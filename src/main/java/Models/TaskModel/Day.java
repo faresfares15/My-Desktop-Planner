@@ -1,8 +1,9 @@
-package Models;
+package Models.TaskModel;
 
 import CalendarComponent.ScheduleMediator;
-import Controllers.TaskSchedule;
-import Controllers.TaskScheduler;
+import Controllers.TaskControllers.TaskSchedule;
+import Controllers.TaskControllers.TaskScheduler;
+import Models.FreeSlot;
 import TaskComponent.*;
 
 import java.time.Duration;

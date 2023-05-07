@@ -1,22 +1,20 @@
-package Controllers;
+package Controllers.TaskControllers;
 
 import Databases.ProjectsDB;
 import Databases.TaskDB;
-import Databases.TaskDatabase;
 import Models.*;
-import TaskComponent.*;
+import Models.TaskModel.SimpleTask;
+import Models.TaskModel.Task;
+import Models.TaskModel.TaskStatus;
+import TaskComponent.TaskNotAssignedException;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.TreeMap;
 
-public class TaskController implements TaskManager {
-    private TaskDatabase taskDB = new TaskDB();
+public class TaskScheduler implements TaskSchedule {
+    private TaskDB taskDB = new TaskDB();
     private ProjectsDB projectsDB;
-    public TreeMap<LocalTime, LocalTime> getTasks(LocalDate date){
-        return taskDB.getTasks(date);
-    }
     public void checkTask(Task task){
 
     }
@@ -56,5 +54,4 @@ public class TaskController implements TaskManager {
     public LocalTime getCeilingTaskStartTime(LocalDate date, int startHour, int startMinute, int endHour, int endMinute){
         return taskDB.getCeilingTaskStartTime(date, startHour, startMinute, endHour, endMinute);
     }
-
 }

@@ -1,6 +1,6 @@
 package Models;
 
-import Controllers.Calendar;
+import Controllers.CalendarControllers.Calendar;
 
 public class UserInfo  implements Comparable<UserInfo>{
     private String username;

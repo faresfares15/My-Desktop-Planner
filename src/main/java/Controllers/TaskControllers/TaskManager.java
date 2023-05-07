@@ -1,7 +1,7 @@
-package Controllers;
+package Controllers.TaskControllers;
 
 import Models.Priority;
-import Models.TaskStatus;
+import Models.TaskModel.TaskStatus;
 import TaskComponent.TaskNotAssignedException;
 
 import java.time.Duration;

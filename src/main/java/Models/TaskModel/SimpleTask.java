@@ -1,4 +1,6 @@
-package Models;
+package Models.TaskModel;
+
+import Models.Priority;
 
 import java.time.Duration;
 import java.time.LocalDate;

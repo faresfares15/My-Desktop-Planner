@@ -1,4 +1,6 @@
-package Models;
+package Models.TaskModel;
+
+import Models.Priority;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -23,7 +25,6 @@ public abstract class Task {
         this.category = category;
         this.status = status;
     }
-
 
     public Task() {
     }
