@@ -4,28 +4,28 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 
 public class Settings {
-    private int minSeuil;
+    private int minimalNumberOfTasksPerDay;
     private Duration minimalDuration;
     private DayOfWeek startOfTheWeek;
 
-    public Settings(int minSeuil, Duration minimalDuration, DayOfWeek startOfTheWeek) {
-        this.minSeuil = minSeuil;
+    public Settings(int minimalNumberOfTasksPerDay, Duration minimalDuration, DayOfWeek startOfTheWeek) {
+        this.minimalNumberOfTasksPerDay = minimalNumberOfTasksPerDay;
         this.minimalDuration = minimalDuration;
         this.startOfTheWeek = startOfTheWeek;
     }
 
     public Settings() {
-        this.minSeuil = 5;
+        this.minimalNumberOfTasksPerDay = 5;
         this.minimalDuration = Duration.ofMinutes(30);
         this.startOfTheWeek = DayOfWeek.SUNDAY;
     }
 
-    public int getMinSeuil() {
-        return minSeuil;
+    public int getMinimalNumberOfTasksPerDay() {
+        return minimalNumberOfTasksPerDay;
     }
 
-    public void setMinSeuil(int minSeuil) {
-        this.minSeuil = minSeuil;
+    public void setMinimalNumberOfTasksPerDay(int minimalNumberOfTasksPerDay) {
+        this.minimalNumberOfTasksPerDay = minimalNumberOfTasksPerDay;
     }
 
     public Duration getMinimalDuration() {

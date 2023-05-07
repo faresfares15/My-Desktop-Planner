@@ -7,24 +7,18 @@ import Models.*;
 import Models.TaskModel.SimpleTask;
 import Models.TaskModel.Task;
 import Models.TaskModel.TaskStatus;
-import TaskComponent.*;
+import Trash.TaskComponent.TaskNotAssignedException;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.TreeMap;
 
-public class TaskController implements TaskManager {
-    private TaskDatabase taskDB = new TaskDB();
-    private ProjectsDB projectsDB;
-    public TreeMap<LocalTime, LocalTime> getTasks(LocalDate date){
-        return taskDB.getTasks(date);
-    }
+public class TaskController  {
     public void checkTask(Task task){
 
     }
 
-    @Override
     public void createSimpleTask(String taskName, LocalTime startTime, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status, Duration periodicity) {
         //TODO: check if we need to pass the settings object here
         Task task = new SimpleTask(taskName, startTime, duration, priority, deadline, category, status, periodicity);
@@ -35,24 +29,67 @@ public class TaskController implements TaskManager {
 
     }
 
-    public boolean isTaskOverlapping(LocalDate date, LocalTime startTime, LocalTime endTime){
-        return taskDB.isTaskOverlapping(date, startTime, endTime);
-    }
+//    public boolean isTaskOverlapping(LocalDate date, LocalTime startTime, LocalTime endTime){
+//        return taskDB.isTaskOverlapping(date, startTime, endTime);
+//    }
 
-    @Override
-    public void planTaskManually() throws TaskNotAssignedException {
-
-    }
-
-    @Override
-    public void planTaskAutomatically() throws TaskNotAssignedException {
+    public void planTaskManually()  {
 
     }
 
-    @Override
-    public void createProject() {
+    public void planTaskAutomatically()  {
 
     }
+
+    public boolean isTaskOverlapping(Task task,LocalDate date, LocalTime startTime, LocalTime endTime){
+        //TODO: complete this algorithm
+        if(task.getDeadline().equals(date)){
+
+                if(task.getStartTime().isBefore(endTime) && task.getEndTime().isAfter(startTime)){
+                    return true;
+                }
+
+            return false;
+        }
+        return false;
+    }
+    public boolean isTaskIntervalsOverlapping(LocalDate date, int startHour, int startMinute, int endHour, int endMinute){
+        if(tasks.containsKey(date)){
+            for(Task task : tasks.get(date)){
+                task.contains(startHour, startMinute, endHour, endMinute);
+                return true;
+            }
+        }
+        return false;
+    }
+    public LocalTime getFloorTaskEndTime(LocalDate date, int startHour, int startMinute, int endHour, int endMinute){
+        LocalTime floorTaskEndTime = null;
+
+        if(tasks.containsKey(date)){
+            for(Task task : tasks.get(date)){
+                if(task.getEndTime().isBefore(LocalTime.of(startHour, startMinute))){
+                    floorTaskEndTime = task.getStartTime().plus(task.getDuration());
+                }
+            }
+            return floorTaskEndTime;
+        }
+        return null;
+    }
+    public LocalTime getCeilingTaskStartTime(LocalDate date, int startHour, int startMinute, int endHour, int endMinute){
+        LocalTime ceilingTaskStartTime = null;
+
+        if(tasks.containsKey(date)){
+            for(Task task : tasks.get(date)){
+                if(task.getStartTime().isAfter(LocalTime.of(endHour, endMinute))){
+                    ceilingTaskStartTime = task.getStartTime();
+                }
+            }
+            return ceilingTaskStartTime;
+        }
+        return null;
+    }
+
+
     public LocalTime getFloorTaskEndTime(LocalDate date, int startHour, int startMinute, int endHour, int endMinute){
         return taskDB.getFloorTaskEndTime(date, startHour, startMinute, endHour, endMinute);
     }

@@ -35,7 +35,7 @@ public class Calendar implements CalendarManager {
         this.settings = settings;
     }
     public Calendar(){
-        this.currentYear = 2023;
+        this.currentYear = LocalDate.now().getYear();
         this.isLeapYear = false;
         initYearDays(this.isLeapYear);
         this.currentDay = new Day(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());;
@@ -44,7 +44,7 @@ public class Calendar implements CalendarManager {
         this.settings = new Settings();
     }
     public Calendar(boolean isLeapYear){
-        this.currentYear = 2023;
+        this.currentYear = LocalDate.now().getYear();
         this.isLeapYear = isLeapYear;
         initYearDays(this.isLeapYear);
         this.currentDay = new Day(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());
