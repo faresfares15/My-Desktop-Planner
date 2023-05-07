@@ -1,8 +1,10 @@
 package Models;
 
 import Controllers.Calendar;
+import Databases.UniqueUsernameViolationException;
+import Databases.UsersDB;
 
-public class UserInfo  implements Comparable<UserInfo>{
+public class UserSchema implements Comparable<UserSchema>{
     private String username;
     private String lastName;
     private String firstName;
@@ -10,7 +12,7 @@ public class UserInfo  implements Comparable<UserInfo>{
     private String email;
     private Calendar calendar;
 
-    public UserInfo(String lastName, String firstName, String password, String email, Calendar calendar) {
+    public UserSchema(String lastName, String firstName, String password, String email, Calendar calendar) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.password = password;
@@ -18,13 +20,13 @@ public class UserInfo  implements Comparable<UserInfo>{
         this.calendar = calendar;
     }
 
-    public UserInfo(String username, String password) {
+    public UserSchema(String username, String password) {
         this.username = username;
         this.password = password;
         this.calendar = new Calendar();
     }
 
-    public UserInfo() {
+    public UserSchema() {
     }
 
     public String getUsername() {
@@ -41,11 +43,12 @@ public class UserInfo  implements Comparable<UserInfo>{
 
     @Override
     public boolean equals(Object obj) {
-        return this.username.equals(((UserInfo)obj).username);
+        return this.username.equals(((UserSchema)obj).username);
     }
 
     @Override
-    public int compareTo(UserInfo o) {
+    public int compareTo(UserSchema o) {
         return (this.lastName + this.firstName).compareTo(o.lastName + o.firstName);
     }
+
 }
