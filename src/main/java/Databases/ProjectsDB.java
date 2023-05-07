@@ -1,6 +1,6 @@
 package Databases;
 
-import Models.Project;
+import Models.ProjectModel.Project;
 
 import java.util.ArrayList;
 

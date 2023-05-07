@@ -1,7 +1,7 @@
 package Models;
 
 import CalendarComponent.ScheduleMediator;
-import Controllers.Calendar;
+import Controllers.CalendarControllers.Calendar;
 import TaskComponent.MinimalDurationException;
 
 import java.time.Duration;

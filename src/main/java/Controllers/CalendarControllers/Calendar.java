@@ -1,8 +1,13 @@
-package Controllers;
+package Controllers.CalendarControllers;
 
-import CalendarComponent.ScheduleMediator;
+import Controllers.TaskControllers.TaskController;
+import Controllers.TaskControllers.TaskManager;
+import Models.ProjectModel.Project;
+import Models.TaskModel.Day;
+import Models.TaskModel.TaskStatus;
+import Trash.CalendarComponent.*;
 import Models.*;
-import TaskComponent.*;
+import Trash.TaskComponent.*;
 
 import java.time.Duration;
 import java.time.LocalDate;

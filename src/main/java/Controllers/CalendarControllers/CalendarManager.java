@@ -1,7 +1,7 @@
-package Controllers;
+package Controllers.CalendarControllers;
 
 import Models.Priority;
-import Models.TaskStatus;
+import Models.TaskModel.TaskStatus;
 
 import java.time.Duration;
 import java.time.LocalDate;

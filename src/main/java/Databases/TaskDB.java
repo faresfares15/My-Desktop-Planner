@@ -1,6 +1,6 @@
 package Databases;
 
-import Models.Task;
+import Models.TaskModel.Task;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

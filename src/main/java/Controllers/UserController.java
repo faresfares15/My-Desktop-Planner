@@ -1,5 +1,7 @@
 package Controllers;
 
+import Controllers.CalendarControllers.Calendar;
+import Controllers.CalendarControllers.CalendarManager;
 import Databases.UniqueUsernameViolationException;
 import Databases.UserDoesNotExistException;
 import Databases.UsersDB;

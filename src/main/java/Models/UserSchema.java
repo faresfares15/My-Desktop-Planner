@@ -1,8 +1,9 @@
 package Models;
 
-import Controllers.Calendar;
+//import Controllers.Calendar;
 import Databases.UniqueUsernameViolationException;
 import Databases.UsersDB;
+import Controllers.CalendarControllers.Calendar;
 
 public class UserSchema implements Comparable<UserSchema>{
     private String username;

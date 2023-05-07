@@ -1,4 +1,7 @@
-package Models;
+package Models.TaskModel;
+
+import Models.TaskModel.SimpleTask;
+import Models.TaskModel.Task;
 
 import java.util.ArrayList;
 
