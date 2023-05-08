@@ -7,6 +7,11 @@ import java.time.LocalTime;
 public class SimpleTaskSchema extends TaskSchema {
     private Duration periodicity;
 
+    public SimpleTaskSchema(String name, LocalTime startTime, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status) {
+        //Sounds useless but it'll be used in the DecomposableTask controller
+        super(name, startTime, duration, priority, deadline, category, status);
+    }
+
     public SimpleTaskSchema(String name, LocalTime startTime, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status, Duration periodicity) {
         super(name, startTime, duration, priority, deadline, category, status);
         this.periodicity = periodicity;
