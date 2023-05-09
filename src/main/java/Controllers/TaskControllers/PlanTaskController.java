@@ -1,8 +1,6 @@
 package Controllers.TaskControllers;
 
 //my imports
-import Exceptions.DayDoesNotHaveFreeSlotsException;
-import Exceptions.DayDoesNotHaveTasksException;
 import Exceptions.SimpleTaskDoesNotFitException;
 import Exceptions.TaskOverlapsException;
 import Models.Day.DaySchema;
@@ -23,11 +21,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class CreateTaskController implements EventHandler<ActionEvent> {
+public class PlanTaskController implements EventHandler<ActionEvent> {
     //If the user wants to create a new task, this controller will be called.
     FreeSlotModel freeSlotModel;
     TaskModel taskModel;
-    public CreateTaskController(FreeSlotModel freeSlotModel, TaskModel taskModel){
+    public PlanTaskController(FreeSlotModel freeSlotModel, TaskModel taskModel){
         this.freeSlotModel = freeSlotModel;
         this.taskModel = taskModel;
     }
