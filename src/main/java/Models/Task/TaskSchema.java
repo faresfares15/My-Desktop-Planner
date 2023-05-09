@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public abstract class TaskSchema {
-    //TODO: add methods to it
+    private LocalDate date; //useful to reference the day this instance belongs to
     private String name;
     private LocalTime startTime;
     private Duration duration;

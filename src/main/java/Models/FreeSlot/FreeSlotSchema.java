@@ -1,8 +1,10 @@
 package Models.FreeSlot;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class FreeSlotSchema {
+    private LocalDate dayDate; //useful to reference the day this instance belongs to
     private LocalTime startTime;
     private LocalTime endTime;
     public FreeSlotSchema(int startHour, int startMinute, int endHour, int endMinute) {

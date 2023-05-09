@@ -5,7 +5,7 @@ module esi.tp_poo_final {
 
     opens esi.tp_poo_final to javafx.fxml;
     exports esi.tp_poo_final;
-    exports Controllers;
+
     //Exporting models
     exports Models.Calendar;
     exports Models.Day;
@@ -14,9 +14,12 @@ module esi.tp_poo_final {
     exports Models.Task;
     exports Models.User;
 
+    //Exporting databases
+    exports Databases;
+
     //Exporting Controllers
     exports Controllers.CalendarControllers;
-
     exports Controllers.TaskControllers;
+
     exports Exceptions;
 }
