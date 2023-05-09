@@ -1,5 +1,7 @@
 package Models.Task;
 
+import Exceptions.InvalidPriorityException;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,7 +12,6 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
     private String name;
     private int id;
     private LocalTime startTime;
-    private LocalTime endTime;
     private Duration duration;
     private Priority priority;
     private LocalDate deadline;
@@ -23,7 +24,6 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         this.date = date;
         this.name = name;
         this.startTime = startTime;
-        this.endTime = endTime;
         this.duration = duration;
         this.priority = priority;
         this.deadline = deadline;
@@ -57,15 +57,6 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         return id;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -74,11 +65,15 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
     public String getCategory() {
         return category;
     }
-
     public LocalDate getDate() {
         return date;
     }
-
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+    public LocalTime getEndTime(){
+        return startTime.plus(duration);
+    }
     @Override
     public int compareTo(TaskSchema o) {
         return this.date.compareTo(o.getDate());
@@ -87,5 +82,16 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
     @Override
     public boolean equals(Object obj) {
         return this.id == ((TaskSchema) obj).getId();
+    }
+
+    //Utility methods
+    public static boolean validatePriority(String priorityName) throws InvalidPriorityException {
+        //Check if the provided priority string is a valid priority of the enum Priority
+        for(Priority priority: Priority.values()){
+            if(priority.name().equals(priorityName)){
+                return true;
+            }
+        }
+        return false;
     }
 }
