@@ -38,8 +38,9 @@ public class CreateTaskController {
             ArrayList<TaskSchema> tasks = taskModel.findMany(day.getDate());
 
             //check if the tasks doesn't overlap with another existing task in the given day
-            for(Task task : tasks.get(date)){
-                if(task.getStartTime().isBefore(endTime) && task.getEndTime().isAfter(startTime)){
+            for(TaskSchema task : tasks.get(day.getDate())){
+                if(task.getStartTime().isBefore(LocalTime.of(endHour, endMinute)) &&
+                task.getEndTime().isAfter(LocalTime.of(startHour, startMinute))){
                     return true;
                 }
             }
@@ -55,7 +56,7 @@ public class CreateTaskController {
 
 
     };
-    private void createDecomposableTask(TaskModel taskModel, String name, LocalTime startTime, Duration duration,
+    private void createDecomposableTask(String name, LocalTime startTime, Duration duration,
                                         Priority priority, LocalDate deadline, String category, TaskStatus status) {
         //This method will create a decomposable task.
         //TODO: check if the it's the controller or the view that will create the task

@@ -1,10 +1,12 @@
 package Databases;
 
 import Exceptions.DayDoesNotHaveTasksException;
+import Exceptions.TaskDoesNotExistException;
 import Models.Task.TaskSchema;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.TreeMap;
 
 public class TaskFileDatabase implements TaskDatabase{
@@ -18,5 +20,52 @@ public class TaskFileDatabase implements TaskDatabase{
 
         //return the list
         return tasksList;
+    }
+
+    @Override
+    public void create(TaskSchema taskSchema) {
+        if (tasksMap.containsKey(taskSchema.getDate())){
+            tasksMap.get(taskSchema.getDate()).add(taskSchema);
+            Collections.sort(tasksMap.get(taskSchema.getDate()));
+        } else {
+            ArrayList<TaskSchema> tasksList = new ArrayList<>();
+            tasksList.add(taskSchema);
+            tasksMap.put(taskSchema.getDate(), tasksList);
+        }
+    }
+
+    @Override
+    public TaskSchema read(int id, LocalDate date) throws TaskDoesNotExistException {
+        if (tasksMap.containsKey(date)){
+            for (TaskSchema taskSchema:
+                    tasksMap.get(date)) {
+                if (taskSchema.getId() == id) return taskSchema;
+            }
+        } else {
+            throw new TaskDoesNotExistException();
+        }
+        return null;
+    }
+
+    @Override
+    public void update(TaskSchema taskSchema) throws TaskDoesNotExistException {
+        if(tasksMap.containsKey(taskSchema.getDate())){
+            tasksMap.get(taskSchema.getDate()).remove(taskSchema);
+            tasksMap.get(taskSchema.getDate()).add(taskSchema);
+            Collections.sort(tasksMap.get(taskSchema.getDate()));
+        } else {
+            throw new TaskDoesNotExistException();
+        }
+
+    }
+
+    @Override
+    public void delete(TaskSchema taskSchema) throws TaskDoesNotExistException {
+        if(tasksMap.containsKey(taskSchema.getDate())){
+            tasksMap.get(taskSchema.getDate()).remove(taskSchema);
+            Collections.sort(tasksMap.get(taskSchema.getDate()));
+        } else {
+            throw new TaskDoesNotExistException();
+        }
     }
 }

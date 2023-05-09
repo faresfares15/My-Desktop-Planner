@@ -2,6 +2,7 @@ package Models.Task;
 
 import Databases.TaskDatabase;
 import Exceptions.DayDoesNotHaveTasksException;
+import Exceptions.TaskDoesNotExistException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,14 +14,29 @@ public class TaskModel {
         this.taskDatabase = taskDatabase;
     }
 
+    //CRUD Operations
+
     public ArrayList<TaskSchema> findMany(LocalDate date) throws DayDoesNotHaveTasksException {
         return this.taskDatabase.findMany(date);
+    }
+    public void create(TaskSchema taskSchema){
+        this.taskDatabase.create(taskSchema);
+    }
+    public TaskSchema read(int id, LocalDate date) throws TaskDoesNotExistException {
+        return this.taskDatabase.read(id, date);
+    }
+    public void update(TaskSchema taskSchema) throws TaskDoesNotExistException {
+            this.taskDatabase.update(taskSchema);
+    }
+    public void delete(TaskSchema taskSchema) throws TaskDoesNotExistException {
+            this.taskDatabase.delete(taskSchema);
+
     }
 }
 /* Your code
 public class TaskModel {
     private ArrayList<TaskSchema> tasks = new ArrayList<>();
-    //It will be sorteed acording to the ID everyTime an operation on it will be done it.
+    //It will be sorted according to the ID everyTime an operation on it will be done it.
 
     public TaskModel(ArrayList<TaskSchema> tasks) {
         this.tasks = tasks;
