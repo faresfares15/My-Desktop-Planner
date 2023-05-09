@@ -2,16 +2,14 @@ package Models.Task;
 
 import java.util.ArrayList;
 
-public class ComposedTaskSchema extends TaskSchema {
+public class DecomposableTaskSchema extends TaskSchema {
     private ArrayList<SimpleTaskSchema> subTasks;
 
-    public ComposedTaskSchema(ArrayList<SimpleTaskSchema> subTasks) {
-        this.subTasks = subTasks;
-    }
-    public ComposedTaskSchema(SimpleTaskSchema task) {
+    public DecomposableTaskSchema(SimpleTaskSchema task) {
         //The one we'll be using I think
         this.subTasks = new ArrayList<SimpleTaskSchema>();
         this.subTasks.add(task);
+        this.setId((getName() + getCategory()).hashCode() + getDeadline().hashCode());
     }
 
     public ArrayList<SimpleTaskSchema> getSubTasks() {
