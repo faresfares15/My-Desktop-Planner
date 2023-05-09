@@ -2,7 +2,6 @@ package Controllers.TaskControllers;
 
 //my imports
 import Exceptions.SimpleTaskDoesNotFitException;
-import Exceptions.TaskOverlapsException;
 import Models.Day.DaySchema;
 import Models.FreeSlot.FreeSlotModel;
 import Models.FreeSlot.FreeSlotSchema;
@@ -35,6 +34,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         //This method will be called when the user clicks on the "create task" button
 
         //Get the data from the view
+        //TODO: implement the view to get these inputs
         String name = "task-name";
         int startHour = 12;
         int startMinute = 0;
@@ -84,12 +84,16 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         LocalTime startTime = LocalTime.of(startHour, startMinute);
         LocalTime endTime = startTime.plus(duration);
 
-        if(isTaskOverlapping(startTime, endTime, tasks)){
-            throw new TaskOverlapsException();
-        }
 
         //check if a free slot is available for this task
-        if(!isFreeSlotAvailable(startTime, endTime, freeslots)){
+        FreeSlotSchema availableFreeSlot = null;
+        if( ( availableFreeSlot = getAvailableFreeSlot(duration, freeslots) ) == null){
+            throw new SimpleTaskDoesNotFitException();
+        }
+
+        //check the minimal duration condition
+        Duration minimalDuration = Duration.ofMinutes(30); //TODO: get the minimal duration from the settings of calendar
+        if(availableFreeSlot.getDuration().compareTo( (duration.plus(minimalDuration))) < 0){
             throw new SimpleTaskDoesNotFitException();
         }
 
@@ -97,6 +101,39 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         SimpleTaskSchema simpleTask = new SimpleTaskSchema(name, startTime, duration,
                 Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status));
         this.taskModel.create(simpleTask);
+    };
+
+    private void planSimpleTaskManually(DaySchema day, String name, Duration duration,
+                                        String priority, LocalDate deadline, String category, String status) throws Exception {
+        //This method will create a simple task.
+
+        //Get the necessary data for verification
+        ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(day.getDate()); //throws DayDoesNotHaveFreeSlotsException
+        ArrayList<TaskSchema> tasks = taskModel.findMany(day.getDate()); //throws DayDoesNotHaveTasksException
+
+        //check if a free slot is available for this task
+        FreeSlotSchema availableFreeSlot = null;
+        if( ( availableFreeSlot = getAvailableFreeSlot(duration, freeslots) ) == null){
+            throw new SimpleTaskDoesNotFitException();
+        }
+
+        //set the start time of the task
+        LocalTime startTime = availableFreeSlot.getStartTime();
+
+        //check the minimal duration condition
+        Duration minimalDuration = Duration.ofMinutes(30); //TODO: get the minimal duration from the settings of calendar
+        if(availableFreeSlot.getDuration().compareTo( (duration.plus(minimalDuration))) < 0){
+            //the new task will take the whole free slot:
+            duration = availableFreeSlot.getDuration(); //now the task's duration = the free slot's duration
+            this.freeSlotModel.delete(day.getDate(), availableFreeSlot.getStartTime()); //remove the free slot
+            this.taskModel.create(new SimpleTaskSchema(name, startTime, duration,
+                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status)));
+        }else{
+            //the free slot will be reduced (to the bottom) by the task's duration, which remains the same
+            this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getDuration().minus(duration));
+            this.taskModel.create(new SimpleTaskSchema(name, startTime, duration,
+                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status)));
+        }
     };
     private void planDecomposableTaskManually(String name, LocalTime startTime, Duration duration,
                                               Priority priority, LocalDate deadline, String category, TaskStatus status) {
@@ -109,23 +146,23 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     }
 
     //Utility methods
-    private boolean isTaskOverlapping(LocalTime startTime, LocalTime endTime, ArrayList<TaskSchema> tasksList){
-        //This method will check if the task is overlapping with another task in the given day.
-        for(TaskSchema task : tasksList){
-            if(task.getStartTime().isBefore(endTime) && task.getEndTime().isAfter(startTime)){
-                return true;
-            }
-        }
-        return false;
-    }
-    private boolean isFreeSlotAvailable(LocalTime startTime, LocalTime endTime, ArrayList<FreeSlotSchema> freeSlotsList){
+    private FreeSlotSchema getAvailableFreeSlot(LocalTime startTime, LocalTime endTime, ArrayList<FreeSlotSchema> freeSlotsList){
         //This method will check if a free slot is available for the given task.
         for(FreeSlotSchema freeSlot : freeSlotsList){
             if(freeSlot.getStartTime().isBefore(startTime) && freeSlot.getEndTime().isAfter(endTime)){
-                return true;
+                return freeSlot;
             }
         }
-        return false;
+        return null;
+    }
+    private FreeSlotSchema getAvailableFreeSlot(Duration duration, ArrayList<FreeSlotSchema> freeSlotsList){
+        //This method will check if a free slot is available for the given task.
+        for(FreeSlotSchema freeSlot : freeSlotsList){
+            if(freeSlot.getDuration().compareTo(duration) >= 0){
+                return freeSlot;
+            }
+        }
+        return null;
     }
 
     //Input validation methods

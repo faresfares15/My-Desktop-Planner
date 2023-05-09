@@ -4,6 +4,7 @@ import Exceptions.DayDoesNotHaveFreeSlotsException;
 import Models.FreeSlot.FreeSlotSchema;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -18,5 +19,40 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
 
         //return the free slots
         return freeSlotsList;
+    }
+    public FreeSlotSchema delete(LocalDate dayDate, LocalTime startTime){
+        //find the day in the map
+        ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(dayDate);
+
+        //find the free slot in the list
+        FreeSlotSchema freeSlotSchema = null;
+        for(FreeSlotSchema freeSlot : freeSlotsList){
+            if(freeSlot.getStartTime().equals(startTime)){
+                freeSlotSchema = freeSlot;
+                break;
+            }
+        }
+
+        //remove the free slot from the list
+        freeSlotsList.remove(freeSlotSchema);
+
+        //return the deleted free slot
+        return freeSlotSchema;
+    }
+    public FreeSlotSchema find(LocalDate dayDate, LocalTime startTime){
+        //find the day in the map
+        ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(dayDate);
+
+        //find the free slot in the list
+        FreeSlotSchema freeSlotSchema = null;
+        for(FreeSlotSchema freeSlot : freeSlotsList){
+            if(freeSlot.getStartTime().equals(startTime)){
+                freeSlotSchema = freeSlot;
+                break;
+            }
+        }
+
+        //return the free slot
+        return freeSlotSchema;
     }
 }

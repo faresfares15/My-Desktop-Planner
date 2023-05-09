@@ -1,5 +1,6 @@
 package Models.FreeSlot;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,4 +18,14 @@ public class FreeSlotSchema {
     public LocalTime getEndTime() {
         return endTime;
     }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    //get duration (instance of Duration)
+    public Duration getDuration() {
+        return Duration.between(startTime, endTime);
+    }
+
 }

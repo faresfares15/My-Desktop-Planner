@@ -68,12 +68,11 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
     public LocalDate getDate() {
         return date;
     }
-    public LocalTime getStartTime() {
-        return startTime;
+
+    public Duration getDuration() {
+        return duration;
     }
-    public LocalTime getEndTime(){
-        return startTime.plus(duration);
-    }
+
     @Override
     public int compareTo(TaskSchema o) {
         return this.date.compareTo(o.getDate());
