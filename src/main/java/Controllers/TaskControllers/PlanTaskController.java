@@ -59,7 +59,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             //boolean isSimpleTask = checkbox.value();
             boolean isSimpleTask = true;
             if(isSimpleTask){
-                createSimpleTask(new DaySchema(LocalDate.now()), name, startHour, startMinute, duration,
+                planSimpleTaskManually(new DaySchema(LocalDate.now()), name, startHour, startMinute, duration,
                         priority, deadline, category, status);
 
             }else{
@@ -72,8 +72,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     }
 
     //These are helper methods that will be called by the controller. They are here to separate logics
-    private void createSimpleTask(DaySchema day, String name, int startHour, int startMinute, Duration duration,
-                                  String priority, LocalDate deadline, String category, String status) throws Exception {
+    private void planSimpleTaskManually(DaySchema day, String name, int startHour, int startMinute, Duration duration,
+                                        String priority, LocalDate deadline, String category, String status) throws Exception {
         //This method will create a simple task.
 
         //Get the necessary data for verification
@@ -94,12 +94,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         }
 
         //create the task
-//        taskModel.create(name, startTime, duration, deadline, category, status);
-
-
+        SimpleTaskSchema simpleTask = new SimpleTaskSchema(name, startTime, duration,
+                Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status));
+        this.taskModel.create(simpleTask);
     };
-    private void createDecomposableTask(String name, LocalTime startTime, Duration duration,
-                                        Priority priority, LocalDate deadline, String category, TaskStatus status) {
+    private void planDecomposableTaskManually(String name, LocalTime startTime, Duration duration,
+                                              Priority priority, LocalDate deadline, String category, TaskStatus status) {
         //This method will create a decomposable task.
         //TODO: check if the it's the controller or the view that will create the task
         SimpleTaskSchema simpleTask = new SimpleTaskSchema(name, startTime, duration,
