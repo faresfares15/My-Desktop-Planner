@@ -155,7 +155,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                                               Priority priority, LocalDate deadline, String category, TaskStatus status)
             throws DayDoesNotHaveFreeSlotsException, FreeSlotNotFoundException {
         //This method will create a decomposable task.
-        // It's not me who will choose the startTime of the Task according to the available free slots
+        // It's me who will choose the startTime of the Task according to the available free slots
 
 
         ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(day.getDate()); //throws DayDoesNotHaveFreeSlotsException
@@ -180,7 +180,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                     this.freeSlotModel.delete(day.getDate(), availableFreeSlot.getStartTime()); //remove the free slot
                 }
                 SimpleTaskSchema simpleTask = new SimpleTaskSchema(day.getDate(), name, availableFreeSlot.getStartTime(), duration,
-                        priority, deadline, category, status, 1);
+                        priority, deadline, category, status, 0);
                 DecomposableTaskSchema decomposableTask = new DecomposableTaskSchema(simpleTask);
                 taskModel.create(decomposableTask);
                 return;
@@ -191,31 +191,29 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         } else {
             //the task will be  decomposed
             SimpleTaskSchema simpleTask = new SimpleTaskSchema(day.getDate(), name, availableFreeSlot.getStartTime(), duration,
-                    priority, deadline, category, status, 1);
+                    priority, deadline, category, status, 0);
             DecomposableTaskSchema decomposableTask = new DecomposableTaskSchema(simpleTask);
             int subTasksIndex = 1;
-            Duration subTaskDuration = Duration.ofMinutes(0);
-            LocalTime subTaskStartTime = null;
 
             for (FreeSlotSchema freeSlot: freeslots){
                 if(duration.compareTo(freeSlot.getDuration()) > 0){
                     duration = duration.minus(freeSlot.getDuration());
                     decomposableTask.addSubTask(new SimpleTaskSchema(day.getDate(), name += String.valueOf(subTasksIndex),
                             freeSlot.getStartTime(), freeSlot.getDuration(),
-                            priority, deadline, category, status, 1));
+                            priority, deadline, category, status, 0));
                     subTasksIndex++;
-                } else { //The case where the comparaison gives 0 will be treated here because the loop will end
+                } else { //The case where the compareTo gives 0 will be treated here because the loop will end
                     if (freeSlot.getDuration().compareTo(duration.plus(minimalDuration)) >=0 ){
                         //the freeSlot will only be updated
                         freeSlotModel.update(day.getDate(), freeSlot.getStartTime(), freeSlot.getStartTime().plus(duration));
                     } else {
-                        //it'll be deleted and the last subTask will take all of the avaible time
+                        //it'll be deleted and the last subTask will take all the available time
                         duration = freeSlot.getDuration();
                         freeSlotModel.delete(day.getDate(), freeSlot.getStartTime());
                     }
                     decomposableTask.addSubTask(new SimpleTaskSchema(day.getDate(), name += String.valueOf(subTasksIndex),
                             freeSlot.getStartTime(), duration,
-                            priority, deadline, category, status, 1));
+                            priority, deadline, category, status, 0));
                 }
             }
             taskModel.create(decomposableTask);
