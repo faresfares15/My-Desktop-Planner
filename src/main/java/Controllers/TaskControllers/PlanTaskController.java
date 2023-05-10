@@ -142,13 +142,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             //TODO: change the periodicity to it's actual value
         } else {
             //the free slot will be reduced (to the bottom) by the task's duration
-            this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(),
-                    availableFreeSlot.getStartTime().plus(availableFreeSlot.getDuration().minus(duration)));
+            this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getStartTime().plus(duration));
             this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
                     Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 1));
         }
 
-        System.out.println("task" + "\"" + name + "\"" + "created successfully");
+        System.out.println("task"+ " \""+ name +"\" "+ "created successfully");
     }
 
     private void planDecomposableTaskManually(DaySchema day, String name, Duration duration,
