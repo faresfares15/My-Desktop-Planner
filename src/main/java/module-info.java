@@ -21,5 +21,8 @@ module esi.tp_poo_final {
     exports Controllers.CalendarControllers;
     exports Controllers.TaskControllers;
 
+    //exporting views
+    exports Views;
+
     exports Exceptions;
 }

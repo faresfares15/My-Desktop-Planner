@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 //your imports
 import Models.Task.*;
+import Views.PlanTaskView;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -26,10 +27,11 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     //If the user wants to create a new task, this controller will be called.
     FreeSlotModel freeSlotModel;
     TaskModel taskModel;
-
-    public PlanTaskController(FreeSlotModel freeSlotModel, TaskModel taskModel) {
+    PlanTaskView planTaskView;
+    public PlanTaskController(FreeSlotModel freeSlotModel, TaskModel taskModel, PlanTaskView planTaskView){
         this.freeSlotModel = freeSlotModel;
         this.taskModel = taskModel;
+        this.planTaskView = planTaskView;
     }
 
     @Override
@@ -39,30 +41,27 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         //Get the data from the view
         //TODO: implement the view to get these inputs
         String name = "task-name";
-        int startHour = 12;
-        int startMinute = 0;
         Duration duration = Duration.ofHours(1);
         String priority = "High";
         LocalDate deadline = LocalDate.of(2020, 12, 31);
         String category = "category";
         String status = "status";
 
-        try {
+        try{
+            System.out.println("hora");
             //validate the inputs
-            if (name == null) return;
-            if (startHour < 0 || startHour > 23) return;
-            if (startMinute < 0 || startMinute > 59) return;
-            if (duration == null) return;
-            if (priority == null || !TaskSchema.validatePriority(priority)) return;
-            if (deadline == null) return;
-            if (category == null) return;
-            if (status == null) return;
+            if(name == null) return;
+            if(duration == null) return;
+            if(priority == null || !TaskSchema.validatePriority(priority)) return;
+            if(deadline == null) return;
+            if(category == null) return;
+            if(status == null) return;
 
             //create the task
             //boolean isSimpleTask = checkbox.value();
             boolean isSimpleTask = true;
-            if (isSimpleTask) {
-                planSimpleTaskManually(new DaySchema(LocalDate.now()), name, startHour, startMinute, duration,
+            if(isSimpleTask){
+                planSimpleTaskManually(new DaySchema(LocalDate.now()), name, duration,
                         priority, deadline, category, status);
 
             } else {
@@ -74,41 +73,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
     }
 
-    //These are helper methods that will be called by the controller. They are here to separate logics
-    private void planSimpleTaskManually(DaySchema day, String name, int startHour, int startMinute, Duration duration,
-                                        String priority, LocalDate deadline, String category, String status) throws Exception {
-        //TODO: check if periodicity will be used here or only in the plan auto method
-        //This method will create a simple task.
-        //TODO: change the string of priority and status to enums because the View can give it to us us an enum
-
-        //Get the necessary data for verification
-        ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(day.getDate()); //throws DayDoesNotHaveFreeSlotsException
-        ArrayList<TaskSchema> tasks = taskModel.findMany(day.getDate()); //throws DayDoesNotHaveTasksException
-
-        //check if the tasks doesn't overlap with another existing task in the given day
-        LocalTime startTime = LocalTime.of(startHour, startMinute);
-        LocalTime endTime = startTime.plus(duration);
-
-
-        //check if a free slot is available for this task
-        FreeSlotSchema availableFreeSlot = null;
-        if ((availableFreeSlot = getAvailableFreeSlot(duration, freeslots)) == null) {
-            throw new SimpleTaskDoesNotFitException();
-        }
-
-        //check the minimal duration condition
-        Duration minimalDuration = Duration.ofMinutes(30); //TODO: get the minimal duration from the settings of calendar
-        if (availableFreeSlot.getDuration().compareTo((duration.plus(minimalDuration))) < 0) {
-            //TODO: why are you checking this while the getAvailableFreeSlot() method already checks it?
-            throw new SimpleTaskDoesNotFitException();
-        }
-
-        //create the task
-        SimpleTaskSchema simpleTask = new SimpleTaskSchema(name, startTime, duration,
-                Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status));
-        this.taskModel.create(simpleTask);
-    }
-
+    //These are helper methods that will be called by the controller. They are here to separate logics.
     private void planSimpleTaskManually(DaySchema day, String name, Duration duration,
                                         String priority, LocalDate deadline, String category, String status) throws Exception {
         //This method will create a simple task.
@@ -121,6 +86,10 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         FreeSlotSchema availableFreeSlot = null;
         if ((availableFreeSlot = getAvailableFreeSlot(duration, freeslots)) == null) {
             throw new SimpleTaskDoesNotFitException();
+        }
+
+        if(duration.compareTo(Duration.ofMinutes(30)) < 0){
+            //TODO: decide what to do for tasks with duration < 30 minutes (minimal duration)
         }
 
         //set the start time of the task
