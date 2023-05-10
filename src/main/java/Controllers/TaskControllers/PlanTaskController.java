@@ -3,6 +3,7 @@ package Controllers.TaskControllers;
 //my imports
 
 import Exceptions.DayDoesNotHaveFreeSlotsException;
+import Exceptions.FreeSlotNotFoundException;
 import Exceptions.SimpleTaskDoesNotFitException;
 import Models.Day.DaySchema;
 import Models.FreeSlot.FreeSlotModel;
@@ -28,7 +29,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     FreeSlotModel freeSlotModel;
     TaskModel taskModel;
     PlanTaskView planTaskView;
-    public PlanTaskController(FreeSlotModel freeSlotModel, TaskModel taskModel, PlanTaskView planTaskView){
+
+    public PlanTaskController(FreeSlotModel freeSlotModel, TaskModel taskModel, PlanTaskView planTaskView) {
         this.freeSlotModel = freeSlotModel;
         this.taskModel = taskModel;
         this.planTaskView = planTaskView;
@@ -71,20 +73,20 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         System.out.println("category: " + category);
         System.out.println("status: " + status);
 
-        try{
+        try {
             System.out.println("hora");
             //validate the inputs
-            if(name == null) return;
-            if(duration == null) return;
-            if(priority == null || !TaskSchema.validatePriority(priority)) return;
-            if(deadline == null) return;
-            if(category == null) return;
-            if(status == null) return;
+            if (name == null) return;
+            if (duration == null) return;
+            if (priority == null || !TaskSchema.validatePriority(priority)) return;
+            if (deadline == null) return;
+            if (category == null) return;
+            if (status == null) return;
 
             //create the task
             //boolean isSimpleTask = checkbox.value();
             boolean isSimpleTask = true;
-            if(isSimpleTask){
+            if (isSimpleTask) {
                 planSimpleTaskManually(new DaySchema(LocalDate.now()), name, duration,
                         priority, deadline, category, status);
 
@@ -99,7 +101,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             try {
                 ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(LocalDate.now());
                 System.out.println("available slots: ");
-                for(FreeSlotSchema freeSlot : freeslots){
+                for (FreeSlotSchema freeSlot : freeslots) {
                     System.out.println(freeSlot.getStartTime() + " - " + freeSlot.getEndTime());
                 }
             } catch (Exception e) {
@@ -122,7 +124,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             throw new SimpleTaskDoesNotFitException();
         }
 
-        if(duration.compareTo(Duration.ofMinutes(30)) < 0){
+        if (duration.compareTo(Duration.ofMinutes(30)) < 0) {
             //TODO: decide what to do for tasks with duration < 30 minutes (minimal duration)
         }
 
@@ -137,50 +139,71 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             this.freeSlotModel.delete(day.getDate(), availableFreeSlot.getStartTime()); //remove the free slot
             this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
                     Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 1));
+            //TODO: change the periodicity to it's actual value
         } else {
             //the free slot will be reduced (to the bottom) by the task's duration
-            this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getStartTime().plus(availableFreeSlot.getDuration().minus(duration)));
+            this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(),
+                    availableFreeSlot.getStartTime().plus(availableFreeSlot.getDuration().minus(duration)));
             this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
                     Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 1));
         }
 
-        System.out.println("task"+ "\""+ name +"\""+ "created successfully");
+        System.out.println("task" + "\"" + name + "\"" + "created successfully");
     }
 
-    private void planDecomposableTaskManually(DaySchema day, String name, LocalTime startTime, Duration duration,
+    private void planDecomposableTaskManually(DaySchema day, String name, Duration duration,
                                               Priority priority, LocalDate deadline, String category, TaskStatus status)
-            throws DayDoesNotHaveFreeSlotsException {
+            throws DayDoesNotHaveFreeSlotsException, FreeSlotNotFoundException {
         //This method will create a decomposable task.
+        // It's not me who will choose the startTime of the Task according to the available free slots
 
 
         ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(day.getDate()); //throws DayDoesNotHaveFreeSlotsException
         Duration avaibleTimeForTheDay = Duration.ofMinutes(0);
         FreeSlotSchema availableFreeSlot = null;
+        Duration minimalDuration = Duration.ofMinutes(30); //TODO: get the minimal duration from the settings of calendar
 
         for (FreeSlotSchema freeSlot : freeslots) {
             avaibleTimeForTheDay = avaibleTimeForTheDay.plus(freeSlot.getDuration());
             //We're sure from the other algorithms that every FreeSLot have at least a minDuration duration
-            if (freeSlot.getDuration().compareTo(duration) >= 0){
+            if (freeSlot.getDuration().compareTo(duration) >= 0) {
                 availableFreeSlot = freeSlot;
-                //and we'll create the task in this free slot
-                SimpleTaskSchema simpleTask = new SimpleTaskSchema( day.getDate(), name, startTime, duration,
+                //first we'll check the minimal duration condition
+                if (availableFreeSlot.getDuration().compareTo(duration.plus(minimalDuration)) >= 0) {
+                    //the free slot will be reduced (to the bottom) by the task's duration, which remains the same
+                    LocalTime newStartTime = availableFreeSlot.getStartTime().plus(duration);
+                    this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(),
+                            newStartTime);
+                } else {
+                    //the new task will take the whole free slot:
+                    duration = availableFreeSlot.getDuration(); //now the task's duration = the free slot's duration
+                    this.freeSlotModel.delete(day.getDate(), availableFreeSlot.getStartTime()); //remove the free slot
+                }
+                SimpleTaskSchema simpleTask = new SimpleTaskSchema(day.getDate(), name, availableFreeSlot.getStartTime(), duration,
                         priority, deadline, category, status, 1);
                 DecomposableTaskSchema decomposableTask = new DecomposableTaskSchema(simpleTask);
                 taskModel.create(decomposableTask);
-                //TODO: think about deleting the freeSlot or nah
+                freeSlotModel.delete(day.getDate(), availableFreeSlot.getStartTime());
                 return;
             }
         }
         if (avaibleTimeForTheDay.compareTo(duration) < 0) {
             throw new DayDoesNotHaveFreeSlotsException();
         } else {
-            //the task will be either decomposed or affected to the freeSlot directly
+            //the task will be  decomposed
+            SimpleTaskSchema simpleTask = new SimpleTaskSchema(day.getDate(), name, availableFreeSlot.getStartTime(), duration,
+                    priority, deadline, category, status, 1);
+            DecomposableTaskSchema decomposableTask = new DecomposableTaskSchema(simpleTask);
+            int subTasksIndex = 1;
+
+            for (FreeSlotSchema freeSlot: freeslots){
+
+            }
         }
 
 
-
-
-        SimpleTaskSchema simpleTask = new SimpleTaskSchema(day.getDate(), name, startTime, duration,
+        //Check is the avaibleFreeSlot is not null
+        SimpleTaskSchema simpleTask = new SimpleTaskSchema(day.getDate(), name, availableFreeSlot.getStartTime(), duration,
                 priority, deadline, category, status, 1);
         DecomposableTaskSchema decomposableTaskSchema = new DecomposableTaskSchema(simpleTask);
         taskModel.create(decomposableTaskSchema);
