@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class FreeSlotSchema {
+public class FreeSlotSchema implements Comparable<FreeSlotSchema> {
     private LocalDate dayDate; //useful to reference the day this instance belongs to
     private LocalTime startTime;
     private LocalTime endTime;
@@ -36,4 +36,8 @@ public class FreeSlotSchema {
     }
 
 
+    @Override
+    public int compareTo(FreeSlotSchema o) {
+        return this.startTime.compareTo(o.getStartTime());
+    }
 }
