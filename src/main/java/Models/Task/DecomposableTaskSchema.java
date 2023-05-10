@@ -21,4 +21,7 @@ public class DecomposableTaskSchema extends TaskSchema {
         this.subTasks = subTasks;
     }
 
+    public void addSubTask(SimpleTaskSchema simpleTaskSchema){
+        subTasks.add(simpleTaskSchema);
+    }
 }
