@@ -23,6 +23,7 @@ import javafx.event.EventHandler;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Comparator;
 
 public class PlanTaskController implements EventHandler<ActionEvent> {
     //If the user wants to create a new task, this controller will be called.
@@ -85,10 +86,11 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
             //create the task
             //boolean isSimpleTask = checkbox.value();
-            boolean isSimpleTask = true;
+            boolean isSimpleTask = true; //Change it to run tests
             if (isSimpleTask) {
-                planSimpleTaskManually(new DaySchema(LocalDate.now()), name, duration,
+                planSimpleTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
                         priority, deadline, category, status);
+                Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority);
 
             } else {
 
@@ -111,8 +113,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     }
 
     //These are helper methods that will be called by the controller. They are here to separate logics.
-    private void planSimpleTaskManually(DaySchema day, String name, Duration duration,
-                                        String priority, LocalDate deadline, String category, String status) throws Exception {
+    private void planSimpleTaskAutomatically(DaySchema day, String name, Duration duration,
+                                             String priority, LocalDate deadline, String category, String status) throws Exception {
         //This method will create a simple task.
 
         //Get the necessary data for verification
@@ -150,8 +152,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         System.out.println("task"+ " \""+ name +"\" "+ "created successfully");
     }
 
-    private void planDecomposableTaskManually(DaySchema day, String name, Duration duration,
-                                              Priority priority, LocalDate deadline, String category, TaskStatus status)
+    private void planDecomposableTaskAutomatically(DaySchema day, String name, Duration duration,
+                                                   Priority priority, LocalDate deadline, String category, TaskStatus status)
             throws DayDoesNotHaveFreeSlotsException, FreeSlotNotFoundException {
         //This method will create a decomposable task.
         // It's me who will choose the startTime of the Task according to the available free slots
@@ -224,6 +226,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                 priority, deadline, category, status, 1);
         DecomposableTaskSchema decomposableTaskSchema = new DecomposableTaskSchema(simpleTask);
         taskModel.create(decomposableTaskSchema);
+    }
+
+
+
+    private void autoPlanSetOfTasks(ArrayList<TaskSchema> tasksList){
+
     }
 
     //Utility methods

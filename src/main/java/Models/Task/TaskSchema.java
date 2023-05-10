@@ -73,6 +73,10 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         return duration;
     }
 
+    public Priority getPriority() {
+        return priority;
+    }
+
     @Override
     public int compareTo(TaskSchema o) {
         return this.date.compareTo(o.getDate()); //TODO: the task here is supposed to compare by start time, no?
