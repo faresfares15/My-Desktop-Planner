@@ -1,6 +1,7 @@
 package Databases;
 
 import Exceptions.DayDoesNotHaveFreeSlotsException;
+import Exceptions.FreeSlotNotFoundException;
 import Models.FreeSlot.FreeSlotSchema;
 
 import java.time.LocalDate;
@@ -10,5 +11,7 @@ import java.util.ArrayList;
 public interface FreeSlotsDatabase {
     ArrayList<FreeSlotSchema> findMany(LocalDate dayDate) throws DayDoesNotHaveFreeSlotsException;
     FreeSlotSchema find(LocalDate dayDate, LocalTime startTime);
+    FreeSlotSchema create(LocalDate dayDate, LocalTime startTime, LocalTime endTime);
+    FreeSlotSchema update(LocalDate dayDate, LocalTime startTime, LocalTime newStartTime) throws FreeSlotNotFoundException;
     FreeSlotSchema delete(LocalDate dayDate, LocalTime startTime);
 }

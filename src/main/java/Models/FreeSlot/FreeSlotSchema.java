@@ -12,6 +12,13 @@ public class FreeSlotSchema {
         this.startTime = LocalTime.of(startHour, startMinute);
         this.endTime = LocalTime.of(endHour, endMinute);
     }
+
+    public FreeSlotSchema(LocalDate dayDate, LocalTime startTime, LocalTime endTime) {
+        this.dayDate = dayDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     public LocalTime getStartTime() {
         return startTime;
     }

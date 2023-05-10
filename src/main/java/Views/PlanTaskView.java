@@ -9,6 +9,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.time.Duration;
+import java.time.LocalDate;
+
 public class PlanTaskView extends Stage {
     private FreeSlotModel freeSlotModel;
     private TaskModel taskModel;
@@ -72,5 +75,19 @@ public class PlanTaskView extends Stage {
 
         // Create a scene with the gridPane as the root node
         this.setScene(new javafx.scene.Scene(gridPane, 500, 500));
+    }
+
+    public String getTaskName() {
+        return taskNameField.getText();
+    }
+
+    public String getPriority() {
+        return priorityComboBox.getValue();
+    }
+    public Duration getDuration(){
+        return Duration.ofHours(hoursSpinner.getValue()).plusMinutes(minutesSpinner.getValue());
+    }
+    public LocalDate getDeadline() {
+        return deadlinePicker.getValue();
     }
 }

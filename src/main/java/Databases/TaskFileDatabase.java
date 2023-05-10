@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.TreeMap;
 
 public class TaskFileDatabase implements TaskDatabase{
-    TreeMap<LocalDate, ArrayList<TaskSchema>> tasksMap;
+    TreeMap<LocalDate, ArrayList<TaskSchema>> tasksMap = new TreeMap<>();
     public ArrayList<TaskSchema> findMany(LocalDate date) throws DayDoesNotHaveTasksException {
         //get the list of tasks for the given date
         ArrayList<TaskSchema> tasksList = tasksMap.get(date);

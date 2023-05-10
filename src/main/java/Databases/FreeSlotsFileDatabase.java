@@ -1,6 +1,7 @@
 package Databases;
 
 import Exceptions.DayDoesNotHaveFreeSlotsException;
+import Exceptions.FreeSlotNotFoundException;
 import Models.FreeSlot.FreeSlotSchema;
 
 import java.time.LocalDate;
@@ -53,6 +54,45 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
         }
 
         //return the free slot
+        return freeSlotSchema;
+    }
+    public FreeSlotSchema update(LocalDate dayDate, LocalTime startTime, LocalTime newStartTime) throws FreeSlotNotFoundException{
+        //find the day in the map
+        ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(dayDate);
+
+        //find the free slot in the list using the find method
+        FreeSlotSchema freeSlotSchema = this.find(dayDate, startTime);
+        if(freeSlotSchema == null) throw new FreeSlotNotFoundException();
+
+        //update the free slot (setting the new start time)
+        freeSlotSchema.setStartTime(newStartTime);
+
+        //return the updated free slot
+        return freeSlotSchema;
+    }
+    public FreeSlotSchema create(LocalDate dayDate, LocalTime startTime, LocalTime endTime){
+        //create the free slot
+        FreeSlotSchema freeSlotSchema = new FreeSlotSchema(dayDate, startTime, endTime);
+
+        //find the day in the map
+        ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(dayDate);
+
+        //check if the day has free slots
+        if(freeSlotsList == null){
+            //create a new list of free slots
+            freeSlotsList = new ArrayList<>();
+
+            //add the free slot to the list
+            freeSlotsList.add(freeSlotSchema);
+
+            //add the list to the map
+            this.freeSlotsMap.put(dayDate, freeSlotsList);
+        }else{
+            //add the free slot to the list
+            freeSlotsList.add(freeSlotSchema);
+        }
+
+        //return the created free slot
         return freeSlotSchema;
     }
 }

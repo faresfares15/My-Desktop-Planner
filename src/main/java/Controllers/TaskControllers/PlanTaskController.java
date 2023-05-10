@@ -32,6 +32,14 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         this.freeSlotModel = freeSlotModel;
         this.taskModel = taskModel;
         this.planTaskView = planTaskView;
+
+
+        //This is temporary test code: create some free slots to test
+        LocalDate date = LocalDate.now();
+        this.freeSlotModel.create(date, LocalTime.of(8, 0), LocalTime.of(10, 0));
+        this.freeSlotModel.create(date, LocalTime.of(11, 0), LocalTime.of(13, 0));
+
+        //end of temporary test code
     }
 
     @Override
@@ -40,12 +48,28 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
         //Get the data from the view
         //TODO: implement the view to get these inputs
-        String name = "task-name";
-        Duration duration = Duration.ofHours(1);
-        String priority = "High";
-        LocalDate deadline = LocalDate.of(2020, 12, 31);
+//        String name = "task-name";
+//        Duration duration = Duration.ofHours(1);
+//        String priority = "High";
+//        LocalDate deadline = LocalDate.of(2020, 12, 31);
         String category = "category";
-        String status = "status";
+        String status = "UNSCHEDULED";
+        //get the data from the view inputs
+        String name = planTaskView.getTaskName();
+        Duration duration = planTaskView.getDuration();
+        String priority = planTaskView.getPriority();
+        LocalDate deadline = planTaskView.getDeadline();
+//        String category = planTaskView.getCategory();
+//        String status = planTaskView.getStatus();
+
+        //print the values of the inputs
+        System.out.println("inputs: ");
+        System.out.println("name: " + name);
+        System.out.println("duration: " + duration);
+        System.out.println("priority: " + priority);
+        System.out.println("deadline: " + deadline);
+        System.out.println("category: " + category);
+        System.out.println("status: " + status);
 
         try{
             System.out.println("hora");
@@ -69,6 +93,17 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            //print available slots in the day
+            try {
+                ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(LocalDate.now());
+                System.out.println("available slots: ");
+                for(FreeSlotSchema freeSlot : freeslots){
+                    System.out.println(freeSlot.getStartTime() + " - " + freeSlot.getEndTime());
+                }
+            } catch (Exception e) {
+            }
         }
 
     }
@@ -80,7 +115,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
         //Get the necessary data for verification
         ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(day.getDate()); //throws DayDoesNotHaveFreeSlotsException
-        ArrayList<TaskSchema> tasks = taskModel.findMany(day.getDate()); //throws DayDoesNotHaveTasksException
 
         //check if a free slot is available for this task
         FreeSlotSchema availableFreeSlot = null;
@@ -101,14 +135,16 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             //the new task will take the whole free slot:
             duration = availableFreeSlot.getDuration(); //now the task's duration = the free slot's duration
             this.freeSlotModel.delete(day.getDate(), availableFreeSlot.getStartTime()); //remove the free slot
-            this.taskModel.create(new SimpleTaskSchema(name, startTime, duration,
-                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status)));
+            this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
+                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 1));
         } else {
-            //the free slot will be reduced (to the bottom) by the task's duration, which remains the same
-            this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getDuration().minus(duration));
-            this.taskModel.create(new SimpleTaskSchema(name, startTime, duration,
-                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status)));
+            //the free slot will be reduced (to the bottom) by the task's duration
+            this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getStartTime().plus(availableFreeSlot.getDuration().minus(duration)));
+            this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
+                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 1));
         }
+
+        System.out.println("task"+ "\""+ name +"\""+ "created successfully");
     }
 
     private void planDecomposableTaskManually(DaySchema day, String name, LocalTime startTime, Duration duration,
@@ -127,8 +163,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             if (freeSlot.getDuration().compareTo(duration) >= 0){
                 availableFreeSlot = freeSlot;
                 //and we'll create the task in this free slot
-                SimpleTaskSchema simpleTask = new SimpleTaskSchema(name, startTime, duration,
-                        priority, deadline, category, status);
+                SimpleTaskSchema simpleTask = new SimpleTaskSchema( day.getDate(), name, startTime, duration,
+                        priority, deadline, category, status, 1);
                 DecomposableTaskSchema decomposableTask = new DecomposableTaskSchema(simpleTask);
                 taskModel.create(decomposableTask);
                 //TODO: think about deleting the freeSlot or nah
@@ -144,8 +180,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
 
 
-        SimpleTaskSchema simpleTask = new SimpleTaskSchema(name, startTime, duration,
-                priority, deadline, category, status);
+        SimpleTaskSchema simpleTask = new SimpleTaskSchema(day.getDate(), name, startTime, duration,
+                priority, deadline, category, status, 1);
         DecomposableTaskSchema decomposableTaskSchema = new DecomposableTaskSchema(simpleTask);
         taskModel.create(decomposableTaskSchema);
     }

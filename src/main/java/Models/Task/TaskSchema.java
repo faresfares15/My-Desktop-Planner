@@ -19,7 +19,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
     private TaskStatus status;
     private Progress progress;
 
-    public TaskSchema(LocalDate date, String name, LocalTime startTime, LocalTime endTime, Duration duration, Priority
+    public TaskSchema(LocalDate date, String name, LocalTime startTime, Duration duration, Priority
             priority, LocalDate deadline, String category, TaskStatus status) {
         this.date = date;
         this.name = name;
@@ -75,7 +75,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
 
     @Override
     public int compareTo(TaskSchema o) {
-        return this.date.compareTo(o.getDate());
+        return this.date.compareTo(o.getDate()); //TODO: the task here is supposed to compare by start time, no?
     }
 
     @Override
