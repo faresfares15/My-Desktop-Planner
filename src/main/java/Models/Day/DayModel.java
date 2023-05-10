@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.TreeSet;
 
 public class DayModel {
+    //TODO: change the map by a DayDatabase
     private TreeSet<DaySchema> days = new TreeSet<>();
 
     public DayModel(TreeSet<DaySchema> days) {

@@ -28,4 +28,5 @@ public class FreeSlotSchema {
         return Duration.between(startTime, endTime);
     }
 
+
 }
