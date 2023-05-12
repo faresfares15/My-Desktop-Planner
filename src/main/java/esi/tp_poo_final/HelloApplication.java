@@ -1,9 +1,6 @@
 package esi.tp_poo_final;
 
-import Databases.FreeSlotsDatabase;
-import Databases.FreeSlotsFileDatabase;
-import Databases.TaskDatabase;
-import Databases.TaskFileDatabase;
+import Databases.*;
 import Models.FreeSlot.FreeSlotModel;
 import Models.Task.TaskModel;
 import Views.PlanTaskView;
@@ -24,6 +21,7 @@ public class HelloApplication extends Application {
         //create the databases
         FreeSlotsDatabase freeSlotsDatabase = new FreeSlotsFileDatabase(/*filename*/);
         TaskDatabase taskDatabase = new TaskFileDatabase(/*filename*/);
+        DayDatabase dayDatabase = new DayFileDataBase(/*filename*/);
 
         //create the models
         FreeSlotModel freeSlotModel = new FreeSlotModel(freeSlotsDatabase);

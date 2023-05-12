@@ -59,6 +59,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         String category = "category";
         String status = "UNSCHEDULED";
         //get the data from the view inputs
+        //TODO: give default values incase the input was empty
         String name = planTaskView.getTaskName();
         Duration duration = planTaskView.getDuration();
         String priority = planTaskView.getPriority();
@@ -91,7 +92,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             if (isSimpleTask) {
                 planSimpleTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
                         priority, deadline, category, status);
-                Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority);
 
             } else {
                 planDecomposableTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
@@ -247,6 +247,15 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
 
     private void autoPlanSetOfTasks(ArrayList<TaskSchema> tasksList){
+        Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority);
+        tasksList.sort(comparator);
+        Iterator<TaskSchema> it = tasksList.iterator();
+        TaskSchema task = null;
+        while(it.hasNext()){
+            task = it.next();
+            // all the exceptions will be handled in the handle method only
+
+        }
 
     }
 
