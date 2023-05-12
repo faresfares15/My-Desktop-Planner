@@ -11,9 +11,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public interface DayDatabase {
-    ArrayList<DaySchema> findMany(LocalDate dayDate);
-    DaySchema find(LocalDate dayDate);
+    ArrayList<DaySchema> findMany(LocalDate startDate, LocalDate endDate);
+    public DaySchema find(LocalDate date);
     DaySchema create(LocalDate dayDate, ArrayList<FreeSlotSchema> freeSlotsOfTheDay, ArrayList<TaskSchema> tasksOfTheDay);
-    FreeSlotSchema update(LocalDate dayDate, LocalTime startTime, LocalTime newStartTime) throws FreeSlotNotFoundException;
-    FreeSlotSchema delete(LocalDate dayDate);
+    DaySchema update() throws FreeSlotNotFoundException;
+    DaySchema delete(LocalDate date);
 }

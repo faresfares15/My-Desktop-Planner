@@ -1,6 +1,7 @@
 package esi.tp_poo_final;
 
 import Databases.*;
+import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
 import Models.Task.TaskModel;
 import Views.PlanTaskView;
@@ -27,7 +28,8 @@ public class HelloApplication extends Application {
         //create the models
         FreeSlotModel freeSlotModel = new FreeSlotModel(freeSlotsDatabase);
         TaskModel taskModel = new TaskModel(taskDatabase);
-        PlanTaskView planTaskView = new PlanTaskView(freeSlotModel, taskModel);
+        DayModel dayModel = new DayModel(dayDatabase);
+        PlanTaskView planTaskView = new PlanTaskView(freeSlotModel, taskModel, dayModel);
         primaryStage.setScene(planTaskView.getScene());
         primaryStage.show();
 

@@ -1,44 +1,35 @@
 package Models.Day;
 
+import Databases.DayDatabase;
+import Exceptions.FreeSlotNotFoundException;
+import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.TaskSchema;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.TreeSet;
 
 public class DayModel {
-    //TODO: change the map by a DayDatabase
-    private TreeSet<DaySchema> days = new TreeSet<>();
+    private DayDatabase dayDatabase;
 
-    public DayModel(TreeSet<DaySchema> days) {
-        this.days = days;
-    }
 
-    public DayModel() {
+    public DayModel(DayDatabase dayDatabase){
+        this.dayDatabase = dayDatabase;
     }
-    //CRUD operations
-    public void create(DaySchema daySchema){
-        days.add(daySchema);
+    public DaySchema create(LocalDate date, ArrayList<FreeSlotSchema> freeSlots, ArrayList<TaskSchema> tasks){
+        return dayDatabase.create(date, freeSlots, tasks);
     }
-    public DaySchema read(LocalDate date){
-        DaySchema tempDay = new DaySchema(date);
-        //TODO: Check if we're going to let it like this because it's returning the one that's greater than or equal to what we're looking for
-        return days.ceiling(tempDay);
+    public ArrayList<DaySchema> findMany(LocalDate startDate, LocalDate endDate){
+        return dayDatabase.findMany(startDate, endDate);
     }
-    public void update(DaySchema daySchema){
-        if (days.contains(daySchema)){
-            //Sounds crazy like that but it'll search for the objects that's equal to the one we're passing with the
-            // overridden method in DaySchema and adds the new object that we passed
-            days.remove(daySchema);
-            days.add(daySchema);
-        }else{
-            //Adds it if it doesn't exist
-            days.add(daySchema);
-        }
+    public DaySchema find(LocalDate date){
+        return dayDatabase.find(date);
     }
-    public void delete(LocalDate date){
-        //Passing the date will be more appropriate as we won't have to create a day object for it.
-        DaySchema tempDay = new DaySchema(date);
-        days.remove(tempDay);
+//    public DaySchema update(LocalDate date, ArrayList<FreeSlotSchema> freeSlots, ArrayList<TaskSchema> tasks) throws FreeSlotNotFoundException {
+//        return dayDatabase.update();
+//    }
+    public DaySchema delete(LocalDate date){
+        return dayDatabase.delete(date);
     }
 }

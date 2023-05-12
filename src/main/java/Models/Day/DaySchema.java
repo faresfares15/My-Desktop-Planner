@@ -14,6 +14,13 @@ public class DaySchema implements Comparable<DaySchema> {
         this.date = LocalDate.now();
         this.taskSchemas = null;
     }
+
+    public DaySchema(LocalDate date, ArrayList<FreeSlotSchema> freeSlots, ArrayList<TaskSchema> taskSchemas) {
+        this.date = date;
+        this.freeSlots = freeSlots;
+        this.taskSchemas = taskSchemas;
+    }
+
     public DaySchema(int year, int month, int day){
         this.date = LocalDate.of(year, month, day);
         this.taskSchemas = null;

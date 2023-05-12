@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.TaskControllers.PlanTaskController;
+import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
 import Models.Task.TaskModel;
 import javafx.collections.FXCollections;
@@ -16,6 +17,7 @@ import java.time.LocalTime;
 public class PlanTaskView extends Stage {
     private FreeSlotModel freeSlotModel;
     private TaskModel taskModel;
+    private DayModel dayModel;
     private TextField taskNameField;
     private Spinner<Integer> startTimeHoursSpinner;
     private Spinner<Integer> startTimeMinutesSpinner;
@@ -24,9 +26,10 @@ public class PlanTaskView extends Stage {
     private Spinner<Integer> durationMinutesSpinner;
     private ComboBox<String> priorityComboBox;
     private DatePicker deadlinePicker;
-    public PlanTaskView(FreeSlotModel freeSlotModel, TaskModel taskModel) {
+    public PlanTaskView(FreeSlotModel freeSlotModel, TaskModel taskModel, DayModel dayModel) {
         this.freeSlotModel = freeSlotModel;
         this.taskModel = taskModel;
+        this.dayModel = dayModel;
         this.setTitle("Plan Task View");
         //this.setScene(new Scene(new PlanTaskPane(/*... model, */)));
 
@@ -54,7 +57,7 @@ public class PlanTaskView extends Stage {
 
         // Create a button to submit the form
         Button submitButton = new Button("Create Task");
-        submitButton.setOnAction(new PlanTaskController(this.freeSlotModel, this.taskModel, this));
+        submitButton.setOnAction(new PlanTaskController(this.freeSlotModel, this.taskModel, this.dayModel, this));
 
         //Create a grid pane to hold the form elements
         GridPane gridPane = new GridPane();
