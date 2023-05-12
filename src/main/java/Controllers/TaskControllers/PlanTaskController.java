@@ -86,13 +86,15 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
             //create the task
             //boolean isSimpleTask = checkbox.value();
-            boolean isSimpleTask = true; //Change it to run tests
+            boolean isSimpleTask = false; //Change it to run tests
             if (isSimpleTask) {
                 planSimpleTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
                         priority, deadline, category, status);
                 Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority);
 
             } else {
+                planDecomposableTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
+                        Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status));
 
             }
         } catch (Exception e) {
@@ -105,6 +107,10 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                 System.out.println("available slots: ");
                 for (FreeSlotSchema freeSlot : freeslots) {
                     System.out.println(freeSlot.getStartTime() + " - " + freeSlot.getEndTime());
+                }
+                System.out.println("Tasks for this day are: ");
+                for (TaskSchema task : taskModel.findMany(LocalDate.now())) {
+                    System.out.println(task.getName() + " - " + task.getName() + " - " + task.getDuration());
                 }
             } catch (Exception e) {
             }
@@ -184,14 +190,15 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                         priority, deadline, category, status, 0);
                 DecomposableTaskSchema decomposableTask = new DecomposableTaskSchema(simpleTask);
                 taskModel.create(decomposableTask);
+                System.out.println("task"+ " \""+ name +"\" "+ "created successfully");
                 return;
             }
         }
         if (avaibleTimeForTheDay.compareTo(duration) < 0) {
             throw new DayDoesNotHaveFreeSlotsException();
         } else {
-            //the task will be  decomposed
-            SimpleTaskSchema simpleTask = new SimpleTaskSchema(day.getDate(), name, availableFreeSlot.getStartTime(), duration,
+            //the task will be  decomposed to sub-tasks and the first one will start at the first free slot
+            SimpleTaskSchema simpleTask = new SimpleTaskSchema(day.getDate(), name, freeslots.get(0).getStartTime(), duration,
                     priority, deadline, category, status, 0);
             DecomposableTaskSchema decomposableTask = new DecomposableTaskSchema(simpleTask);
             int subTasksIndex = 1;
@@ -199,10 +206,11 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             for (FreeSlotSchema freeSlot: freeslots){
                 if(duration.compareTo(freeSlot.getDuration()) > 0){
                     duration = duration.minus(freeSlot.getDuration());
-                    decomposableTask.addSubTask(new SimpleTaskSchema(day.getDate(), name += String.valueOf(subTasksIndex),
+                    decomposableTask.addSubTask(new SimpleTaskSchema(day.getDate(), name + String.valueOf(subTasksIndex),
                             freeSlot.getStartTime(), freeSlot.getDuration(),
                             priority, deadline, category, status, 0));
                     subTasksIndex++;
+                    freeSlotModel.delete(freeSlot.getDayDate(), freeSlot.getStartTime());
                 } else { //The case where the compareTo gives 0 will be treated here because the loop will end
                     if (freeSlot.getDuration().compareTo(duration.plus(minimalDuration)) >=0 ){
                         //the freeSlot will only be updated
@@ -212,12 +220,13 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                         duration = freeSlot.getDuration();
                         freeSlotModel.delete(day.getDate(), freeSlot.getStartTime());
                     }
-                    decomposableTask.addSubTask(new SimpleTaskSchema(day.getDate(), name += String.valueOf(subTasksIndex),
+                    decomposableTask.addSubTask(new SimpleTaskSchema(day.getDate(), name + String.valueOf(subTasksIndex),
                             freeSlot.getStartTime(), duration,
                             priority, deadline, category, status, 0));
                 }
             }
             taskModel.create(decomposableTask);
+            System.out.println("task"+ " \""+ name +"\" "+ "created successfully");
         }
 
 

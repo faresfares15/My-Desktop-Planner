@@ -77,6 +77,18 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         return priority;
     }
 
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public int compareTo(TaskSchema o) {
         return this.date.compareTo(o.getDate()); //TODO: the task here is supposed to compare by start time, no?
