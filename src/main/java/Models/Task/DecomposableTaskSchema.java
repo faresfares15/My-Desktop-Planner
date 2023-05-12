@@ -9,6 +9,7 @@ public class DecomposableTaskSchema extends TaskSchema {
         //The one we'll be using I think
         this.subTasks = new ArrayList<SimpleTaskSchema>();
         this.subTasks.add(task);
+        this.setDate(task.getDate());
         this.setName(task.getName());
         this.setCategory(task.getCategory());
         this.setDeadline(task.getDeadline());

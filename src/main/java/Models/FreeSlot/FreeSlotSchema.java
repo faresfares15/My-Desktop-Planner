@@ -44,4 +44,10 @@ public class FreeSlotSchema implements Comparable<FreeSlotSchema> {
     public int compareTo(FreeSlotSchema o) {
         return this.startTime.compareTo(o.getStartTime());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.startTime.equals(((FreeSlotSchema)obj).getStartTime());
+    }
 }
+

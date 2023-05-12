@@ -30,6 +30,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         this.category = category;
         this.status = status;
         this.id = (name + category).hashCode() + deadline.hashCode();
+        this.progress = Progress.NOT_REALIZED;
     }
     public TaskSchema(String name, LocalTime startTime, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status) {
         this.name = name;
@@ -39,6 +40,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         this.deadline = deadline;
         this.category = category;
         this.status = status;
+        this.progress = Progress.NOT_REALIZED;
         this.id = (name + category).hashCode() + deadline.hashCode();
     }
 
@@ -69,6 +71,10 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         return date;
     }
 
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     public Duration getDuration() {
         return duration;
     }
@@ -79,6 +85,14 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
 
     public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
+    }
+
+    public Progress getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Progress progress) {
+        this.progress = progress;
     }
 
     public void setName(String name) {
