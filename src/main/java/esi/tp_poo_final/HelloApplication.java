@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalTime;
 
 public class HelloApplication extends Application {
     @Override
@@ -29,6 +30,10 @@ public class HelloApplication extends Application {
         PlanTaskView planTaskView = new PlanTaskView(freeSlotModel, taskModel);
         primaryStage.setScene(planTaskView.getScene());
         primaryStage.show();
+
+        LocalTime t1 = LocalTime.of(8, 0);
+        LocalTime t2 = LocalTime.of(8, 0);
+        System.out.println(t1.isBefore(t2));
     }
 
     public static void main(String[] args) {

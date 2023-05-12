@@ -3,6 +3,7 @@ package Databases;
 import Exceptions.DayDoesNotHaveTasksException;
 import Exceptions.TaskDoesNotExistException;
 import Models.Task.TaskSchema;
+import javafx.concurrent.Task;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class TaskFileDatabase implements TaskDatabase{
     }
 
     @Override
-    public void create(TaskSchema taskSchema) {
+    public TaskSchema create(TaskSchema taskSchema) {
         if (tasksMap.containsKey(taskSchema.getDate())){
             tasksMap.get(taskSchema.getDate()).add(taskSchema);
             Collections.sort(tasksMap.get(taskSchema.getDate()));
@@ -32,6 +33,8 @@ public class TaskFileDatabase implements TaskDatabase{
             tasksList.add(taskSchema);
             tasksMap.put(taskSchema.getDate(), tasksList);
         }
+
+        return taskSchema;
     }
 
     @Override

@@ -7,6 +7,7 @@ import Models.FreeSlot.FreeSlotSchema;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.TreeMap;
 
 public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
@@ -90,6 +91,7 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
         }else{
             //add the free slot to the list
             freeSlotsList.add(freeSlotSchema);
+            Collections.sort(freeSlotsList);
         }
 
         //return the created free slot

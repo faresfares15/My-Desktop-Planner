@@ -69,6 +69,16 @@
                             <noHeaderFiles>true</noHeaderFiles>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>debug</id>
+                        <configuration>
+                            <mainClass>esi.tp_poo_final/esi.tp_poo_final.HelloApplication</mainClass>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=n,address=localhost:8000,suspend=y</option>
+                            </options>
+                            <mainClass>org.waninge.test.JFXTest</mainClass>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

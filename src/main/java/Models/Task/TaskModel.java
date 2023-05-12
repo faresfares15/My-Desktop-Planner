@@ -19,8 +19,8 @@ public class TaskModel {
     public ArrayList<TaskSchema> findMany(LocalDate date) throws DayDoesNotHaveTasksException {
         return this.taskDatabase.findMany(date);
     }
-    public void create(TaskSchema taskSchema){
-        this.taskDatabase.create(taskSchema);
+    public TaskSchema create(TaskSchema taskSchema){
+        return this.taskDatabase.create(taskSchema);
     }
     public TaskSchema read(int id, LocalDate date) throws TaskDoesNotExistException {
         return this.taskDatabase.read(id, date);

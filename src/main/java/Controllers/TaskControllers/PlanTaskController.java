@@ -2,9 +2,7 @@ package Controllers.TaskControllers;
 
 //my imports
 
-import Exceptions.DayDoesNotHaveFreeSlotsException;
-import Exceptions.FreeSlotNotFoundException;
-import Exceptions.SimpleTaskDoesNotFitException;
+import Exceptions.*;
 import Models.Day.DaySchema;
 import Models.FreeSlot.FreeSlotModel;
 import Models.FreeSlot.FreeSlotSchema;
@@ -28,6 +26,23 @@ import java.util.Iterator;
 
 public class PlanTaskController implements EventHandler<ActionEvent> {
     //If the user wants to create a new task, this controller will be called.
+    protected class SubTaskInfo{
+        //a container class useful to create an array of subtasks ( in planDcompmosableTaskManually)
+        LocalTime startTime;
+        Duration duration;
+        SubTaskInfo(LocalTime startTime, Duration duration){
+            this.startTime = startTime;
+            this.duration = duration;
+        }
+
+        public LocalTime getStartTime() {
+            return startTime;
+        }
+
+        public Duration getDuration() {
+            return duration;
+        }
+    }
     FreeSlotModel freeSlotModel;
     TaskModel taskModel;
     PlanTaskView planTaskView;
@@ -42,6 +57,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         LocalDate date = LocalDate.now();
         this.freeSlotModel.create(date, LocalTime.of(8, 0), LocalTime.of(10, 0));
         this.freeSlotModel.create(date, LocalTime.of(11, 0), LocalTime.of(13, 0));
+//        this.freeSlotModel.create(date, LocalTime.of(8, 0), LocalTime.of(13, 0));
 
         //end of temporary test code
     }
@@ -61,6 +77,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         //get the data from the view inputs
         //TODO: give default values incase the input was empty
         String name = planTaskView.getTaskName();
+        LocalTime startTime = planTaskView.getStartTime();
         Duration duration = planTaskView.getDuration();
         String priority = planTaskView.getPriority();
         LocalDate deadline = planTaskView.getDeadline();
@@ -77,27 +94,66 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         System.out.println("status: " + status);
 
         try {
-            System.out.println("hora");
             //validate the inputs
-            if (name == null) return;
-            if (duration == null) return;
-            if (priority == null || !TaskSchema.validatePriority(priority)) return;
-            if (deadline == null) return;
-            if (category == null) return;
-            if (status == null) return;
+            if (name == null) throw new EmptyRequiredFieldException();
+            if (duration == null) throw new EmptyRequiredFieldException();
+            if (priority == null || !TaskSchema.validatePriority(priority)) throw new EmptyRequiredFieldException();
+            if (deadline == null) throw new EmptyRequiredFieldException();
+            if (category == null) throw new EmptyRequiredFieldException();
+            if (status == null) throw new EmptyRequiredFieldException();
+            //TODO: verify the day in the past exception
 
             //create the task
             //boolean isSimpleTask = checkbox.value();
+            boolean isManual = true; //Change it to run tests
             boolean isSimpleTask = false; //Change it to run tests
-            if (isSimpleTask) {
-                planSimpleTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
-                        priority, deadline, category, status);
 
-            } else {
-                planDecomposableTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
-                        Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status));
+            switch (Boolean.toString(isManual)){
+                case "true":
+                //planning a task manually
+                    switch (Boolean.toString(isSimpleTask)){
+                        case "true":
+                        //planning a simple task manually
+                            planSimpleTaskManually(new DaySchema(LocalDate.now()), name, startTime, duration,
+                                    priority, deadline, category, status, 0);
+                            break;
+                        case "false":
+                        //planning a decomposable task manually
+//                            planDecomposableTaskManually(new DaySchema(LocalDate.now()), name, startTime, duration,
+//                                    priority, deadline, category, status);
+                            SubTaskInfo subtaskInfo1 = new SubTaskInfo(LocalTime.of(9, 0), Duration.ofHours(2));
+                            SubTaskInfo subtaskInfo2 = new SubTaskInfo(LocalTime.of(12, 0), Duration.ofHours(1));
+                            ArrayList<SubTaskInfo> subtasksInfos = new ArrayList<>(){{
+                                add(subtaskInfo1);
+                                add(subtaskInfo2);
+                            }};
+                            //trash
+                                for(SubTaskInfo subtaskInfo : subtasksInfos){
+                                    System.out.println(subtaskInfo.getStartTime());
+                                    System.out.println(subtaskInfo.getDuration());
+                                }
+                            //
+                            planDecomposableTaskManually(new DaySchema(LocalDate.now()), name, subtasksInfos, priority, deadline,  category, status);
+                            break;
+                    }
+                    break;
 
+                case "false":
+                //planning a task automatically
+                    switch (Boolean.toString(isSimpleTask)){
+                        case "true":
+                        //planning a simple task automatically
+                            planSimpleTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
+                                    priority, deadline, category, status);
+                            break;
+                        case "false":
+                        //planning a decomposable task automatically
+                            planDecomposableTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
+                                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status));
+                            break;
+                    }
             }
+            
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -121,12 +177,101 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
                 }
             } catch (Exception e) {
+
             }
         }
 
     }
-
     //These are helper methods that will be called by the controller. They are here to separate logics.
+    private SimpleTaskSchema planSimpleTaskManually(DaySchema day, String name, LocalTime taskStartTime, Duration duration,
+                                        String priority, LocalDate deadline, String category, String status, int periodicity) throws Exception {
+        //This method will create a simple task.
+
+        //Get the necessary data for verification
+        ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(day.getDate()); //throws DayDoesNotHaveFreeSlotsException
+
+        //check if a free slot is available for this task
+        FreeSlotSchema availableFreeSlot = null;
+        if ((availableFreeSlot = getAvailableFreeSlot(taskStartTime, duration, freeslots)) == null) {
+            throw new SimpleTaskDoesNotFitException();
+        }
+
+        //check the minimal duration condition
+        Duration minimalDuration = Duration.ofMinutes(30); //TODO: get the minimal duration from the settings of calendar
+        if (availableFreeSlot.getDuration().compareTo((duration.plus(minimalDuration))) <= 0) {
+            //allocate the whole free slot for this task
+            duration = availableFreeSlot.getDuration();
+            this.freeSlotModel.delete(day.getDate(), availableFreeSlot.getStartTime());
+            return (SimpleTaskSchema) this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, taskStartTime, duration,
+                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 1));
+        }else {
+            //allocate a part of the free slot for this task and split the task into two parts)
+                //delete the current free slot
+                //prepare to create two free slots after removing the time allocated for the task, but:
+                //if the size of the first free slot is less than the minimal duration: don't create it but merge its duration to the task
+                //if the size of the second free slot is less than the minimal duration: don't create it but merge its duration to the task
+            this.freeSlotModel.delete(day.getDate(), availableFreeSlot.getStartTime());
+
+            //start time of the first free slot is the start time of the original slot
+            //end time of the first free slot is the start time of the task
+            //start time of the second free slot is the end time of the task
+            //end time of the second free slot is the end time of the original task
+
+            if(Duration.between(availableFreeSlot.getStartTime(), taskStartTime).compareTo(minimalDuration) <= 0){
+                //don't create the new sub free slot, and add its duration to the task
+                duration = duration.plus(Duration.between(availableFreeSlot.getStartTime(), taskStartTime));
+                taskStartTime = availableFreeSlot.getStartTime();
+            }else{
+                //create the free slot
+                this.freeSlotModel.create(day.getDate(), availableFreeSlot.getStartTime(), taskStartTime);
+            }
+
+            LocalTime taskEndTime = taskStartTime.plus(duration);
+            if(Duration.between(taskEndTime, availableFreeSlot.getEndTime()).compareTo(minimalDuration) <= 0){
+                //don't create the new sub free slot, and add its duration to the task
+                duration = duration.plus(Duration.between(taskEndTime, availableFreeSlot.getEndTime()));
+            }else {
+                //create the free slot
+                this.freeSlotModel.create(day.getDate(), taskEndTime, availableFreeSlot.getEndTime());
+            }
+
+            return (SimpleTaskSchema) this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, taskStartTime, duration,
+                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 1));
+        }
+    }
+    public void planDecomposableTaskManually(DaySchema day, String name, ArrayList<SubTaskInfo> subtasks, String priority, LocalDate deadline, String category, String status)
+    throws Exception{
+        //This method will create a decomposable task, with the decompositions manually given as an array
+
+        //Get the free slots of the given day
+        ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(day.getDate()); //throws DayDoesNotHaveFreeSlotsException
+
+        //check that no subtask overlaps with another sub task (start time + duration of current task < start time of next task)
+        for(int i = 0; i < subtasks.size() - 1; i++) {
+            if (subtasks.get(i).getStartTime().plus(subtasks.get(i).getDuration()).isAfter(subtasks.get(i + 1).getStartTime())) {
+                throw new TasksOverlapException();
+            }
+        }
+
+        //if one of the sub tasks doesn't have a free slot in the freeslots array list, throw an exception
+        for(SubTaskInfo subtask : subtasks){
+            if(getAvailableFreeSlot(subtask.getStartTime(), subtask.getDuration(), freeslots) == null){
+                throw new SimpleTaskDoesNotFitException();
+            }
+        }
+
+        //create a DecomposableTaskSchema object
+        DecomposableTaskSchema decomposableTask = new DecomposableTaskSchema(new SimpleTaskSchema(day.getDate(), name+"1", subtasks.get(0).getStartTime(), subtasks.get(0).getDuration(),
+                Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 0));
+
+        //add the subtasks to the DecomposableTaskSchema object
+        for(SubTaskInfo subtask : subtasks){
+            decomposableTask.addSubTask(planSimpleTaskManually(day, name+subtasks.indexOf(subtask), subtask.getStartTime(), subtask.getDuration(),
+                    priority, deadline, category, status, 0));
+        }
+
+
+    };
     private void planSimpleTaskAutomatically(DaySchema day, String name, Duration duration,
                                              String priority, LocalDate deadline, String category, String status) throws Exception {
         //This method will create a simple task.
@@ -243,9 +388,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         }
 
     }
-
-
-
     private void autoPlanSetOfTasks(ArrayList<TaskSchema> tasksList){
         Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority);
         tasksList.sort(comparator);
@@ -260,12 +402,19 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     }
 
     //Utility methods
-    private FreeSlotSchema getAvailableFreeSlot(LocalTime startTime, LocalTime endTime, ArrayList<FreeSlotSchema> freeSlotsList) {
+    private FreeSlotSchema getAvailableFreeSlot(LocalTime taskStartTime, Duration taskDuration, ArrayList<FreeSlotSchema> freeSlotsList) {
         //This method will check if a free slot is available for the given task.
+        LocalTime taskEndTime = taskStartTime.plus(taskDuration);
         for (FreeSlotSchema freeSlot : freeSlotsList) {
-            if (freeSlot.getStartTime().isBefore(startTime) && freeSlot.getEndTime().isAfter(endTime)) {
-                return freeSlot;
-            }
+            //if the free slot ends before the start of the task => "continue"
+            //if the free slot starts after the end of the task => "break"
+            //otherwise: check if the free slot can contain the task
+            if (freeSlot.getEndTime().isBefore(taskStartTime)) continue;
+
+            if (freeSlot.getStartTime().isAfter(taskEndTime)) break;
+
+            if (freeSlot.getStartTime().isBefore(taskStartTime.plusMinutes(1)) && freeSlot.getEndTime().isAfter(taskEndTime.minusMinutes(1))) return freeSlot;
+
         }
         return null;
     }
