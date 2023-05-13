@@ -8,8 +8,7 @@ import java.util.ArrayList;
 
 public class DaySchema implements Comparable<DaySchema> {
     private LocalDate date;
-    private int calendarId;
-    //TODO: will be set when we'll finish with the calendar
+
     public DaySchema(LocalDate date) {
         this.date = date;
     }

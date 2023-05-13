@@ -28,4 +28,14 @@ public class DecomposableTaskSchema extends TaskSchema {
     public void addSubTask(SimpleTaskSchema simpleTaskSchema){
         subTasks.add(simpleTaskSchema);
     }
+
+    @Override
+    public double getProgressPercentage() {
+        double sum = 0;
+        for (int i = 1; i < subTasks.size(); i++) {
+            sum += subTasks.get(i).getProgressPercentage();
+        }
+        // minus 1 because we don't want to count the mother task from which the others were decomposed
+        return sum / (subTasks.size()-1);
+    }
 }

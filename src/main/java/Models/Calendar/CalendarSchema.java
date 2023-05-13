@@ -5,13 +5,12 @@ import Models.Project.ProjectSchema;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
+import java.util.ArrayList;
 
 public class CalendarSchema {
     private int minimalNumberOfTasksPerDay;
     private Duration minimalDuration;
     private DaySchema[][] days;
-//    private DaySchema[][] days = new DaySchema[12][];
-    private ProjectSchema[] projects;
     private DayOfWeek startOfTheWeek;
 
     public CalendarSchema(int minimalNumberOfTasksPerDay, Duration minimalDuration, DayOfWeek startOfTheWeek) {

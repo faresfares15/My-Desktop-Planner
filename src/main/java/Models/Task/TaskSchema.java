@@ -5,6 +5,7 @@ import Exceptions.InvalidPriorityException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Random;
 
 
 public abstract class TaskSchema implements Comparable<TaskSchema> {
@@ -22,6 +23,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
 
     public TaskSchema(LocalDate date, String name, LocalTime startTime, Duration duration, Priority
             priority, LocalDate deadline, String category, TaskStatus status) {
+        Random random = new Random();
         this.date = date;
         this.name = name;
         this.startTime = startTime;
@@ -30,10 +32,11 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         this.deadline = deadline;
         this.category = category;
         this.status = status;
-        this.id = (name + category).hashCode() + deadline.hashCode();
+        this.id = (name + category).hashCode() + deadline.hashCode() + random.nextInt(1000);
         this.progress = Progress.NOT_REALIZED;
     }
     public TaskSchema(String name, LocalTime startTime, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status) {
+        Random random = new Random();
         this.name = name;
         this.startTime = startTime;
         this.duration = duration;
@@ -42,12 +45,13 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         this.category = category;
         this.status = status;
         this.progress = Progress.NOT_REALIZED;
-        this.id = (name + category).hashCode() + deadline.hashCode();
+        this.id = (name + category).hashCode() + deadline.hashCode() + random.nextInt(1000);
     }
 
     public TaskSchema(String name, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status) {
+        Random random = new Random();
         this.name = name;
-        this.id = (name + category).hashCode() + deadline.hashCode();
+        this.id = (name + category).hashCode() + deadline.hashCode() + random.nextInt(1000);
         this.duration = duration;
         this.priority = priority;
         this.deadline = deadline;
@@ -168,4 +172,5 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         }
         return false;
     }
+    public abstract double getProgressPercentage();
 }

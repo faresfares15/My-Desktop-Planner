@@ -63,4 +63,18 @@ public class ProjectSchema {
     public void setTasksList(ArrayList<TaskSchema> tasksList) {
         this.tasksList = tasksList;
     }
+    public double getProgressPercentage(){
+        double total = 0;
+        for (TaskSchema task: tasksList) {
+            total += task.getProgressPercentage();
+        }
+        return total/tasksList.size();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof ProjectSchema)) return false;
+        return this.projectId == ((ProjectSchema) obj).getProjectId();
+    }
 }

@@ -37,6 +37,7 @@ public class HelloApplication extends Application {
         LocalTime t1 = LocalTime.of(8, 0);
         LocalTime t2 = LocalTime.of(8, 0);
         System.out.println(t1.isBefore(t2));
+        System.out.println((double) 2/(4-1));
 
 //        class A{
 //            int a;

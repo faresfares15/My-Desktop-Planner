@@ -11,5 +11,6 @@ public interface ProjectDataBase {
     ProjectSchema initialize(String name, String description); //Just for initialization
     ProjectSchema create(String name, String description, ArrayList<TaskSchema> tasksList); //Create from input
     ProjectSchema find(int id);
-    ProjectSchema update(ProjectSchema projectSchema);
+    ProjectSchema update(ProjectSchema projectSchema); //normally the id must not be changed
+    ProjectSchema delete(ProjectSchema projectSchema);
 }
