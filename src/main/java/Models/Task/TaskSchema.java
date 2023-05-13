@@ -18,6 +18,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
     private String category;
     private TaskStatus status;
     private Progress progress;
+    private int projectId = -1;
 
     public TaskSchema(LocalDate date, String name, LocalTime startTime, Duration duration, Priority
             priority, LocalDate deadline, String category, TaskStatus status) {
@@ -57,6 +58,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
 
     public TaskSchema() {
     }
+
 
     public LocalDate getDeadline() {
         return deadline;
@@ -136,6 +138,14 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
     @Override
