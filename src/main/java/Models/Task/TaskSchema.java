@@ -44,6 +44,17 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         this.id = (name + category).hashCode() + deadline.hashCode();
     }
 
+    public TaskSchema(String name, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status) {
+        this.name = name;
+        this.id = (name + category).hashCode() + deadline.hashCode();
+        this.duration = duration;
+        this.priority = priority;
+        this.deadline = deadline;
+        this.category = category;
+        this.status = status;
+        this.progress = Progress.NOT_REALIZED;;
+    }
+
     public TaskSchema() {
     }
 

@@ -53,7 +53,7 @@ public class PlanTaskView extends Stage {
         priorityComboBox = new ComboBox<>(FXCollections.observableArrayList("LOW", "MEDIUM", "HIGH"));
 
         Label deadlineLabel = new Label("Deadline:");
-        deadlinePicker = new DatePicker(LocalDate.of(2023, 5, 11));
+        deadlinePicker = new DatePicker(LocalDate.now());
 
         // Create a button to submit the form
         Button submitButton = new Button("Create Task");

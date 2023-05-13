@@ -2,11 +2,8 @@ package Databases;
 
 import Exceptions.FreeSlotNotFoundException;
 import Models.Day.DaySchema;
-import Models.FreeSlot.FreeSlotSchema;
-import Models.Task.TaskSchema;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
@@ -27,8 +24,8 @@ public class DayFileDataBase implements DayDatabase{
     }
 
     @Override
-    public DaySchema create(LocalDate dayDate, ArrayList<FreeSlotSchema> freeSlotsOfTheDay, ArrayList<TaskSchema> tasksOfTheDay) {
-        DaySchema day = new DaySchema(dayDate, freeSlotsOfTheDay, tasksOfTheDay);
+    public DaySchema create(LocalDate dayDate) {
+    DaySchema day = new DaySchema(dayDate);
         if (days.add(day)) return day;
         else return null;
     }

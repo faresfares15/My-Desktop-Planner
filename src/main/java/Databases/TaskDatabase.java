@@ -11,6 +11,7 @@ public interface TaskDatabase {
     public ArrayList<TaskSchema> findMany(LocalDate date) throws DayDoesNotHaveTasksException;
     public TaskSchema create(TaskSchema taskSchema);
     public TaskSchema read(int id, LocalDate date) throws TaskDoesNotExistException;
+    void initialize(LocalDate date);
     public void update(TaskSchema taskSchema) throws TaskDoesNotExistException;
     public void delete(TaskSchema taskSchema) throws TaskDoesNotExistException;
 }

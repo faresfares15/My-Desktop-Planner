@@ -16,7 +16,12 @@ public class SimpleTaskSchema extends TaskSchema {
         this.periodicity = periodicity;
     }
 
-//    public Duration getPeriodicity() {
+    public SimpleTaskSchema(String name, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status, int periodicity) {
+        super(name, duration, priority, deadline, category, status);
+        this.periodicity = periodicity;
+    }
+
+    //    public Duration getPeriodicity() {
 //        return periodicity;
 //    }
     public int getPeriodicity() {

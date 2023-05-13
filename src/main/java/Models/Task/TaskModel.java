@@ -22,6 +22,9 @@ public class TaskModel {
     public TaskSchema create(TaskSchema taskSchema){
         return this.taskDatabase.create(taskSchema);
     }
+    public void initialize(LocalDate date){
+        this.taskDatabase.initialize(date);
+    }
     public TaskSchema read(int id, LocalDate date) throws TaskDoesNotExistException {
         return this.taskDatabase.read(id, date);
     }

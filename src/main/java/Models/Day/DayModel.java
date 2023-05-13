@@ -17,8 +17,8 @@ public class DayModel {
     public DayModel(DayDatabase dayDatabase){
         this.dayDatabase = dayDatabase;
     }
-    public DaySchema create(LocalDate date, ArrayList<FreeSlotSchema> freeSlots, ArrayList<TaskSchema> tasks){
-        return dayDatabase.create(date, freeSlots, tasks);
+    public DaySchema create(LocalDate date){
+        return dayDatabase.create(date);
     }
     public ArrayList<DaySchema> findMany(LocalDate startDate, LocalDate endDate){
         return dayDatabase.findMany(startDate, endDate);

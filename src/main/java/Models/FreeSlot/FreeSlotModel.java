@@ -23,6 +23,16 @@ public class FreeSlotModel {
     public FreeSlotSchema create(LocalDate date, LocalTime startTime, LocalTime endTime){
         return this.freeSlotsDatabase.create(date, startTime, endTime);
     }
+    public void initialize(LocalDate date){
+        this.freeSlotsDatabase.initialize(date);
+    }
+    public FreeSlotSchema create(FreeSlotSchema freeSlotSchema){
+        return this.freeSlotsDatabase.create(freeSlotSchema);
+    }
+    public ArrayList<FreeSlotSchema> create(ArrayList<FreeSlotSchema> freeSlotsList){
+        return this.freeSlotsDatabase.create(freeSlotsList);
+    }
+
     public FreeSlotSchema update(LocalDate date, LocalTime startTime, LocalTime newStartTime) throws FreeSlotNotFoundException {
         return this.freeSlotsDatabase.update(date, startTime, newStartTime);
     }

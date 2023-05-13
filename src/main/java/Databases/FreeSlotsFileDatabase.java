@@ -97,4 +97,43 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
         //return the created free slot
         return freeSlotSchema;
     }
+    public FreeSlotSchema create(FreeSlotSchema freeSlotSchema){
+        //create the free slot
+
+        //find the day in the map
+        ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(freeSlotSchema.getDayDate());
+
+        //check if the day has free slots
+        if(freeSlotsList == null){
+            //create a new list of free slots
+            freeSlotsList = new ArrayList<>();
+
+            //add the free slot to the list
+            freeSlotsList.add(freeSlotSchema);
+
+            //add the list to the map
+            this.freeSlotsMap.put(freeSlotSchema.getDayDate(), freeSlotsList);
+        }else{
+            //add the free slot to the list
+            freeSlotsList.add(freeSlotSchema);
+            Collections.sort(freeSlotsList);
+        }
+
+        //return the created free slot
+        return freeSlotSchema;
+    }
+
+    @Override
+    public ArrayList<FreeSlotSchema> create(ArrayList<FreeSlotSchema> freeSlotsList) {
+        for(FreeSlotSchema freeSlotSchema : freeSlotsList){
+            this.create(freeSlotSchema);
+        }
+        return freeSlotsList;
+    }
+
+    @Override
+    public void initialize(LocalDate dayDate) {
+        freeSlotsMap.put(dayDate, new ArrayList<>());
+        //just an empty arrayList for the days that doesn't have free slots
+    }
 }

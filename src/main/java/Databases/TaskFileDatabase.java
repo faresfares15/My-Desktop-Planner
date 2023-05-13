@@ -51,6 +51,12 @@ public class TaskFileDatabase implements TaskDatabase{
     }
 
     @Override
+    public void initialize(LocalDate date) {
+        tasksMap.put(date, new ArrayList<>());
+        //just an empty list to init the day when creating it
+    }
+
+    @Override
     public void update(TaskSchema taskSchema) throws TaskDoesNotExistException {
         if(tasksMap.containsKey(taskSchema.getDate())){
             tasksMap.get(taskSchema.getDate()).remove(taskSchema);
