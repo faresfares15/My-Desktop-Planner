@@ -19,7 +19,6 @@ public class CalendarSchema {
         this.startOfTheWeek = startOfTheWeek;
         //TODO: copy-paste the method that inits the days to here
     }
-
     public CalendarSchema() {
         this.minimalNumberOfTasksPerDay = 5;
         this.minimalDuration = Duration.ofMinutes(30);

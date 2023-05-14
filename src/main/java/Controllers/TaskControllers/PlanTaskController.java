@@ -10,20 +10,26 @@ import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.TaskModel;
 import Models.Task.TaskSchema;
 
+import java.net.URL;
 import java.util.ArrayList;
-
 
 //your imports
 import Models.Task.*;
 import Views.PlanTaskView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 
 public class PlanTaskController implements EventHandler<ActionEvent> {
     FreeSlotModel freeSlotModel;
@@ -92,10 +98,100 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         this.dayModel.create(date);
 
 
-
 //        this.freeSlotModel.create(date, LocalTime.of(8, 0), LocalTime.of(13, 0));
+    }
+    //If the user wants to create a new task, this controller will be called.
+    private class SubTaskInfo{
+        //a container class useful to create an array of subtasks ( in planDcompmosableTaskManually)
+        LocalTime startTime;
+        Duration duration;
+        SubTaskInfo(LocalTime startTime, Duration duration){
+            this.startTime = startTime;
+            this.duration = duration;
+        }
 
-        //end of temporary test code
+        public LocalTime getStartTime() {
+            return startTime;
+        }
+        public Duration getDuration() {
+            return duration;
+        }
+    }
+    @FXML
+    TextField taskNameField;
+    @FXML
+    Spinner<Integer> startTimeHoursSpinner;
+    @FXML
+    Spinner<Integer> startTimeMinutesSpinner;
+    @FXML
+    Spinner<Integer> durationHoursSpinner;
+    @FXML
+    Spinner<Integer> durationMinutesSpinner;
+    @FXML
+    ComboBox<String> priorityComboBox;
+    @FXML
+    DatePicker deadlinePicker;
+    private class CreateTaskViewInfos{
+        String getTaskName(){
+            return taskNameField.getText();
+        }
+        LocalTime getStartTime(){
+            return LocalTime.of(startTimeHoursSpinner.getValue(), startTimeMinutesSpinner.getValue());
+        }
+        public Duration getDuration(){
+            return Duration.ofHours(durationHoursSpinner.getValue()).plusMinutes(durationMinutesSpinner.getValue());
+        }
+        public String getPriority() {
+            return priorityComboBox.getValue();
+        }
+        public LocalDate getDeadline() {
+            return deadlinePicker.getValue();
+        }
+    }
+
+//    PlanTaskView2 planTaskView;
+
+    public PlanTaskController(){
+        //default constructor
+    }
+
+    public PlanTaskController(FreeSlotModel freeSlotModel, TaskModel taskModel) {
+        this.freeSlotModel = freeSlotModel;
+        this.taskModel = taskModel;
+//        this.planTaskView = planTaskView;
+    }
+
+    @FXML
+    public void initialize() {
+        //This method will be called when the view is loaded
+
+        //setting the start time hours spinner
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
+        valueFactory.setValue(0);
+        startTimeHoursSpinner.setValueFactory(valueFactory);
+
+        //setting the start time minutes spinner
+        valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0);
+        valueFactory.setValue(0);
+        startTimeMinutesSpinner.setValueFactory(valueFactory);
+
+        //setting the duration hours spinner
+        valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
+        valueFactory.setValue(0);
+        durationHoursSpinner.setValueFactory(valueFactory);
+
+        //setting the duration minutes spinner
+        valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0);
+        valueFactory.setValue(0);
+        durationMinutesSpinner.setValueFactory(valueFactory);
+
+        //setting the priority combo box
+        ObservableList<String> priorities = FXCollections.observableArrayList("LOW", "MEDIUM", "HIGH");
+        priorityComboBox.setValue("LOW");
+        priorityComboBox.setItems(priorities);
+
+        //setting the deadline picker
+        deadlinePicker.setValue(LocalDate.now());
     }
 
     @Override
@@ -111,23 +207,28 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         String category = "category";
         String status = "UNSCHEDULED";
         //get the data from the view inputs
-        //TODO: give default values in case the input was empty
-        String name = planTaskView.getTaskName();
-        LocalTime startTime = planTaskView.getStartTime();
-        Duration duration = planTaskView.getDuration();
-        String priority = planTaskView.getPriority();
-        LocalDate deadline = planTaskView.getDeadline();
-//        String category = planTaskView.getCategory();
-//        String status = planTaskView.getStatus();
+
+//        TODO: give default values incase the input was empty
+        CreateTaskViewInfos viewInfos = new CreateTaskViewInfos();
+        String name = viewInfos.getTaskName();
+        LocalTime startTime = viewInfos.getStartTime();
+        Duration duration = viewInfos.getDuration();
+        String priority = viewInfos.getPriority();
+        LocalDate deadline = viewInfos.getDeadline();
+//        String category = viewInfos.getCategory();
+//        String status = viewInfos.getStatus();
 
         //print the values of the inputs
-//        System.out.println("inputs: ");
-//        System.out.println("name: " + name);
-//        System.out.println("duration: " + duration);
-//        System.out.println("priority: " + priority);
-//        System.out.println("deadline: " + deadline);
+        System.out.println("inputs: ");
+        System.out.println("name: " + name);
+        System.out.println("startTime: " + startTime);
+        System.out.println("duration: " + duration);
+        System.out.println("priority: " + priority);
+        System.out.println("deadline: " + deadline);
 //        System.out.println("category: " + category);
 //        System.out.println("status: " + status);
+//        System.out.println("trash break");
+        if(true) return;
 
         try {
             //validate the inputs
@@ -163,12 +264,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 //                                add(subtaskInfo1);
 //                                add(subtaskInfo2);
 //                            }};
-//                            //trash
-//                            for (SubTaskInfo subtaskInfo : subtasksInfos) {
-//                                System.out.println(subtaskInfo.getStartTime());
-//                                System.out.println(subtaskInfo.getDuration());
-//                            }
-//                            //
 //                            planDecomposableTaskManually(new DaySchema(LocalDate.now()), name, subtasksInfos, priority,
 //                                    deadline, category, status);
 //                            break;
@@ -600,26 +695,26 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         }
         return null;
     }
+    //Input validation methods
 
-    //If the user wants to create a new task, this controller will be called.
-    protected class SubTaskInfo {
-        //a container class useful to create an array of subtasks ( in planDcompmosableTaskManually)
-        LocalTime startTime;
-        Duration duration;
 
-        SubTaskInfo(LocalTime startTime, Duration duration) {
-            this.startTime = startTime;
-            this.duration = duration;
-        }
+    //setters for models and views
+    public void setFreeSlotModel(FreeSlotModel freeSlotModel) {
+        this.freeSlotModel = freeSlotModel;
 
-        public LocalTime getStartTime() {
-            return startTime;
-        }
 
-        public Duration getDuration() {
-            return duration;
-        }
+        //This is temporary test code: create some free slots to test
+        LocalDate date = LocalDate.now();
+        this.freeSlotModel.create(date, LocalTime.of(8, 0), LocalTime.of(10, 0));
+        this.freeSlotModel.create(date, LocalTime.of(11, 0), LocalTime.of(13, 0));
+        //end of test code
     }
 
-    //Input validation methods
+    public void setTaskModel(TaskModel taskModel) {
+        this.taskModel = taskModel;
+    }
+
+//    public void setPlanTaskView(PlanTaskView2 planTaskView) {
+//        this.planTaskView = planTaskView;
+//    }
 }

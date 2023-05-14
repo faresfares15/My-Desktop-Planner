@@ -16,7 +16,6 @@ public class DecomposableTaskSchema extends TaskSchema {
         this.setId((getName() + getCategory()).hashCode() + getDeadline().hashCode());
     }
 
-
     public ArrayList<SimpleTaskSchema> getSubTasks() {
         return subTasks;
     }

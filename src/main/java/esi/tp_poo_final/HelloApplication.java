@@ -1,5 +1,6 @@
 package esi.tp_poo_final;
 
+import Controllers.TaskControllers.PlanTaskController;
 import Databases.*;
 import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
@@ -7,6 +8,7 @@ import Models.Task.TaskModel;
 import Views.PlanTaskView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -18,8 +20,10 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         System.setProperty("javafx.sg.warn", "true");
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 400, 300);
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("plan-task-view.fxml"));
+//        Parent root = fxmlLoader.load();
 
         //create the databases
         FreeSlotsDatabase freeSlotsDatabase = new FreeSlotsFileDatabase(/*filename*/);
@@ -30,14 +34,14 @@ public class HelloApplication extends Application {
         FreeSlotModel freeSlotModel = new FreeSlotModel(freeSlotsDatabase);
         TaskModel taskModel = new TaskModel(taskDatabase);
         DayModel dayModel = new DayModel(dayDatabase);
-        PlanTaskView planTaskView = new PlanTaskView(freeSlotModel, taskModel, dayModel);
-        primaryStage.setScene(planTaskView.getScene());
-        primaryStage.show();
 
-        LocalTime t1 = LocalTime.of(8, 0);
-        LocalTime t2 = LocalTime.of(8, 0);
-        System.out.println(t1.isBefore(t2));
-        System.out.println((double) 2/(4-1));
+        fxmlLoader.setControllerFactory(c ->
+                new HelloController(freeSlotModel, taskModel)
+        );
+        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        primaryStage.setTitle("Hello!");
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
 //        class A{
 //            int a;
@@ -55,6 +59,18 @@ public class HelloApplication extends Application {
 //        a1.setA(11);
 //        System.out.println(list.get(0).a);
 
+        //get the controller from the view
+//        PlanTaskController planTaskController = fxmlLoader.getController();
+//        planTaskController.setFreeSlotModel(freeSlotModel);
+//        planTaskController.setTaskModel(taskModel);
+//        planTaskController.setPlanTaskView(this);
+
+//        primaryStage.setScene(root.getScene());
+//        primaryStage.show();
+
+//        PlanTaskView planTaskView = new PlanTaskView(freeSlotModel, taskModel, primaryStage);
+//        primaryStage.setScene(planTaskView.getScene());
+//        primaryStage.show();
 
     }
 
