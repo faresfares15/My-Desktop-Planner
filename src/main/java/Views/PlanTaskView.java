@@ -124,9 +124,6 @@ public class PlanTaskView extends Stage {
             calendarGrid.getChildren().add(dayLabel);
         }
 
-        Label deadlineLabel = new Label("Deadline:");
-        deadlinePicker = new DatePicker(LocalDate.now());
-
         // Create a button to submit the form
         Button submitButton = new Button("Create Task");
         submitButton.setOnAction(new PlanTaskController(this.freeSlotModel, this.taskModel, this.dayModel, this));
