@@ -133,7 +133,7 @@ public class PlanTaskView extends Stage {
             for (int hour = 0; hour < NUM_HOURS; hour++) {
                 Rectangle rectangle = new Rectangle();
                 rectangle.setWidth(50);
-                rectangle.setHeight(20);
+                rectangle.setHeight(10);
                 rectangle.setFill(Color.BLUE); // Change color as needed
                 GridPane.setColumnIndex(rectangle, day + 1);
                 GridPane.setRowIndex(rectangle, hour + 1);

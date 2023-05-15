@@ -38,7 +38,7 @@
             <Spinner fx:id="startTimeMinutesSpinner" editable="true" prefHeight="26.0" prefWidth="111.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Spinner fx:id="durationHoursSpinner" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Spinner fx:id="durationMinutesSpinner" editable="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <ComboBox prefWidth="150.0" promptText="LOW" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <ComboBox fx:id="priorityComboBox" prefWidth="150.0" promptText="LOW" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <DatePicker fx:id="deadlinePicker" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Button mnemonicParsing="false" onAction="#handle" text="Create Task" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
          </children>

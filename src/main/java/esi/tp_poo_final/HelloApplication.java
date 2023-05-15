@@ -5,24 +5,12 @@ import Databases.*;
 import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
 import Models.Task.TaskModel;
-import Views.PlanTaskView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalTime;
-import java.util.ArrayList;
 
 public class HelloApplication extends Application {
     @Override
@@ -30,7 +18,7 @@ public class HelloApplication extends Application {
         System.setProperty("javafx.sg.warn", "true");
         primaryStage.setTitle("Signup Page");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
 //
 ////        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("plan-task-view.fxml"));
 ////        Parent root = fxmlLoader.load();
@@ -48,10 +36,10 @@ public class HelloApplication extends Application {
 //        fxmlLoader.setControllerFactory(c ->
 //                new HelloController(freeSlotModel, taskModel)
 //        );
-//        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-//        primaryStage.setTitle("Signup Page");
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        primaryStage.setTitle("Calendar");
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
         //get the controller from the view
 //        PlanTaskController planTaskController = fxmlLoader.getController();
