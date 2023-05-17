@@ -50,12 +50,6 @@ public class PlanTaskView2 extends Stage {
             Scene scene = new Scene(root);
             this.setScene(scene);
 
-            //getting the controller from the view
-            PlanTaskController planTaskController = fxmlLoader.getController();
-
-            //setting the models for the controller
-            planTaskController.setFreeSlotModel(freeSlotModel);
-            planTaskController.setTaskModel(taskModel);
 
             //setting the view for the controller
 //            planTaskController.setPlanTaskView(this);

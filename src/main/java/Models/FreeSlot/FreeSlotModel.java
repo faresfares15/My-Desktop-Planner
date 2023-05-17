@@ -17,6 +17,9 @@ public class FreeSlotModel {
     public ArrayList<FreeSlotSchema> findMany(LocalDate date) throws DayDoesNotHaveFreeSlotsException {
         return this.freeSlotsDatabase.findMany(date);
     }
+    public FreeSlotSchema find(LocalDate date, LocalTime startTime) throws FreeSlotNotFoundException {
+        return this.freeSlotsDatabase.find(date, startTime);
+    }
     public FreeSlotSchema delete(LocalDate date, LocalTime startTime){
         return this.freeSlotsDatabase.delete(date, startTime);
     }

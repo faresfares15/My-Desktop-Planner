@@ -1,5 +1,6 @@
 package Controllers.UserControllers;
 
+import Models.User.UserModel;
 import esi.tp_poo_final.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,12 +14,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoginController {
+    private final UserModel userModel = HelloApplication.userModel;
     @FXML
     TextField userName;
     @FXML
     PasswordField password;
+
     public void handle() throws IOException {
-        boolean successful = true;
+        boolean successful = false;
 
         if (successful) {
             //go to calendar page (view)
@@ -35,8 +38,11 @@ public class LoginController {
             stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
 
             stage.setScene(scene);
-            return;
+        } else{
+            System.out.println("Login failed");
         }
-        System.out.println("Login failed");
+
+
+
     }
 }

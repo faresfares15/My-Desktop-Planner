@@ -3,6 +3,7 @@ package esi.tp_poo_final;
 import Controllers.TaskControllers.PlanTaskController;
 import Databases.FreeSlotsFileDatabase;
 import Databases.TaskFileDatabase;
+import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
 import Models.Task.TaskModel;
 import javafx.fxml.FXML;
@@ -19,10 +20,12 @@ public class HelloController {
     @FXML
     private Label welcomeText;
     FreeSlotModel freeSlotModel;
+    private DayModel dayModel;
     TaskModel taskModel;
-    public HelloController(FreeSlotModel freeSlotModel, TaskModel taskModel) {
+    public HelloController(FreeSlotModel freeSlotModel, TaskModel taskModel, DayModel dayModel) {
         this.freeSlotModel = freeSlotModel;
         this.taskModel = taskModel;
+        this.dayModel = dayModel;
     }
 
     @FXML
@@ -30,7 +33,7 @@ public class HelloController {
         welcomeText.setText("Welcome to JavaFX Application!");
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-task-view.fxml"));
         fxmlLoader.setControllerFactory(c ->
-                new PlanTaskController(freeSlotModel, taskModel)
+                new PlanTaskController(freeSlotModel, taskModel, dayModel)
         );
 
         Scene scene = new Scene(fxmlLoader.load(), 600, 500);

@@ -7,20 +7,17 @@ public class UserSchema implements Comparable<UserSchema>{
     private String firstName;
     private String password;
     private String email;
-    private CalendarSchema calendarSchema;
 
-    public UserSchema(String lastName, String firstName, String password, String email, CalendarSchema calendarSchema) {
+    public UserSchema(String lastName, String firstName, String password, String email) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.password = password;
         this.email = email;
-        this.calendarSchema = calendarSchema;
     }
 
     public UserSchema(String username, String password) {
         this.username = username;
         this.password = password;
-        this.calendarSchema = new CalendarSchema();
     }
 
     public UserSchema() {
@@ -34,13 +31,16 @@ public class UserSchema implements Comparable<UserSchema>{
         return password;
     }
 
-    public CalendarSchema getCalendar() {
-        return calendarSchema;
-    }
 
     @Override
     public boolean equals(Object obj) {
-        return this.username.equals(((UserSchema)obj).username);
+        if (this == obj){
+            return true;
+        } else if (obj instanceof UserSchema) {
+            return this.username.equals(((UserSchema) obj).getUsername());
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -48,4 +48,14 @@ public class UserSchema implements Comparable<UserSchema>{
         return (this.lastName + this.firstName).compareTo(o.lastName + o.firstName);
     }
 
+    @Override
+    public String toString() {
+        return "UserSchema{" +
+                "username='" + username + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

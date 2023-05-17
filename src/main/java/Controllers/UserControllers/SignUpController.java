@@ -1,6 +1,7 @@
 package Controllers.UserControllers;
 
-import Controllers.TaskControllers.PlanTaskController;
+import Databases.UniqueUsernameViolationException;
+import Databases.UserDoesNotExistException;
 import Models.User.UserModel;
 import esi.tp_poo_final.HelloApplication;
 import javafx.fxml.FXML;
@@ -16,29 +17,49 @@ import java.io.IOException;
 
 public class SignUpController {
     //assign models and views
-    UserModel userModel;
+    private final UserModel userModel = HelloApplication.userModel;
     @FXML
-    private TextField userName;
+    private TextField userNameField;
     @FXML
-    private PasswordField password;
+    private PasswordField passwordField;
+
     public void handle() throws IOException {
         boolean successful = true;
         if(successful){
             //go to login page (view)
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-//            fxmlLoader.setControllerFactory(c -> new ...());
+            fxmlLoader.setControllerFactory(c -> new LoginController());
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-            Stage stage = (Stage) userName.getScene().getWindow();
+            Stage stage = (Stage) userNameField.getScene().getWindow();
             stage.setTitle("Login");
 
             //center the view on the user's screen
             Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
             stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
             stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
-
             stage.setScene(scene);
-            return;
+
+            String username = userNameField.getText();
+            String password = passwordField.getText();
+            try {
+                userModel.create(username, password);
+
+
+
+            } catch (UniqueUsernameViolationException e) {
+                System.out.println(e.getMessage());
+            } finally {
+                System.out.println("UsersDB content");
+                try {
+                    System.out.println(userModel.find(username));
+                } catch (UserDoesNotExistException e) {
+                    System.out.println("User does not exist");
+                }
+            }
+
+
+        } else{
+            System.out.println("Sign up failed");
         }
-        System.out.println("Sign up failed");
     }
 }

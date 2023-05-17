@@ -1,38 +1,37 @@
 package Models.User;
 
 import Databases.UniqueUsernameViolationException;
+import Databases.UserDataBase;
 import Databases.UserDoesNotExistException;
 
 import java.util.TreeMap;
 
 public class UserModel {
-    private TreeMap<String, UserSchema> users = new TreeMap<>();
-    //CRUD operations implementation using an MVC architecture
-    public void create(UserSchema userSchema){
-        users.put(userSchema.getUsername(), userSchema);
+    private UserDataBase userDataBase;
+
+    public UserModel(UserDataBase userDataBase) {
+        this.userDataBase = userDataBase;
     }
 
-    public UserSchema read(String username) throws UserDoesNotExistException {
-        if (!users.containsKey(username)) throw new UserDoesNotExistException();
-        return users.get(username);
+    public UserSchema create(UserSchema userSchema) throws UniqueUsernameViolationException {
+        return this.userDataBase.create(userSchema);
+    }
+    public UserSchema create(String username, String password) throws UniqueUsernameViolationException {
+        return this.userDataBase.create(new UserSchema(username, password));
+    }
+    public UserSchema find(String username) throws UserDoesNotExistException{
+        return this.userDataBase.find(username);
+    }
+    public UserSchema update(String oldUsername,UserSchema userSchema) throws UniqueUsernameViolationException,
+            UserDoesNotExistException{
+        return this.userDataBase.update(oldUsername, userSchema);
+    }
+    public UserSchema update(UserSchema userSchema) throws UserDoesNotExistException{
+       return this.userDataBase.update(userSchema);
+    }
+    public UserSchema delete(String username) throws UserDoesNotExistException{
+        return this.userDataBase.delete(username);
     }
 
-    public void update(String oldUsername,UserSchema userSchema) throws UniqueUsernameViolationException,
-            UserDoesNotExistException {
-        // In case he changes his username
-        if (!users.containsKey(oldUsername)) throw new UserDoesNotExistException();
-        if (!users.containsKey(userSchema.getUsername())) throw new UniqueUsernameViolationException();
-        users.remove(oldUsername);
-        users.put(userSchema.getUsername(), userSchema);
-    }
 
-    public void update(UserSchema userSchema) throws UserDoesNotExistException {
-        // In case he doesn't change his username
-        if (!users.containsKey(userSchema.getUsername())) throw new UserDoesNotExistException();
-        users.replace(userSchema.getUsername(), userSchema);
-    }
-    public void delete(String username) throws UserDoesNotExistException {
-        if (!users.containsKey(username)) throw new UserDoesNotExistException();
-        users.remove(username);
-    }
 }

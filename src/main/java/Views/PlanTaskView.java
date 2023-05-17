@@ -126,7 +126,7 @@ public class PlanTaskView extends Stage {
 
         // Create a button to submit the form
         Button submitButton = new Button("Create Task");
-        submitButton.setOnAction(new PlanTaskController(this.freeSlotModel, this.taskModel, this.dayModel, this));
+        submitButton.setOnAction(new PlanTaskController(this.freeSlotModel, this.taskModel, this.dayModel));
 
         // Add rectangles for time slots
         for (int day = 0; day < NUM_DAYS; day++) {
