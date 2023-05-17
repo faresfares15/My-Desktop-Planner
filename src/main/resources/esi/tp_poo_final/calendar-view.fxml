@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CalendarControllers.ShowCalendarController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@calendar.css" fx:controller="Controllers.CalendarControllers.ShowCalendarController">
    <children>
       <VBox layoutX="63.0" layoutY="79.0" prefHeight="282.0" prefWidth="474.0">
          <children>
@@ -25,30 +25,30 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                      <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                      <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
+                      <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                      <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                      <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                        <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
                     </rowConstraints>
                   </GridPane>
                </content>

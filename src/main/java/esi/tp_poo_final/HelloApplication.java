@@ -4,17 +4,28 @@ import Controllers.TaskControllers.PlanTaskController;
 import Databases.*;
 import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
+import Models.Task.Priority;
+import Models.Task.SimpleTaskSchema;
 import Models.Task.TaskModel;
+import Models.Task.TaskStatus;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class HelloApplication extends Application {
+    public static final TaskModel taskModel = new TaskModel(new TaskFileDatabase());
     @Override
     public void start(Stage primaryStage) throws IOException {
+        //trash code
+        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task1", LocalTime.of(10, 0), Duration.ofHours(1).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task2", LocalTime.of(13, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        //end of trash code
         System.setProperty("javafx.sg.warn", "true");
         primaryStage.setTitle("Signup Page");
 

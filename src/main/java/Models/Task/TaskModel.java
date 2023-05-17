@@ -28,6 +28,9 @@ public class TaskModel {
     public TaskSchema read(int id, LocalDate date) throws TaskDoesNotExistException {
         return this.taskDatabase.read(id, date);
     }
+    public TaskSchema find(LocalDate date, String name) throws TaskDoesNotExistException {
+        return this.taskDatabase.find(date, name);
+    }
     public void update(TaskSchema taskSchema) throws TaskDoesNotExistException {
             this.taskDatabase.update(taskSchema);
     }

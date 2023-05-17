@@ -49,6 +49,17 @@ public class TaskFileDatabase implements TaskDatabase{
         }
         return null;
     }
+    @Override
+    public TaskSchema find(LocalDate date, String name) throws TaskDoesNotExistException {
+        if (tasksMap.containsKey(date)){
+            for (TaskSchema taskSchema:
+                    tasksMap.get(date)) {
+                if (taskSchema.getName().equals(name)) return taskSchema;
+            }
+        }
+
+        throw new TaskDoesNotExistException();
+    }
 
     @Override
     public void initialize(LocalDate date) {
