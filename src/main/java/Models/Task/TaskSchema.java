@@ -57,7 +57,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
         this.deadline = deadline;
         this.category = category;
         this.status = status;
-        this.progress = Progress.NOT_REALIZED;;
+        this.progress = Progress.NOT_REALIZED;
     }
 
     public TaskSchema() {
@@ -154,7 +154,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema> {
 
     @Override
     public int compareTo(TaskSchema o) {
-        return this.date.compareTo(o.getDate()); //TODO: the task here is supposed to compare by start time, no?
+        return this.deadline.compareTo(o.getDeadline()); //TODO: the task here is supposed to compare by start time, no?
     }
 
     @Override

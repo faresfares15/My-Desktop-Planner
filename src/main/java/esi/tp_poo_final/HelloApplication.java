@@ -8,6 +8,7 @@ import Models.Task.Priority;
 import Models.Task.SimpleTaskSchema;
 import Models.Task.TaskModel;
 import Models.Task.TaskStatus;
+import Models.User.UserModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,6 +21,9 @@ import java.time.LocalTime;
 
 public class HelloApplication extends Application {
     public static final TaskModel taskModel = new TaskModel(new TaskFileDatabase());
+    public static final UserModel userModel = new UserModel(new UserFileDataBase());
+    public static final DayModel dayModel = new DayModel(new DayFileDataBase());
+    public static final FreeSlotModel freeSlotModel = new FreeSlotModel(new FreeSlotsFileDatabase());
     @Override
     public void start(Stage primaryStage) throws IOException {
         //trash code
@@ -29,26 +33,18 @@ public class HelloApplication extends Application {
         System.setProperty("javafx.sg.warn", "true");
         primaryStage.setTitle("Signup Page");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-task-view.fxml"));
 //
 ////        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("plan-task-view.fxml"));
 ////        Parent root = fxmlLoader.load();
 //
-//        //create the databases
-        FreeSlotsDatabase freeSlotsDatabase = new FreeSlotsFileDatabase(/*filename*/);
-        TaskDatabase taskDatabase = new TaskFileDatabase(/*filename*/);
-        DayDatabase dayDatabase = new DayFileDataBase(/*filename*/);
-//
-//        //create the models
-        FreeSlotModel freeSlotModel = new FreeSlotModel(freeSlotsDatabase);
-        TaskModel taskModel = new TaskModel(taskDatabase);
-        DayModel dayModel = new DayModel(dayDatabase);
+
 //
 //        fxmlLoader.setControllerFactory(c ->
 //                new HelloController(freeSlotModel, taskModel)
 //        );
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        primaryStage.setTitle("Calendar");
+        primaryStage.setTitle("Plan Task View");
         primaryStage.setScene(scene);
         primaryStage.show();
 

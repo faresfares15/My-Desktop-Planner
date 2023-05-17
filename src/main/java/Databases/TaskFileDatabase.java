@@ -63,7 +63,7 @@ public class TaskFileDatabase implements TaskDatabase{
 
     @Override
     public void initialize(LocalDate date) {
-        tasksMap.put(date, new ArrayList<>());
+        if (!tasksMap.containsKey(date))tasksMap.put(date, new ArrayList<>());
         //just an empty list to init the day when creating it
     }
 

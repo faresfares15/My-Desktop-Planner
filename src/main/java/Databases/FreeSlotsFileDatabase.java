@@ -133,7 +133,7 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
 
     @Override
     public void initialize(LocalDate dayDate) {
-        freeSlotsMap.put(dayDate, new ArrayList<>());
+        if (!freeSlotsMap.containsKey(dayDate)) freeSlotsMap.put(dayDate, new ArrayList<>());
         //just an empty arrayList for the days that doesn't have free slots
     }
 }

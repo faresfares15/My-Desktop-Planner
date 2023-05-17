@@ -19,6 +19,9 @@ public class FreeSlotSchema implements Comparable<FreeSlotSchema> {
         this.endTime = endTime;
     }
 
+    public FreeSlotSchema() {
+    }
+
     public LocalTime getStartTime() {
         return startTime;
     }

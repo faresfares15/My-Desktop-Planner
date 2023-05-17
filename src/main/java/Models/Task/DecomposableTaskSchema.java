@@ -10,10 +10,20 @@ public class DecomposableTaskSchema extends TaskSchema {
         this.subTasks = new ArrayList<SimpleTaskSchema>();
         this.subTasks.add(task);
         this.setDate(task.getDate());
+        this.setProjectId(task.getProjectId());
+        this.setStatus(task.getStatus());
+        this.setProgress(task.getProgress());
+        this.setPriority(task.getPriority());
+        this.setDuration(task.getDuration());
+        this.setDate(task.getDate());
         this.setName(task.getName());
         this.setCategory(task.getCategory());
         this.setDeadline(task.getDeadline());
         this.setId((getName() + getCategory()).hashCode() + getDeadline().hashCode());
+    }
+
+    public DecomposableTaskSchema() {
+
     }
 
     public ArrayList<SimpleTaskSchema> getSubTasks() {
@@ -25,6 +35,7 @@ public class DecomposableTaskSchema extends TaskSchema {
     }
 
     public void addSubTask(SimpleTaskSchema simpleTaskSchema){
+        simpleTaskSchema.setId(this.getId());
         subTasks.add(simpleTaskSchema);
     }
 

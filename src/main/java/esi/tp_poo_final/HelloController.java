@@ -33,7 +33,7 @@ public class HelloController {
         welcomeText.setText("Welcome to JavaFX Application!");
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-task-view.fxml"));
         fxmlLoader.setControllerFactory(c ->
-                new PlanTaskController(freeSlotModel, taskModel, dayModel)
+                new PlanTaskController()
         );
 
         Scene scene = new Scene(fxmlLoader.load(), 600, 500);
