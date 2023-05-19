@@ -27,24 +27,26 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         //trash code
-        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task1", LocalTime.of(10, 0), Duration.ofHours(1).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(8), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(7), "task00", LocalTime.of(10, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(3), "task0", LocalTime.of(13, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(2), "task1", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task2", LocalTime.of(13, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(4), "task4", LocalTime.of(13, 30), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        //end of trash code
+
+        //trash code
+
         //end of trash code
         System.setProperty("javafx.sg.warn", "true");
         primaryStage.setTitle("Signup Page");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-task-view.fxml"));
-//
-////        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("plan-task-view.fxml"));
-////        Parent root = fxmlLoader.load();
-//
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
 
-//
-//        fxmlLoader.setControllerFactory(c ->
-//                new HelloController(freeSlotModel, taskModel)
-//        );
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        primaryStage.setTitle("Plan Task View");
+        Scene scene = new Scene(fxmlLoader.load(), 840, 400);
+        primaryStage.setTitle("Calendar");
+
         primaryStage.setScene(scene);
         primaryStage.show();
 

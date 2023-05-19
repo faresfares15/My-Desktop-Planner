@@ -5,9 +5,11 @@ import Exceptions.TaskDoesNotExistException;
 import Models.Task.TaskSchema;
 import javafx.concurrent.Task;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 public class TaskFileDatabase implements TaskDatabase{
@@ -87,5 +89,22 @@ public class TaskFileDatabase implements TaskDatabase{
         } else {
             throw new TaskDoesNotExistException();
         }
+    }
+
+    @Override
+    public TreeMap<LocalDate, ArrayList<TaskSchema>> findMany(LocalDate startDate, LocalDate endDate) {
+        TreeMap<LocalDate, ArrayList<TaskSchema>> resultMap = new TreeMap<>();
+        if(startDate.until(endDate).getDays() < 0) return null;
+
+        int daysCounter = startDate.until(endDate).getDays();
+        for (int i = 0; i <= daysCounter; i++) {
+            if(tasksMap.containsKey(startDate)){
+                resultMap.put(startDate, tasksMap.get(startDate));
+            }
+
+            startDate = startDate.plusDays(1); //go to next day
+        }
+
+        return resultMap;
     }
 }

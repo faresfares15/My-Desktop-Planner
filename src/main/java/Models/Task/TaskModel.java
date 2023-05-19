@@ -6,6 +6,8 @@ import Exceptions.TaskDoesNotExistException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 public class TaskModel {
     private TaskDatabase taskDatabase;
@@ -18,6 +20,9 @@ public class TaskModel {
 
     public ArrayList<TaskSchema> findMany(LocalDate date) throws DayDoesNotHaveTasksException {
         return this.taskDatabase.findMany(date);
+    }
+    public TreeMap<LocalDate, ArrayList<TaskSchema>> findMany(LocalDate startDate, LocalDate endDate){
+        return this.taskDatabase.findMany(startDate, endDate);
     }
     public TaskSchema create(TaskSchema taskSchema){
         return this.taskDatabase.create(taskSchema);

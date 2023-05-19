@@ -10,20 +10,24 @@ import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.TaskModel;
 import Models.Task.TaskSchema;
 
-import java.net.URL;
+import java.io.IOException;
 import java.util.*;
 
 //your imports
 import Models.Task.*;
-import Views.PlanTaskView;
 import esi.tp_poo_final.HelloApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.text.Text;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -34,6 +38,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     final TaskModel taskModel = HelloApplication.taskModel;
     final DayModel dayModel = HelloApplication.dayModel;
     TreeMap<TaskSchema, ArrayList<FreeSlotSchema>> preValidationMap = new TreeMap<>();
+    @FXML
+    Label viewTitle;
     @FXML
     TextField taskNameField;
     @FXML
@@ -121,6 +127,9 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     public void initialize() {
         //This method will be called when the view is loaded
 
+        //set the view title
+
+
         //setting the start time hours spinner
         //TODO: Set the start time to the actual moment
         taskNameField.setPromptText("Task Name");
@@ -157,6 +166,20 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent actionEvent) {
         //This method will be called when the user clicks on the "create task" button
+
+
+
+        Alert confirmationMessage = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationMessage.setContentText("Tasks can be scheduled in the specified period. Do you confirm the operation?");
+        confirmationMessage.setHeaderText("Tasks scheduling confirmation");
+        confirmationMessage.setTitle("Tasks scheduling confirmation");
+        Optional<ButtonType> clickedButton = confirmationMessage.showAndWait();
+
+        if(clickedButton.get() == ButtonType.OK){
+            System.out.println("OK clicked");
+        }else{
+            System.out.println("Cancel clicked");
+        }
 
         //Get the data from the view
         //TODO: implement the view to get these inputs
@@ -293,7 +316,19 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
             }
         }
+    }
+    public void moveToCalendarView() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 840, 400);
+        Stage stage = (Stage) viewTitle.getScene().getWindow();
+        stage.setTitle("Calendar");
 
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+
+        stage.setScene(scene);
     }
 
     //These are helper methods that will be called by the controller. They are here to separate logics.

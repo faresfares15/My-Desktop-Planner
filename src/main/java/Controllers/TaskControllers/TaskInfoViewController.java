@@ -49,7 +49,7 @@ public class TaskInfoViewController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
 //            fxmlLoader.setControllerFactory(c -> new ...());
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            Scene scene = new Scene(fxmlLoader.load(), 800, 400);
             Stage stage = (Stage) taskName.getScene().getWindow();
             stage.setTitle("Calendar");
 

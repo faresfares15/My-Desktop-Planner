@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@calendar.css" fx:controller="Controllers.CalendarControllers.ShowCalendarController">
+<AnchorPane prefHeight="400.0" prefWidth="840.0" stylesheets="@calendar.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CalendarControllers.ShowCalendarController">
    <children>
-      <VBox layoutX="63.0" layoutY="79.0" prefHeight="282.0" prefWidth="474.0">
+      <VBox layoutX="63.0" layoutY="79.0" prefHeight="282.0" prefWidth="597.0">
          <children>
-            <ScrollPane>
+            <ScrollPane fx:id="scrollPane" prefHeight="283.0" prefWidth="589.0">
                <content>
-                  <GridPane fx:id="calendarGrid" gridLinesVisible="true" prefWidth="400.0">
+                  <GridPane fx:id="calendarGrid" prefWidth="400.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="70.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="70.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="70.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="70.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="70.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="70.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="70.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="70.0" prefWidth="70.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+                      <RowConstraints minHeight="40.0" prefHeight="40.0" valignment="TOP" vgrow="NEVER" />
                       <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
                       <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
                         <RowConstraints minHeight="30.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
@@ -54,5 +58,21 @@
                </content>
             </ScrollPane>
          </children></VBox>
+      <Text layoutX="579.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current date:" />
+      <Text fx:id="todayDate" layoutX="665.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Button layoutX="393.0" layoutY="38.0" mnemonicParsing="false" onAction="#goToCurrentWeek" text="Back to current week" />
+      <HBox alignment="CENTER" layoutX="88.0" layoutY="25.0" prefHeight="50.0" prefWidth="219.0" spacing="40.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#goToPreviousWeek" prefHeight="26.0" prefWidth="25.0" text="&lt;" />
+            <Text fx:id="startDateOfCurrentWeek" strokeType="OUTSIDE" strokeWidth="0.0" text="MAY 2023" />
+            <Button mnemonicParsing="false" onAction="#goToNextWeek" prefHeight="26.0" prefWidth="25.0" text="&gt;" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+      <Button layoutX="707.0" layoutY="148.0" mnemonicParsing="false" onAction="#moveToScheduleFreeSlotView" text="Schedule a free slot" />
+      <Button layoutX="707.0" layoutY="207.0" mnemonicParsing="false" onAction="#moveToScheduleTaskView" text="Schedule a task" />
+      <Button layoutX="707.0" layoutY="276.0" mnemonicParsing="false" onAction="#moveToScheduleSetOfTaskView" text="Schedule set of tasks" />
    </children>
 </AnchorPane>
