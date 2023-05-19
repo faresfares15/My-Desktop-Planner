@@ -12,6 +12,14 @@ import java.util.TreeMap;
 
 public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
     TreeMap<LocalDate, ArrayList<FreeSlotSchema>> freeSlotsMap = new TreeMap<>();
+
+    public FreeSlotsFileDatabase(TreeMap<LocalDate, ArrayList<FreeSlotSchema>> freeSlotsMap) {
+        this.freeSlotsMap = freeSlotsMap;
+    }
+
+    public FreeSlotsFileDatabase() {
+    }
+
     public ArrayList<FreeSlotSchema> findMany(LocalDate dayDate) throws DayDoesNotHaveFreeSlotsException{
         //find the day in the map
         ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(dayDate);

@@ -1,10 +1,11 @@
 package Models.FreeSlot;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class FreeSlotSchema implements Comparable<FreeSlotSchema> {
+public class FreeSlotSchema implements Comparable<FreeSlotSchema>, Serializable {
     private LocalDate dayDate; //useful to reference the day this instance belongs to
     private LocalTime startTime;
     private LocalTime endTime;

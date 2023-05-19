@@ -1,10 +1,12 @@
 package Models.Day;
 
-import Databases.DayDatabase;
+import Databases.*;
 import Exceptions.FreeSlotNotFoundException;
 import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.TaskSchema;
+import esi.tp_poo_final.HelloApplication;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,6 +18,18 @@ public class DayModel {
 
     public DayModel(DayDatabase dayDatabase){
         this.dayDatabase = dayDatabase;
+    }
+    public void save() throws IOException {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.dayDbFileName))) {
+            objectOutputStream.writeObject(dayDatabase);
+        }
+    }
+    public void load() throws IOException, ClassNotFoundException {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.dayDbFileName))) {
+            dayDatabase = (DayDatabase) objectInputStream.readObject();
+        }
     }
     public DaySchema create(LocalDate date){
         return dayDatabase.create(date);

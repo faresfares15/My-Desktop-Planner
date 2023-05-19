@@ -1,12 +1,32 @@
 package Models.Project;
 
-import Databases.ProjectDataBase;
+import Databases.*;
 import Models.Task.TaskSchema;
+import esi.tp_poo_final.HelloApplication;
 
+import java.io.*;
 import java.util.ArrayList;
 
 public class ProjectModel {
     private ProjectDataBase projectDataBase;
+
+    public ProjectModel() {
+    }
+
+    public ProjectModel(ProjectDataBase projectDataBase) {
+        this.projectDataBase = projectDataBase;
+    }
+
+    public void save() throws IOException {
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.projectDbFileName));
+        objectOutputStream.writeObject(projectDataBase);
+    }
+    public void load() throws IOException, ClassNotFoundException {
+        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.projectDbFileName));
+        projectDataBase = (ProjectDataBase) objectInputStream.readObject();
+    }
     // The CRUD operations
     public ProjectSchema create(ProjectSchema projectSchema){//Create directly
         return projectDataBase.create(projectSchema);

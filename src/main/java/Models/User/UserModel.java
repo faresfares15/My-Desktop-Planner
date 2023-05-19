@@ -1,9 +1,9 @@
 package Models.User;
 
-import Databases.UniqueUsernameViolationException;
-import Databases.UserDataBase;
-import Databases.UserDoesNotExistException;
+import Databases.*;
+import esi.tp_poo_final.HelloApplication;
 
+import java.io.*;
 import java.util.TreeMap;
 
 public class UserModel {
@@ -11,6 +11,21 @@ public class UserModel {
 
     public UserModel(UserDataBase userDataBase) {
         this.userDataBase = userDataBase;
+    }
+    public void save() throws IOException {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(HelloApplication.usersDbFileName))) {
+            objectOutputStream.writeObject(userDataBase);
+        }
+    }
+    public void load() throws IOException, ClassNotFoundException {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File(HelloApplication.usersDbFileName)))) {
+
+                userDataBase = (UserDataBase) objectInputStream.readObject();
+                System.out.println("loading the user model");
+        }
+    }
+    public boolean exists(String username){
+        return this.userDataBase.exists(username);
     }
 
     public UserSchema create(UserSchema userSchema) throws UniqueUsernameViolationException {

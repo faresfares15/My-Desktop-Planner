@@ -1,9 +1,14 @@
 package Models.FreeSlot;
 
 import Databases.FreeSlotsDatabase;
+import Databases.FreeSlotsFileDatabase;
+import Databases.TaskDatabase;
+import Databases.TaskFileDatabase;
 import Exceptions.DayDoesNotHaveFreeSlotsException;
 import Exceptions.FreeSlotNotFoundException;
+import esi.tp_poo_final.HelloApplication;
 
+import java.io.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,6 +19,19 @@ public class FreeSlotModel {
     FreeSlotsDatabase freeSlotsDatabase;
     public FreeSlotModel(FreeSlotsDatabase freeSlotsDatabase){
         this.freeSlotsDatabase = freeSlotsDatabase;
+    }
+
+    public void save() throws IOException {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.freeSlotDbFileName))) {
+            objectOutputStream.writeObject(freeSlotsDatabase);
+        }
+    }
+    public void load() throws IOException, ClassNotFoundException {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.freeSlotDbFileName))) {
+            freeSlotsDatabase = (FreeSlotsDatabase) objectInputStream.readObject();
+        }
     }
     public ArrayList<FreeSlotSchema> findMany(LocalDate date) throws DayDoesNotHaveFreeSlotsException {
         return this.freeSlotsDatabase.findMany(date);

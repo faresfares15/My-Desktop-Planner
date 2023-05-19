@@ -3,9 +3,10 @@ package Databases;
 import Models.Project.ProjectSchema;
 import Models.Task.TaskSchema;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public interface ProjectDataBase {
+public interface ProjectDataBase extends Serializable {
     // The CRUD operations
     ProjectSchema create(ProjectSchema projectSchema); //Create directly
     ProjectSchema initialize(String name, String description); //Just for initialization

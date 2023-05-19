@@ -1,7 +1,9 @@
 package Models.User;
 import Models.Calendar.CalendarSchema;
 
-public class UserSchema implements Comparable<UserSchema>{
+import java.io.Serializable;
+
+public class UserSchema implements Comparable<UserSchema>, Serializable {
     private String username;
     private String lastName;
     private String firstName;

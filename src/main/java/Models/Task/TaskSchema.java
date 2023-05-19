@@ -2,13 +2,14 @@ package Models.Task;
 
 import Exceptions.InvalidPriorityException;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Random;
 
 
-public abstract class TaskSchema implements Comparable<TaskSchema> {
+public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable {
     private LocalDate date; //useful to reference the day this instance belongs to
     private String name;
     private int id;

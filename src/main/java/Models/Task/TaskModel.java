@@ -1,9 +1,12 @@
 package Models.Task;
 
 import Databases.TaskDatabase;
+import Databases.TaskFileDatabase;
 import Exceptions.DayDoesNotHaveTasksException;
 import Exceptions.TaskDoesNotExistException;
+import esi.tp_poo_final.HelloApplication;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +17,18 @@ public class TaskModel {
 
     public TaskModel(TaskDatabase taskDatabase) {
         this.taskDatabase = taskDatabase;
+    }
+    public void save() throws IOException {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.taskDbFileName))) {
+            objectOutputStream.writeObject(taskDatabase);
+        }
+    }
+    public void load() throws IOException, ClassNotFoundException {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.taskDbFileName))) {
+            taskDatabase = (TaskDatabase) objectInputStream.readObject();
+        }
     }
 
     //CRUD Operations

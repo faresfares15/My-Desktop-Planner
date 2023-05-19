@@ -14,6 +14,14 @@ import java.util.TreeMap;
 
 public class TaskFileDatabase implements TaskDatabase{
     TreeMap<LocalDate, ArrayList<TaskSchema>> tasksMap = new TreeMap<>();
+
+    public TaskFileDatabase() {
+    }
+
+    public TaskFileDatabase(TreeMap<LocalDate, ArrayList<TaskSchema>> tasksMap) {
+        this.tasksMap = tasksMap;
+    }
+
     public ArrayList<TaskSchema> findMany(LocalDate date) throws DayDoesNotHaveTasksException {
         //get the list of tasks for the given date
         ArrayList<TaskSchema> tasksList = tasksMap.get(date);

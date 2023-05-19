@@ -4,12 +4,13 @@ import Exceptions.DayDoesNotHaveTasksException;
 import Exceptions.TaskDoesNotExistException;
 import Models.Task.TaskSchema;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-public interface TaskDatabase {
+public interface TaskDatabase extends Serializable {
     public ArrayList<TaskSchema> findMany(LocalDate date) throws DayDoesNotHaveTasksException;
     public TaskSchema create(TaskSchema taskSchema);
     public TaskSchema read(int id, LocalDate date) throws TaskDoesNotExistException;

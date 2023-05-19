@@ -2,10 +2,11 @@ package Models.Project;
 
 import Models.Task.TaskSchema;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ProjectSchema {
+public class ProjectSchema implements Serializable {
     private String name;
     private String description;
     private int projectId;

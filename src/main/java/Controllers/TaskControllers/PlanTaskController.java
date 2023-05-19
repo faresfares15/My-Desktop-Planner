@@ -456,6 +456,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             decomposableTask.addSubTask(planSimpleTaskManually(day, name + (1 + subtasks.indexOf(subtask)), subtask.getStartTime(), subtask.getDuration(),
                     priority, deadline, category, status, 0));
         }
+        //TODO: this method doesn't even add it to the model
 
 
     }
@@ -473,10 +474,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         if ((availableFreeSlot = getAvailableFreeSlot(duration, freeslots)) == null) {
             throw new SimpleTaskDoesNotFitException();
         }
+        ArrayList<FreeSlotSchema> freeSlotList = new ArrayList<>();
         Duration minimalDuration = Duration.ofMinutes(30); //TODO: get the minimal duration from the settings of calendar
         if (duration.compareTo(minimalDuration) < 0) {
             //TODO: decide what to do for tasks with duration < 30 minutes (minimal duration)
             //TODO: make their duration = minDuration
+            //TODO: Just do it !!!
         }
 
         //set the start time of the task
@@ -487,8 +490,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             //the new task will take the whole free slot:
             duration = availableFreeSlot.getDuration(); //now the task's duration = the free slot's duration
             this.freeSlotModel.delete(day.getDate(), availableFreeSlot.getStartTime()); //remove the free slot
-            this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
-                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 1));
+//            this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
+//                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 0));
+
+            freeSlotList.add(availableFreeSlot);
+            preValidationMap.put(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
+                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 0), freeSlotList);
             //TODO: change the periodicity to it's actual value
         } else {
             //the free slot will be reduced (to the bottom) by the task's duration

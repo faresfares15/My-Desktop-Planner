@@ -2,11 +2,19 @@ package Databases;
 
 import Models.User.UserSchema;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.TreeMap;
 
-public class UserFileDataBase implements UserDataBase {
-    private final TreeMap<String, UserSchema> users = new TreeMap<>();
+public class UserFileDataBase implements UserDataBase, Serializable {
+    private TreeMap<String, UserSchema> users = new TreeMap<>();
+
+    public UserFileDataBase() {
+    }
+
+    public UserFileDataBase(TreeMap<String, UserSchema> users) {
+        this.users = users;
+    }
 
     //CRUD operations implementation using an MVC architecture
     public UserSchema create(UserSchema userSchema) throws UniqueUsernameViolationException {
@@ -17,6 +25,9 @@ public class UserFileDataBase implements UserDataBase {
     public UserSchema find(String username) throws UserDoesNotExistException {
         if (!users.containsKey(username)) throw new UserDoesNotExistException();
         return users.get(username);
+    }
+    public boolean exists(String username)  {
+        return users.containsKey(username);
     }
 
     public UserSchema update(String oldUsername, UserSchema userSchema) throws UniqueUsernameViolationException,

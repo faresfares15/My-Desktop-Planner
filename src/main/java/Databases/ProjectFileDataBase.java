@@ -10,6 +10,15 @@ import java.util.TreeSet;
 
 public class ProjectFileDataBase implements ProjectDataBase{
     private TreeMap<Integer, ProjectSchema> projectsTreeSet = new TreeMap<>();
+
+    public ProjectFileDataBase(TreeMap<Integer, ProjectSchema> projectsTreeSet) {
+        this.projectsTreeSet = projectsTreeSet;
+    }
+
+    public ProjectFileDataBase() {
+    }
+
+
     @Override
     public ProjectSchema create(ProjectSchema projectSchema) {
         return projectsTreeSet.put(projectSchema.getProjectId(), projectSchema);

@@ -10,6 +10,12 @@ import java.util.TreeSet;
 public class DayFileDataBase implements DayDatabase{
     private TreeSet<DaySchema> days = new TreeSet<>();
 
+    public DayFileDataBase(TreeSet<DaySchema> days) {
+        this.days = days;
+    }
+
+    public DayFileDataBase() {
+    }
 
     @Override
     public ArrayList<DaySchema> findMany(LocalDate startDate, LocalDate endDate) {
