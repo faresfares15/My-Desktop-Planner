@@ -7,14 +7,8 @@ import Models.Day.DayModel;
 import Models.Day.DaySchema;
 import Models.FreeSlot.FreeSlotModel;
 import Models.FreeSlot.FreeSlotSchema;
-import Models.Task.TaskModel;
-import Models.Task.TaskSchema;
-
-import java.io.IOException;
-import java.util.*;
-
-//your imports
 import Models.Task.*;
+import Models.Task.Priority;
 import esi.tp_poo_final.HelloApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,17 +16,23 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.*;
 
-public class PlanTaskController implements EventHandler<ActionEvent> {
+public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
     final FreeSlotModel freeSlotModel = HelloApplication.freeSlotModel;
     final TaskModel taskModel = HelloApplication.taskModel;
     final DayModel dayModel = HelloApplication.dayModel;
@@ -63,8 +63,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     Spinner<Integer> periodicitySpinner;
     @FXML
     CheckBox decomposeTaskCheckBox;
+    @FXML
+    Button addTaskButton;
+    @FXML
+    VBox tasksPanel;
 
-    public PlanTaskController() {
+    public PlanSetOfTasksController() {
 
 
         //TODO: consider initilizing the free slots and tasks in the dataBase always when creating a new day
@@ -198,6 +202,11 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
         //setting the deadline picker
         deadlinePicker.setValue(LocalDate.now());
+
+        //initializing the tasks panel's border
+        tasksPanel.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        tasksPanel.setPadding(new Insets(5, 0,5, 0));
+
     }
 
 //    PlanTaskView2 planTaskView;
@@ -230,6 +239,20 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             return;
         }
 //        String status = viewInfos.getStatus();
+
+        boolean success = true;
+        if(success){
+            Label label = new Label(name);
+            label.setFont(new Font("Arial", 15));
+            label.setPadding(new Insets(10, 0, 10, 0));
+//            HBox taskRow = new HBox(label);
+
+            // Add the Label to the VBox.
+            tasksPanel.getChildren().add(label);
+            return;
+        }
+
+
 
         //print the values of the inputs
         System.out.println("inputs: ");
@@ -1082,5 +1105,16 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         errorMessage.setHeaderText("Error");
         errorMessage.setTitle("Error");
         errorMessage.showAndWait();
+    }
+    private void showSuccessMessage(String message){
+        Alert successMessage = new Alert(Alert.AlertType.INFORMATION);
+        successMessage.setContentText(message);
+        successMessage.setHeaderText("Success");
+        successMessage.setTitle("Success");
+        successMessage.showAndWait();
+    }
+    public void planTasks(){
+        showSuccessMessage("Tasks planned successfully");
+        tasksPanel.getChildren().clear();
     }
 }

@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class FreeSlotModel {
     FreeSlotsDatabase freeSlotsDatabase;
@@ -16,6 +17,9 @@ public class FreeSlotModel {
     }
     public ArrayList<FreeSlotSchema> findMany(LocalDate date) throws DayDoesNotHaveFreeSlotsException {
         return this.freeSlotsDatabase.findMany(date);
+    }
+    public TreeMap<LocalDate, ArrayList<FreeSlotSchema> > findMany(LocalDate startDate, LocalDate endDate) {
+        return this.freeSlotsDatabase.findMany(startDate, endDate);
     }
     public FreeSlotSchema find(LocalDate date, LocalTime startTime) throws FreeSlotNotFoundException {
         return this.freeSlotsDatabase.find(date, startTime);

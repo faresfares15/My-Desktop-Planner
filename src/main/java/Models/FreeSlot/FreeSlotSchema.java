@@ -29,7 +29,7 @@ public class FreeSlotSchema implements Comparable<FreeSlotSchema> {
         return endTime;
     }
 
-    public LocalDate getDayDate() {
+    public LocalDate getDate() {
         return dayDate;
     }
 

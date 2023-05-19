@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.FreeSlotControllers.CreateFreeSlotController">
+    <children>
+        <GridPane hgap="10.0" layoutX="137.0" layoutY="88.0" prefHeight="272.0" prefWidth="403.0" vgap="10.0" AnchorPane.topAnchor="88.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="118.0" minWidth="10.0" prefWidth="87.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.2" minWidth="10.0" prefWidth="173.2" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="66.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="Start time:" />
+                <Label text="Duration:" GridPane.rowIndex="1" />
+                <Label text="Date:" GridPane.rowIndex="2" />
+                <Spinner fx:id="startTimeHoursSpinner" editable="true" prefHeight="26.0" prefWidth="115.0" GridPane.columnIndex="1" />
+                <Spinner fx:id="startTimeMinutesSpinner" editable="true" prefHeight="26.0" prefWidth="111.0" GridPane.columnIndex="2" />
+                <Spinner fx:id="durationHoursSpinner" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Spinner fx:id="durationMinutesSpinner" editable="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Button mnemonicParsing="false" onAction="#createFreeSlot" text="Create free slot" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                <Button mnemonicParsing="false" onAction="#moveToCalendarView" text="Go Back" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+            </children>
+        </GridPane>
+        <Label fx:id="viewTitle" layoutX="224.0" layoutY="35.0" text="Create a free slot" GridPane.columnSpan="2">
+            <font>
+                <Font name="Arial Bold" size="20.0" />
+            </font>
+        </Label>
+    </children>
+</AnchorPane>

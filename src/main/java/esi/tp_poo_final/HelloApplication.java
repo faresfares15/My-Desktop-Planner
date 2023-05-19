@@ -12,6 +12,11 @@ import Models.User.UserModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -36,19 +41,18 @@ public class HelloApplication extends Application {
         taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(4), "task4", LocalTime.of(13, 30), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
         //end of trash code
 
-        //trash code
-
-        //end of trash code
         System.setProperty("javafx.sg.warn", "true");
-        primaryStage.setTitle("Signup Page");
+        primaryStage.setTitle("Calendar Page");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-set-of-tasks-view.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 840, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 840, 500);
         primaryStage.setTitle("Calendar");
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
 
         //get the controller from the view
 //        PlanTaskController planTaskController = fxmlLoader.getController();

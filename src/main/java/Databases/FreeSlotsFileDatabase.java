@@ -22,6 +22,24 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
         //return the free slots
         return freeSlotsList;
     }
+    public TreeMap<LocalDate, ArrayList<FreeSlotSchema> > findMany(LocalDate startDate, LocalDate endDate){
+        //create a new tree map
+        TreeMap<LocalDate, ArrayList<FreeSlotSchema>> result = new TreeMap<>();
+
+        //loop through the dates
+        for(LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)){
+            //find the free slots for the date
+            ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(date);
+
+            //check if the date has free slots
+            if(freeSlotsList == null) continue;
+
+            result.put(date, this.freeSlotsMap.get(date));
+        }
+
+        //return the free slots
+        return result;
+    }
     public FreeSlotSchema delete(LocalDate dayDate, LocalTime startTime){
         //find the day in the map
         ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(dayDate);
@@ -101,7 +119,7 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
         //create the free slot
 
         //find the day in the map
-        ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(freeSlotSchema.getDayDate());
+        ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(freeSlotSchema.getDate());
 
         //check if the day has free slots
         if(freeSlotsList == null){
@@ -112,7 +130,7 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
             freeSlotsList.add(freeSlotSchema);
 
             //add the list to the map
-            this.freeSlotsMap.put(freeSlotSchema.getDayDate(), freeSlotsList);
+            this.freeSlotsMap.put(freeSlotSchema.getDate(), freeSlotsList);
         }else{
             //add the free slot to the list
             freeSlotsList.add(freeSlotSchema);

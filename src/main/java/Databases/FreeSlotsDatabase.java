@@ -7,9 +7,11 @@ import Models.FreeSlot.FreeSlotSchema;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public interface FreeSlotsDatabase {
     ArrayList<FreeSlotSchema> findMany(LocalDate dayDate) throws DayDoesNotHaveFreeSlotsException;
+    TreeMap<LocalDate, ArrayList<FreeSlotSchema>> findMany(LocalDate startDate, LocalDate endDate);
     FreeSlotSchema find(LocalDate dayDate, LocalTime startTime);
     FreeSlotSchema create(LocalDate dayDate, LocalTime startTime, LocalTime endTime);
     FreeSlotSchema create(FreeSlotSchema freeSlotSchema);

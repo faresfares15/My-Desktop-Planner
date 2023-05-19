@@ -2,6 +2,7 @@ package Controllers.CalendarControllers;
 
 import Controllers.TaskControllers.TaskInfoViewController;
 import Exceptions.TaskDoesNotExistException;
+import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.TaskSchema;
 import esi.tp_poo_final.HelloApplication;
 import javafx.event.Event;
@@ -59,20 +60,6 @@ public class ShowCalendarController{
         startDateOfCurrentWeek.setText(currentWeekStartDate.getMonth().toString()+" "+currentWeekStartDate.getYear());
 
         loadCalendar();
-
-        Rectangle task2Rectangle = new Rectangle(70, hourBlockHeight, freeSlotColor); //width, height, fill color
-
-        Text text2 = new Text("Hi");
-        text2.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-
-        // Create a nested pane to hold the rectangle and text
-        StackPane taskBlock2 = new StackPane(task2Rectangle, text2);
-
-        GridPane.setColumnIndex(taskBlock2, 1);
-        GridPane.setRowIndex(taskBlock2, 6);
-        GridPane.setRowSpan(taskBlock2, 2);
-        calendarGrid.getChildren().add(taskBlock2);
-
 
         //set a click event handler on the calendar, for when a task box was clicked
         calendarGrid.setOnMouseClicked(new EventHandler<Event>() {
@@ -174,9 +161,6 @@ public class ShowCalendarController{
                         System.out.println("Free slot color: " + blockColor);
                     }
 
-                    DayOfWeek day =  LocalDate.now().getDayOfWeek();
-                    System.out.println(day.name());
-
                 }catch (TaskDoesNotExistException e) {
                     System.out.println("Error loading task info view: " + e.getMessage());
                 }catch (Exception e){
@@ -226,12 +210,22 @@ public class ShowCalendarController{
 
     }
 
-    public void moveToScheduleFreeSlotView(){
+    public void moveToScheduleFreeSlotView() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-free-slot-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Stage stage = (Stage) calendarGrid.getScene().getWindow();
+        stage.setTitle("Plan a free slot");
 
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+
+        stage.setScene(scene);
     }
     public void moveToScheduleTaskView()  throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-task-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 676, 486);
         Stage stage = (Stage) calendarGrid.getScene().getWindow();
         stage.setTitle("Plan a task");
 
@@ -242,8 +236,18 @@ public class ShowCalendarController{
 
         stage.setScene(scene);
     }
-    public void moveToScheduleSetOfTaskView(){
+    public void moveToScheduleSetOfTaskView() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-set-of-tasks-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 800, 500);
+        Stage stage = (Stage) calendarGrid.getScene().getWindow();
+        stage.setTitle("Plan set of tasks");
 
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+
+        stage.setScene(scene);
     }
 
     //helper methods
@@ -313,6 +317,17 @@ public class ShowCalendarController{
 
         try{
 
+            //================ show the free slots of the current week ===========================//
+            TreeMap<LocalDate, ArrayList<FreeSlotSchema>> weekFreeSlots = HelloApplication.freeSlotModel.findMany(currentWeekStartDate, currentWeekStartDate.plusDays(6));
+            for(LocalDate day: weekFreeSlots.keySet()){
+                ArrayList<FreeSlotSchema> dayFreeSlotsList = weekFreeSlots.get(day);
+                for(FreeSlotSchema freeSlot: dayFreeSlotsList){
+                    StackPane freeSlotBlock = createBlock(70, freeSlotColor, "Free Slot", freeSlot.getDate().getDayOfWeek(), freeSlot.getStartTime(), freeSlot.getDuration());
+                    calendarGrid.getChildren().add(freeSlotBlock);
+                }
+            }
+
+            //================ show the tasks of the current week ================================//
 
             //get tasks from the current week
             TreeMap<LocalDate, ArrayList<TaskSchema>> weekTasks = HelloApplication.taskModel.findMany(currentWeekStartDate, currentWeekStartDate.plusDays(6));
