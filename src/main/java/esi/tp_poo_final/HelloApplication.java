@@ -2,6 +2,7 @@ package esi.tp_poo_final;
 
 import Controllers.TaskControllers.PlanTaskController;
 import Databases.*;
+import Models.Calendar.Settings;
 import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
 import Models.Project.ProjectModel;
@@ -44,6 +45,7 @@ public class HelloApplication extends Application {
     public static final String projectDbFileName = "projectFileDatabase.dat";
     public static final String usersDbFileName = "usersFileDatabase.dat";
     public static String currentUserName = null;
+    public static Settings currentUserSettings = null;
 
     @Override
     public void start(Stage primaryStage) throws IOException {

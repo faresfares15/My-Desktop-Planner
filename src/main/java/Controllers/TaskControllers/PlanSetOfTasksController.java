@@ -322,7 +322,7 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
 
             //Test the auto Plan set of tasks
             ArrayList<TaskSchema> tasks = new ArrayList<>();
-            DecomposableTaskSchema longTask = new DecomposableTaskSchema(new SimpleTaskSchema("longTask", Duration.ofHours(4).plus(Duration.ofMinutes(30)), Priority.HIGH, LocalDate.now().plusDays(4), "category", TaskStatus.UNSCHEDULED, 0));
+            DecomposableTaskSchema longTask = new DecomposableTaskSchema(new SimpleTaskSchema("longTask2", Duration.ofHours(4).plus(Duration.ofMinutes(30)), Priority.HIGH, LocalDate.now().plusDays(4), "category", TaskStatus.UNSCHEDULED, 0));
             tasks.add(longTask);
             tasks.add(new SimpleTaskSchema("fares task1", Duration.ofHours(1), Priority.LOW, LocalDate.now().plusDays(4), "category", TaskStatus.UNSCHEDULED, 0));
             tasks.add(new SimpleTaskSchema("fares task2", Duration.ofHours(2), Priority.MEDIUM, LocalDate.now(), "category", TaskStatus.UNSCHEDULED, 0));

@@ -3,13 +3,10 @@ package Databases;
 import Exceptions.DayDoesNotHaveTasksException;
 import Exceptions.TaskDoesNotExistException;
 import Models.Task.TaskSchema;
-import javafx.concurrent.Task;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public class TaskFileDatabase implements TaskDatabase{
@@ -60,11 +57,11 @@ public class TaskFileDatabase implements TaskDatabase{
         return null;
     }
     @Override
-    public TaskSchema find(LocalDate date, String name) throws TaskDoesNotExistException {
+    public TaskSchema find(LocalDate date, int id) throws TaskDoesNotExistException {
         if (tasksMap.containsKey(date)){
             for (TaskSchema taskSchema:
                     tasksMap.get(date)) {
-                if (taskSchema.getName().equals(name)) return taskSchema;
+                if (taskSchema.getId() == id) return taskSchema;
             }
         }
 
