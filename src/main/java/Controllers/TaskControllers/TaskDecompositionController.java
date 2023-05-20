@@ -9,6 +9,9 @@ import javafx.scene.text.Text;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+
+import Controllers.TaskControllers.PlanTaskController.SubTaskBlock;
 
 public class TaskDecompositionController {
     @FXML
@@ -69,36 +72,7 @@ public class TaskDecompositionController {
             return datePicker.getValue();
         }
     }
-    private ArrayList<TaskBlock> taskBlocks = new ArrayList<>();
-    protected class TaskBlock{
-        private LocalTime startTime;
-        private LocalTime endTime;
-        private LocalDate date;
-
-        public void setStartTime(LocalTime startTime) {
-            this.startTime = startTime;
-        }
-
-        public void setEndTime(LocalTime endTime) {
-            this.endTime = endTime;
-        }
-
-        public void setDate(LocalDate date) {
-            this.date = date;
-        }
-
-        public LocalTime getStartTime() {
-            return startTime;
-        }
-
-        public LocalTime getEndTime() {
-            return endTime;
-        }
-
-        public LocalDate getDate() {
-            return date;
-        }
-    }
+    private ArrayList<SubTaskBlock> subTaskBlocks = new ArrayList<>();
 
     public void addBlock() {
         try{
@@ -114,8 +88,27 @@ public class TaskDecompositionController {
             if(date.isBefore(LocalDate.now())) throw new Exception("Date is before today");
             if(date.isEqual(LocalDate.now()) && startTime.isBefore(LocalTime.now())) throw new Exception("Start time is before current time");
 
+
+            //create the corresponding task block object
+            SubTaskBlock subTaskBlock = new SubTaskBlock(date, startTime, endTime);
+            subTaskBlock.setStartTime(startTime);
+            subTaskBlock.setEndTime(endTime);
+            subTaskBlock.setDate(date);
+
+            //verify that the new block doesn't overlap with a previous block
+            for(SubTaskBlock otherBlock : subTaskBlocks){
+                if(otherBlock.getDate().isEqual(subTaskBlock.getDate())){
+                    if(otherBlock.getStartTime().isBefore(subTaskBlock.getStartTime()) && otherBlock.getEndTime().isAfter(subTaskBlock.getStartTime())) throw new Exception("Block overlaps with another block");
+                    if(otherBlock.getStartTime().isBefore(subTaskBlock.getEndTime()) && otherBlock.getEndTime().isAfter(subTaskBlock.getEndTime())) throw new Exception("Block overlaps with another block");
+                    if(otherBlock.getStartTime().isAfter(subTaskBlock.getStartTime()) && otherBlock.getEndTime().isBefore(subTaskBlock.getEndTime())) throw new Exception("Block overlaps with another block");
+                }
+            }
+
             //add the block to the view
             blocksContainer.getChildren().add(createTaskBlockView(startTime, endTime, date));
+
+            //add the task block to the array list
+            subTaskBlocks.add(subTaskBlock);
 
         }catch (Exception e){
             showErrorMessage(e.getMessage());
@@ -123,28 +116,14 @@ public class TaskDecompositionController {
         }
     }
     public void submitDecomposition() {
-        //get the texts from the blocks container
-        blocksContainer.getChildren().forEach((block) -> {
-            //get the texts from the block
-            Text startTimeText = (Text) ((HBox) block).getChildren().get(0);
-            Text endTimeText = (Text) ((HBox) block).getChildren().get(1);
-            Text dateText = (Text) ((HBox) block).getChildren().get(2);
-
-            //create the task block object
-            TaskBlock taskBlock = new TaskBlock();
-            taskBlock.setStartTime(LocalTime.parse(startTimeText.getText()));
-            taskBlock.setEndTime(LocalTime.parse(endTimeText.getText()));
-            taskBlock.setDate(LocalDate.parse(dateText.getText()));
-
-            //add the task block to the array list
-            taskBlocks.add(taskBlock);
-        });
+        //sort the tasks blocks by date
+        Collections.sort(subTaskBlocks);
 
         submitButton.getScene().getWindow().hide();
     }
 
-    public ArrayList<TaskBlock> getTaskBlocks() {
-        return taskBlocks;
+    public ArrayList<SubTaskBlock> getTaskBlocks() {
+        return subTaskBlocks;
     }
 
     private HBox createTaskBlockView(LocalTime startTime, LocalTime endTime, LocalDate date){
@@ -158,6 +137,9 @@ public class TaskDecompositionController {
 
         //add spacing
         taskBlockView.setSpacing(10);
+
+        //give it an id (to be able to track it later)
+        taskBlockView.setId(String.valueOf(subTaskBlocks.size())); //the id is the index of the block in the array list
 
         //return the horizontal box
         return taskBlockView;

@@ -33,7 +33,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
         this.deadline = deadline;
         this.category = category;
         this.status = status;
-        this.id = (name + category).hashCode() + deadline.hashCode() + random.nextInt(1000);
+        this.id = (name + category).hashCode() + date.hashCode() + random.nextInt(1000);
         this.progress = Progress.NOT_REALIZED;
     }
     public TaskSchema(String name, LocalTime startTime, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status) {
@@ -46,13 +46,13 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
         this.category = category;
         this.status = status;
         this.progress = Progress.NOT_REALIZED;
-        this.id = (name + category).hashCode() + deadline.hashCode() + random.nextInt(1000);
+        this.id = (name + category).hashCode() + date.hashCode() + random.nextInt(1000);
     }
 
     public TaskSchema(String name, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status) {
         Random random = new Random();
         this.name = name;
-        this.id = (name + category).hashCode() + deadline.hashCode() + random.nextInt(1000);
+        this.id = (name + category).hashCode() + date.hashCode() + random.nextInt(1000);
         this.duration = duration;
         this.priority = priority;
         this.deadline = deadline;
@@ -155,7 +155,17 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
 
     @Override
     public int compareTo(TaskSchema o) {
-        return this.deadline.compareTo(o.getDeadline()); //TODO: the task here is supposed to compare by start time, no?
+//        return this.deadline.compareTo(o.getDeadline()); //TODO: the task here is supposed to compare by start time, no?
+        int dateComparison = this.date.compareTo(o.getDate());
+        if(dateComparison == 0){
+            int startTimeComparison = this.startTime.compareTo(o.getStartTime());
+            if(startTimeComparison == 0){
+                return this.duration.compareTo(o.getDuration());
+            }else{
+                return startTimeComparison;
+            }
+        }
+        return dateComparison;
     }
 
     @Override

@@ -28,9 +28,6 @@ public class TaskInfoViewController {
     Text status;
     @FXML
     Text progress;
-    @FXML
-    public void initialize(){
-    }
     TaskSchema task;
     public TaskInfoViewController(TaskSchema task){
         this.task = task;

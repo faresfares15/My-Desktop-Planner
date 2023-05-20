@@ -52,7 +52,8 @@ public class HelloApplication extends Application {
         taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(4), "task4", LocalTime.of(13, 30), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
 
-        freeSlotModel.create(LocalDate.now().plusDays(1), LocalTime.of(8, 0), LocalTime.of(10,0));
+        freeSlotModel.create(LocalDate.now(), LocalTime.of(15, 0), LocalTime.of(16,0));
+        freeSlotModel.create(LocalDate.now().plusDays(1), LocalTime.of(13, 0), LocalTime.of(15,0));
         //end of trash code
 
         System.setProperty("javafx.sg.warn", "true");

@@ -32,10 +32,6 @@ public class HelloController {
     protected void onHelloButtonClick() throws IOException {
         welcomeText.setText("Welcome to JavaFX Application!");
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-task-view.fxml"));
-        fxmlLoader.setControllerFactory(c ->
-                new PlanTaskController()
-        );
-
         Scene scene = new Scene(fxmlLoader.load(), 600, 500);
 
         Stage stage = (Stage) welcomeText.getScene().getWindow();

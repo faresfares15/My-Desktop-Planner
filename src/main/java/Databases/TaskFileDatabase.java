@@ -99,18 +99,10 @@ public class TaskFileDatabase implements TaskDatabase{
     @Override
     public TreeMap<LocalDate, ArrayList<TaskSchema>> findMany(LocalDate startDate, LocalDate endDate) {
         TreeMap<LocalDate, ArrayList<TaskSchema>> resultMap = new TreeMap<>();
+
         if(startDate.until(endDate).getDays() < 0) return null;
 
-//        int daysCounter = startDate.until(endDate).getDays();
-//        for (int i = 0; i <= daysCounter; i++) {
-//            if(tasksMap.containsKey(startDate)){
-//                resultMap.put(startDate, tasksMap.get(startDate));
-//            }
-//
-//            startDate = startDate.plusDays(1); //go to next day
-//        }
-
-        for(LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)){
+        for(LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)){
             if(tasksMap.containsKey(date)){
                 resultMap.put(date, tasksMap.get(date));
             }

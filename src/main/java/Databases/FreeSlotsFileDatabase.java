@@ -35,14 +35,11 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
         TreeMap<LocalDate, ArrayList<FreeSlotSchema>> result = new TreeMap<>();
 
         //loop through the dates
-        for(LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)){
-            //find the free slots for the date
-            ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(date);
+        for(LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)){
 
-            //check if the date has free slots
-            if(freeSlotsList == null) continue;
-
-            result.put(date, this.freeSlotsMap.get(date));
+            if(freeSlotsMap.containsKey(date)) {
+                result.put(date, freeSlotsMap.get(date));
+            }
         }
 
         //return the free slots
