@@ -1,5 +1,6 @@
 package Controllers.FreeSlotControllers;
 
+import Exceptions.EmptyRequiredFieldException;
 import esi.tp_poo_final.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -57,7 +58,7 @@ public class CreateFreeSlotController {
         durationMinutesSpinner.setValueFactory(valueFactory);
 
         //setting the date picker
-        datePicker.setValue(LocalDate.now());
+        datePicker.setValue(LocalDate.now().plusDays(1));
     }
 
     //internal class to abstract inputs from methods
@@ -66,33 +67,60 @@ public class CreateFreeSlotController {
             return LocalTime.of(startTimeHoursSpinner.getValue(), startTimeMinutesSpinner.getValue());
         }
 
-        public Duration getDuration() {
+        public Duration getDuration() throws EmptyRequiredFieldException{
+            //check if an input is not provided
+            if(durationHoursSpinner.getValue() == null && durationMinutesSpinner.getValue() == null) throw new EmptyRequiredFieldException("Duration is required");
             return Duration.ofHours(durationHoursSpinner.getValue()).plusMinutes(durationMinutesSpinner.getValue());
         }
-        public LocalDate getDate() {
+        public LocalDate getDate() throws EmptyRequiredFieldException {
+            //check if an input is not provided
+            if(datePicker.getValue() == null) throw new EmptyRequiredFieldException("Date is required");
             return datePicker.getValue();
         }
     }
     public void createFreeSlot(){
-        //get the inputs from the view
-        ViewInfos infos = new ViewInfos();
+        try{
+            //get the inputs from the view
+            ViewInfos infos = new ViewInfos();
+            LocalDate date = infos.getDate();
+            LocalTime startTime = infos.getStartTime();
+            Duration duration = infos.getDuration();
+            LocalTime endTime = startTime.plus(duration);
 
-        //TODO validate the inputs (e.g time in the past) and check if free slot can be created
-        boolean success = true;
-        if(!success){
-            showErrorMessage("Free slot cannot be created");
-            return;
+            if(date.isBefore(LocalDate.now())) throw new Exception("Date cannot be in the past");
+
+            if(date.isEqual(LocalDate.now()) && startTime.isBefore(LocalTime.now())) throw new Exception("Start time cannot be in the past");
+
+            if(duration.toMinutes() == 0) throw new Exception("Duration cannot be 0");
+
+            HelloApplication.freeSlotModel.findMany(date).forEach(freeSlot -> {
+                if (freeSlot.getStartTime().isBefore(startTime) && freeSlot.getEndTime().isAfter(startTime)) {
+                    //new start time is inside the free slot
+                    throw new RuntimeException("Free slot cannot be created");
+                }
+                if (freeSlot.getStartTime().isBefore(endTime) && freeSlot.getEndTime().isAfter(endTime)) {
+                    //new end time is inside the free slot
+                    throw new RuntimeException("Free slot cannot be created");
+                }
+                if (freeSlot.getStartTime().isAfter(startTime) && freeSlot.getEndTime().isBefore(endTime)) {
+                    //new free slot is inside the free slot
+                    throw new RuntimeException("Free slot cannot be created");
+                }
+            });
+
+            if(!confirmSchedule("Free slot schedule confirmation","Free slot can be scheduled in the date and time. Do you confirm the operation?")){
+                System.out.println("Operation cancelled");
+                return;
+            }
+
+            //create the free slot
+            HelloApplication.freeSlotModel.create(infos.getDate(), infos.getStartTime(), infos.getStartTime().plus(infos.getDuration()));
+
+            showSuccessMessage("Free slot created successfully");
+
+        }catch (Exception e){
+            showErrorMessage(e.getMessage());
         }
-
-        if(!isConfirmed()){
-            System.out.println("Operation cancelled");
-            return;
-        }
-
-        //create the free slot
-        HelloApplication.freeSlotModel.create(infos.getDate(), infos.getStartTime(), infos.getStartTime().plus(infos.getDuration()));
-
-        showSuccessMessage("Free slot created successfully");
     }
     public void moveToCalendarView() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
@@ -109,11 +137,11 @@ public class CreateFreeSlotController {
     }
 
     //helper methods
-    private boolean isConfirmed(){
+    private boolean confirmSchedule(String title, String message){
         Alert confirmationMessage = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationMessage.setContentText("Free slot can be scheduled in the date and time. Do you confirm the operation?");
-        confirmationMessage.setHeaderText("Free slot scheduling confirmation");
-        confirmationMessage.setTitle("Free slot confirmation");
+        confirmationMessage.setContentText(message);
+        confirmationMessage.setHeaderText(title);
+        confirmationMessage.setTitle(title);
         Optional<ButtonType> clickedButton = confirmationMessage.showAndWait();
 
         return clickedButton.get() == ButtonType.OK;

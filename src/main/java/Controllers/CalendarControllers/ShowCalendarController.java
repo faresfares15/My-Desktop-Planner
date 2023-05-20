@@ -264,6 +264,7 @@ public class ShowCalendarController{
         StackPane block = new StackPane(background, blockText);
 
         block.setMaxHeight(blockHeight);
+        block.setStyle("-fx-cursor: hand;");
 
         // Translate the task block to the bottom, according the
         double minutesOffset = startTime.getMinute() * minuteBlockHeight;

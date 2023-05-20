@@ -252,8 +252,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
             return;
         }
 
-
-
         //print the values of the inputs
         System.out.println("inputs: ");
         System.out.println("name: " + name);
