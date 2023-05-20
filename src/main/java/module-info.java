@@ -8,6 +8,7 @@ module esi.tp_poo_final {
     opens Controllers.UserControllers to javafx.fxml;
     opens Controllers.CalendarControllers to javafx.fxml;
     opens Controllers.FreeSlotControllers to javafx.fxml;
+    opens Controllers.ProjectControllers to javafx.fxml;
     exports esi.tp_poo_final;
 
     //Exporting models

@@ -82,7 +82,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     VBox decompositionsPanel;
 
     ArrayList<SubTaskBlock> subTasksBlocks = new ArrayList<>(); //will be used for manually decomposed tasks
-    private final String trashProperty = "trash";
 
     @FXML
     public void initialize() {
@@ -119,8 +118,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         priorityComboBox.setItems(priorities);
 
         //setting the category combo box
-        ObservableList<String> categories = FXCollections.observableArrayList("Work", "Study", "Personal", "New category");
-        category.setValue("Work");
+        ObservableList<String> categories = FXCollections.observableArrayList("", "Work", "Study", "Personal", "New category");
+        category.setValue("");
         category.getItems().clear();
         category.getItems().setAll(categories);
         category.setOnAction(event -> {
@@ -513,7 +512,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     private void planSimpleTaskAutomatically(DaySchema day, String name, Duration duration,
                                              String priority, LocalDate deadline, String category, String status) throws Exception {
         //This method will create a simple task.
-        //TODO: check wether you're going to add periodicity or not
+        //TODO: check whether you're going to add periodicity
 
         //Get the necessary data for verification
         ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(day.getDate()); //throws DayDoesNotHaveFreeSlotsException
@@ -557,6 +556,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             preValidationMap.put(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
                     Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 0), freeSlotList);
         }
+
         //validation pop-up
 
         System.out.println("task" + " \"" + name + "\" " + "created successfully on: " + day.getDate() + " at: " + startTime + " with duration: " + duration);
@@ -1065,9 +1065,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         return isEnoughTimeForTask;
     }
 
-    public String getTrashProperty() {
-        return trashProperty;
-    }
 
     public void moveToTaskDecompositionView() throws IOException {
         //display a pop window where the user can insert decompositions for the tasks

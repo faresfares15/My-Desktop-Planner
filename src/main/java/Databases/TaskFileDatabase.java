@@ -75,11 +75,10 @@ public class TaskFileDatabase implements TaskDatabase{
     }
 
     @Override
-    public void update(TaskSchema taskSchema) throws TaskDoesNotExistException {
-        if(tasksMap.containsKey(taskSchema.getDate())){
-            tasksMap.get(taskSchema.getDate()).remove(taskSchema);
-            tasksMap.get(taskSchema.getDate()).add(taskSchema);
-            Collections.sort(tasksMap.get(taskSchema.getDate()));
+    public void update(LocalDate date, int id, String newName) throws TaskDoesNotExistException {
+        if(tasksMap.containsKey(date)){
+            TaskSchema task = this.find(date, id);
+            task.setName(newName);
         } else {
             throw new TaskDoesNotExistException();
         }

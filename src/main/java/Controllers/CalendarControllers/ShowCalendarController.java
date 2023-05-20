@@ -74,21 +74,22 @@ public class ShowCalendarController{
                     Color blockColor = null;
                     String blockTitle = null;
                     int columnIndex = 0;
+                    int taskId = 0;
                     //TODO: the id property of the stack pane is set, now change the search code to use the id
 
                     //get the color and the title of the clicked block (if it is a block)
                     if(clickedItem instanceof StackPane){
                         //get the stack pane object
-                        StackPane taskBox = (StackPane) clickedItem;
-                        System.out.println(taskBox.getId());
-                        columnIndex = GridPane.getColumnIndex(taskBox);
+                        StackPane taskBlock = (StackPane) clickedItem;
+                        taskId = Integer.parseInt(taskBlock.getId());
+                        columnIndex = GridPane.getColumnIndex(taskBlock);
 
                         //get the color of its rectangle
-                        Rectangle rectangle = (Rectangle) taskBox.getChildren().get(0);
+                        Rectangle rectangle = (Rectangle) taskBlock.getChildren().get(0);
                         blockColor = (Color) rectangle.getFill();
 
                         //get the content of the text
-                        blockTitle = ((Text) taskBox.getChildren().get(1)).getText();
+                        blockTitle = ((Text) taskBlock.getChildren().get(1)).getText();
                     }
                     else if(clickedItem instanceof Rectangle){
                         //get the rectangle's color
@@ -97,7 +98,7 @@ public class ShowCalendarController{
 
                         //get the stack pane object to access the text
                         StackPane taskBlock = (StackPane) rectangle.getParent();
-                        System.out.println(taskBlock.getId());
+                        taskId = Integer.parseInt(taskBlock.getId());
                         columnIndex = GridPane.getColumnIndex(taskBlock);
 
                         //get the text form the stack pane container
@@ -107,7 +108,7 @@ public class ShowCalendarController{
                     else if(clickedItem instanceof Text text){
                         //get the stack pane object to access the rectangle
                         StackPane taskBlock = (StackPane) text.getParent();
-                        System.out.println(taskBlock.getId());
+                        taskId = Integer.parseInt(taskBlock.getId());
                         columnIndex = GridPane.getColumnIndex(taskBlock);
 
                         //get the rectangle's color
@@ -129,7 +130,7 @@ public class ShowCalendarController{
                         System.out.println("Task color: " + blockColor);
 
                         //search for the task object
-                        TaskSchema task = HelloApplication.taskModel.find(currentWeekStartDate.plusDays(columnIndex -1), Integer.parseInt(blockTitle));
+                        TaskSchema task = HelloApplication.taskModel.find(currentWeekStartDate.plusDays(columnIndex -1), taskId);
                         //TODO: change it to get the id
                         System.out.println("Task found: " + task.getName());
 

@@ -13,6 +13,8 @@ public interface ProjectDataBase extends Serializable {
     ProjectSchema initialize(String name, String description); //Just for initialization
     ProjectSchema create(String name, String description, ArrayList<TaskSchema> tasksList); //Create from input
     ProjectSchema find(int id) throws ProjectDoesNotExistException;
+    ProjectSchema find(String name) throws ProjectDoesNotExistException;
+    ArrayList<ProjectSchema> findAll();
     ProjectSchema update(ProjectSchema projectSchema) throws ProjectDoesNotExistException; //normally the id must not be changed
     ProjectSchema delete(ProjectSchema projectSchema) throws ProjectDoesNotExistException;
 }
