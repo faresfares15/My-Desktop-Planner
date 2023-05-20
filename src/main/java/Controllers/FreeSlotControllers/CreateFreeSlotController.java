@@ -93,20 +93,25 @@ public class CreateFreeSlotController {
 
             if(duration.toMinutes() == 0) throw new Exception("Duration cannot be 0");
 
-            HelloApplication.freeSlotModel.findMany(date).forEach(freeSlot -> {
-                if (freeSlot.getStartTime().isBefore(startTime) && freeSlot.getEndTime().isAfter(startTime)) {
-                    //new start time is inside the free slot
-                    throw new RuntimeException("Free slot cannot be created");
-                }
-                if (freeSlot.getStartTime().isBefore(endTime) && freeSlot.getEndTime().isAfter(endTime)) {
-                    //new end time is inside the free slot
-                    throw new RuntimeException("Free slot cannot be created");
-                }
-                if (freeSlot.getStartTime().isAfter(startTime) && freeSlot.getEndTime().isBefore(endTime)) {
-                    //new free slot is inside the free slot
-                    throw new RuntimeException("Free slot cannot be created");
-                }
-            });
+
+            try{
+                HelloApplication.freeSlotModel.findMany(date).forEach(freeSlot -> {
+                    if (freeSlot.getStartTime().isBefore(startTime) && freeSlot.getEndTime().isAfter(startTime)) {
+                        //new start time is inside the free slot
+                        throw new RuntimeException("Free slot cannot be created");
+                    }
+                    if (freeSlot.getStartTime().isBefore(endTime) && freeSlot.getEndTime().isAfter(endTime)) {
+                        //new end time is inside the free slot
+                        throw new RuntimeException("Free slot cannot be created");
+                    }
+                    if (freeSlot.getStartTime().isAfter(startTime) && freeSlot.getEndTime().isBefore(endTime)) {
+                        //new free slot is inside the free slot
+                        throw new RuntimeException("Free slot cannot be created");
+                    }
+                });
+            }catch (Exception e){
+                //do nothing, no free slots found to compare with
+            }
 
             if(!confirmSchedule("Free slot schedule confirmation","Free slot can be scheduled in the date and time. Do you confirm the operation?")){
                 System.out.println("Operation cancelled");

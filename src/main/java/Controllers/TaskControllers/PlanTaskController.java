@@ -83,10 +83,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
     ArrayList<SubTaskBlock> subTasksBlocks = new ArrayList<>(); //will be used for manually decomposed tasks
 
-    public PlanTaskController(TreeMap<TaskSchema, ArrayList<FreeSlotSchema>> preValidationMap) {
-        this.preValidationMap = preValidationMap;
-    }
-
     @FXML
     public void initialize() {
         //This method will be called when the view is loaded
@@ -236,16 +232,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                             break;
                         case "true":
                             //planning a decomposable task manually
-//                            planDecomposableTaskManually(new DaySchema(LocalDate.now()), name, startTime, duration,
-//                                    priority, deadline, category, status);
-//                            SubTaskInfo subtaskInfo1 = new SubTaskInfo(LocalTime.of(9, 0), Duration.ofHours(2));
-//                            SubTaskInfo subtaskInfo2 = new SubTaskInfo(LocalTime.of(12, 0), Duration.ofHours(1));
-//                            ArrayList<SubTaskInfo> subtasksInfos = new ArrayList<>() {{
-//                                add(subtaskInfo1);
-//                                add(subtaskInfo2);
-//                            }};
-
-                            planDecomposableTaskManually(name, this.subTasksBlocks, priority, deadline, category, status);
+                            planDecomposableTaskManually(name, this.subTasksBlocks, priority,
+                                    deadline, category, status);
                             break;
                     }
                     break;
