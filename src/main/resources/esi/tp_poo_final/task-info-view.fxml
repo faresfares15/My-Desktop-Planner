@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TaskControllers.TaskInfoViewController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@general.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TaskControllers.TaskInfoViewController">
    <children>
       <ScrollPane layoutX="155.0" layoutY="63.0" prefHeight="274.0" prefWidth="290.0">
          <content>

@@ -1,6 +1,5 @@
 package esi.tp_poo_final;
 
-import Controllers.TaskControllers.PlanTaskController;
 import Databases.*;
 import Models.Calendar.Settings;
 import Models.Day.DayModel;
@@ -14,11 +13,6 @@ import Models.User.UserModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -57,17 +51,24 @@ public class HelloApplication extends Application {
         taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task2", LocalTime.of(13, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(4), "task4", LocalTime.of(13, 30), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+
+        freeSlotModel.create(LocalDate.now().plusDays(1), LocalTime.of(8, 0), LocalTime.of(10,0));
         //end of trash code
 
         System.setProperty("javafx.sg.warn", "true");
 
-        primaryStage.setTitle("Login");
+//        primaryStage.setTitle("Login");
+//
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+//
+//        Scene scene = new Scene(fxmlLoader.load(), 840, 400);
+//        primaryStage.setTitle("Login");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-task-view.fxml"));
 
-        Scene scene = new Scene(fxmlLoader.load(), 840, 400);
-        primaryStage.setTitle("Login");
-
+        Scene scene = new Scene(fxmlLoader.load(), 840, 500);
+//        primaryStage.setTitle("Plan Task");
 
         primaryStage.setScene(scene);
         primaryStage.show();

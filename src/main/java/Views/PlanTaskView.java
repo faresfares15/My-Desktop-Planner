@@ -2,11 +2,8 @@ package Views;
 
 import Controllers.TaskControllers.PlanTaskController;
 import Models.Day.DayModel;
-import Controllers.VisualControllers.ToggleSimpleTaskController;
 import Models.FreeSlot.FreeSlotModel;
 import Models.Task.TaskModel;
-import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;

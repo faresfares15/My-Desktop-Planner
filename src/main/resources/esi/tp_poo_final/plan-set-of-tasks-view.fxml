@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TaskControllers.PlanSetOfTasksController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" stylesheets="@general.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TaskControllers.PlanSetOfTasksController">
     <children>
         <GridPane hgap="10.0" layoutX="136.0" layoutY="86.0" prefHeight="363.0" prefWidth="403.0" vgap="10.0" AnchorPane.topAnchor="86.0">
             <columnConstraints>
