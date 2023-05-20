@@ -164,7 +164,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                 //disable start time input
                 startTimeHoursSpinner.setDisable(true);
                 startTimeMinutesSpinner.setDisable(true);
-                decomposeTaskCheckBox.setDisable(true);
+                decomposeTaskCheckBox.setDisable(false);
                 decomposeButton.setDisable(true);
                 decompositionsPanel.setVisible(false);
                 decompositionPanelTitle.setVisible(false);
@@ -197,7 +197,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             ViewInfos viewInfos = new ViewInfos();
 
             String name = viewInfos.getTaskName();
-            LocalTime startTime = viewInfos.getStartTime();
             Duration duration = viewInfos.getDuration();
             String priority = viewInfos.getPriority();
             LocalDate date = viewInfos.getDate();
@@ -208,7 +207,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             //print the values of the inputs
             System.out.println("inputs: ");
             System.out.println("name: " + name);
-            System.out.println("startTime: " + startTime);
             System.out.println("duration: " + duration);
             System.out.println("priority: " + priority);
             System.out.println("category: " + category);
@@ -221,6 +219,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             //create the task
             switch (Boolean.toString(autoPlanCheckBox.isSelected())) {
                 case "false":
+                    LocalTime startTime = viewInfos.getStartTime();
+                    System.out.println("startTime: " + startTime);
                     //planning a task manually
                     switch (Boolean.toString(decomposeTaskCheckBox.isSelected())) {
                         case "false":
@@ -660,6 +660,13 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                     break;
                 }
             }
+            decomposableTask.setDate(decomposableTask.getSubTasks().get(1).getDate());
+            decomposableTask.setStartTime(decomposableTask.getSubTasks().get(1).getStartTime());
+            duration = Duration.ZERO;
+            for (int i = 1; i < decomposableTask.getSubTasks().size(); i++) {
+                duration = duration.plus(decomposableTask.getSubTasks().get(i).getDuration());
+            }
+            decomposableTask.setDuration(duration);
             preValidationMap.put(decomposableTask, freeSlotList);
 //            taskModel.create(decomposableTask);
             //putting it in the model will be done when we validat the planning in the validation controller
@@ -930,6 +937,11 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                                 //The day of a decomposable task is the day of it's first sub task
                                 task.setDate(((DecomposableTaskSchema) task).getSubTasks().get(1).getDate());
                                 task.setStartTime(((DecomposableTaskSchema) task).getSubTasks().get(1).getStartTime());
+                                Duration duration = Duration.ZERO;
+                                for (int i = 1; i < ((DecomposableTaskSchema) task).getSubTasks().size(); i++) {
+                                    duration = duration.plus(((DecomposableTaskSchema) task).getSubTasks().get(i).getDuration());
+                                }
+                                task.setDuration(duration);
                                 preValidationMap.put(task, freeSlotsList);
 //                                taskModel.create(task);
                                 System.out.println("decomposableTask" + " \"" + task.getName() + "\" " +
