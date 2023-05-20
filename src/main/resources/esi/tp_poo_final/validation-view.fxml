@@ -6,7 +6,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TaskControllers.ValidationController">
    <children>
-      <Button fx:id="validateButton" layoutX="375.0" layoutY="275.0" mnemonicParsing="false" text="Validate" textAlignment="CENTER" />
-      <Button fx:id="declineButton" layoutX="144.0" layoutY="276.0" mnemonicParsing="false" text="Decline" textAlignment="CENTER" />
+      <Button fx:id="validateButton" layoutX="375.0" layoutY="275.0" mnemonicParsing="false" onAction="#validatePlanification" text="Validate" textAlignment="CENTER" />
+      <Button fx:id="declineButton" layoutX="144.0" layoutY="276.0" mnemonicParsing="false" onAction="#declinePlanification" text="Decline" textAlignment="CENTER" />
    </children>
 </AnchorPane>

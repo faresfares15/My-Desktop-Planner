@@ -2,6 +2,7 @@ package Controllers.TaskControllers;
 
 import Exceptions.DayDoesNotHaveFreeSlotsException;
 import Exceptions.FreeSlotNotFoundException;
+import Exceptions.ScheduleConfirmationException;
 import Models.FreeSlot.FreeSlotModel;
 import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.TaskModel;
@@ -10,6 +11,7 @@ import esi.tp_poo_final.HelloApplication;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class ValidationController implements EventHandler<ActionEvent> {
     TreeMap<TaskSchema, ArrayList<FreeSlotSchema>> preValidationMap;
     TaskModel taskModel = HelloApplication.taskModel;
     FreeSlotModel freeSlotModel = HelloApplication.freeSlotModel;
+    boolean planningValidated;
 
     public ValidationController(TreeMap<TaskSchema, ArrayList<FreeSlotSchema>> preValidationMap) {
         this.preValidationMap = preValidationMap;
@@ -34,25 +37,19 @@ public class ValidationController implements EventHandler<ActionEvent> {
         isValidated();
     }
 
-    public void isValidated() {
-        boolean planningValidated;
-        validateButton.setOnAction(event -> {
-            validatePlanification();
-        });
-        validateButton.getScene().getWindow().hide();
-        
-        declineButton.setOnAction(event -> {
-            declinePlanification();
-        });
-        declineButton.getScene().getWindow().hide();
+    public boolean isValidated() {
+
+        return planningValidated;
 
     }
     public void validatePlanification(){
         for (TaskSchema task : preValidationMap.keySet()) {
             taskModel.create(task);
         }
+        planningValidated = true;
+        validateButton.getScene().getWindow().hide();
     }
-    public void declinePlanification(){
+    public void declinePlanification() {
 
         boolean dayHaveFreeSlots;
         boolean freeSlotIsUpdated = false;
@@ -92,6 +89,15 @@ public class ValidationController implements EventHandler<ActionEvent> {
                 }
             }
         }
+        planningValidated = false;
+        declineButton.getScene().getWindow().hide();
+    }
+    private void showSuccessMessage(String message) {
+        Alert successMessage = new Alert(Alert.AlertType.INFORMATION);
+        successMessage.setContentText(message);
+        successMessage.setHeaderText("Success");
+        successMessage.setTitle("Success");
+        successMessage.showAndWait();
     }
 
 }
