@@ -9,7 +9,7 @@ import java.util.Random;
 public class ProjectSchema implements Serializable {
     private String name;
     private String description;
-    private int projectId;
+    private int id;
     ArrayList<TaskSchema> tasksList;
     //TODO: update this list and the corresponding tasks in the dataBases everytime we do a modification on the tasks
 
@@ -17,7 +17,7 @@ public class ProjectSchema implements Serializable {
         Random random = new Random();
         this.name = name;
         this.description = description;
-        this.projectId = name.hashCode() + random.nextInt(1000);
+        this.id = name.hashCode() + random.nextInt(1000);
         this.tasksList = new ArrayList<>();
     }
 
@@ -26,12 +26,12 @@ public class ProjectSchema implements Serializable {
         this.name = name;
         this.description = description;
         this.tasksList = tasksList;
-        this.projectId = name.hashCode() + random.nextInt(1000);
+        this.id = name.hashCode() + random.nextInt(1000);
     }
 
     public void addTask(TaskSchema taskSchema){
         //to ensure that this task corresponds to this project
-        taskSchema.setProjectId(this.getProjectId());
+        taskSchema.setProjectId(this.getId());
         tasksList.add(taskSchema);
     }
 
@@ -51,12 +51,12 @@ public class ProjectSchema implements Serializable {
         this.description = description;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public int getId() {
+        return id;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public ArrayList<TaskSchema> getTasksList() {
@@ -78,6 +78,6 @@ public class ProjectSchema implements Serializable {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (!(obj instanceof ProjectSchema)) return false;
-        return this.projectId == ((ProjectSchema) obj).getProjectId();
+        return this.id == ((ProjectSchema) obj).getId();
     }
 }

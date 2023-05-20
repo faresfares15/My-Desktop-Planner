@@ -27,6 +27,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label fx:id="taskName" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="201.0" text="Task" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.vgrow="ALWAYS" />
@@ -35,19 +36,23 @@
                   <Label text="Priority:" GridPane.rowIndex="3" />
                   <Label text="Deadline:" GridPane.rowIndex="4" />
                   <Label text="Category:" GridPane.rowIndex="5" />
-                  <Label text="Status:" GridPane.rowIndex="6" />
-                  <Label text="Progress:" GridPane.rowIndex="7" />
+                  <Label text="Status:" GridPane.rowIndex="7" />
+                  <Label text="Progress:" GridPane.rowIndex="8" />
                   <Text fx:id="startTime" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Text fx:id="duration" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Text fx:id="priority" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Text fx:id="deadline" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <Text fx:id="category" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Text fx:id="status" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <Text fx:id="progress" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Text fx:id="status" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Text fx:id="progress" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <Label text="Project:" GridPane.rowIndex="6" />
+                  <Text fx:id="projectName" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                </children>
             </GridPane>
          </content>
       </ScrollPane>
-      <Button layoutX="393.0" layoutY="360.0" mnemonicParsing="false" text="Back" onAction="#goToCalendar" />
+      <Button layoutX="280.0" layoutY="360.0" mnemonicParsing="false" onAction="#goToCalendar" text="Back" />
+      <Button layoutX="474.0" layoutY="106.0" mnemonicParsing="false" onAction="#addTaskToProject" text="Add to project" />
+      <Button layoutX="475.0" layoutY="153.0" mnemonicParsing="false" onAction="#changeTaskName" text="Change name" />
    </children>
 </AnchorPane>

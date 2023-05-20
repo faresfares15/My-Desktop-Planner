@@ -41,6 +41,12 @@ public class ProjectModel {
     public ProjectSchema find(int id) throws ProjectDoesNotExistException {
         return projectDataBase.find(id);
     }
+    public ProjectSchema find(String name) throws ProjectDoesNotExistException {
+        return projectDataBase.find(name);
+    }
+    public ArrayList<ProjectSchema> findAll(){
+        return projectDataBase.findAll();
+    }
     public ProjectSchema update(ProjectSchema projectSchema) throws ProjectDoesNotExistException{//normally the id must not be changed
         return projectDataBase.update(projectSchema);
     }
