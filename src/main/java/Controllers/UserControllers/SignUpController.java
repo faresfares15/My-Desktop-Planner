@@ -68,6 +68,7 @@ public class SignUpController {
                 System.out.println("Directory created");
                 //Create a file for each FileDataBase class
                 HelloApplication.currentUserName = username;
+                //TODO: create a view for the users who sign up for the first time to get their settings
                 System.out.println(new File(HelloApplication.usersDirectoryName + "/" + username + "/" + HelloApplication.taskDbFileName).createNewFile());
                 new File(HelloApplication.usersDirectoryName + "/" + username + "/" + HelloApplication.freeSlotDbFileName).createNewFile();
                 new File(HelloApplication.usersDirectoryName + "/" + username + "/" + HelloApplication.dayDbFileName).createNewFile();

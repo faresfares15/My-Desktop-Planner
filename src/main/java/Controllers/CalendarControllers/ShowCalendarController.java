@@ -129,7 +129,8 @@ public class ShowCalendarController{
                         System.out.println("Task color: " + blockColor);
 
                         //search for the task object
-                        TaskSchema task = HelloApplication.taskModel.find(currentWeekStartDate.plusDays(columnIndex -1), blockTitle);
+                        TaskSchema task = HelloApplication.taskModel.find(currentWeekStartDate.plusDays(columnIndex -1), Integer.parseInt(blockTitle));
+                        //TODO: change it to get the id
                         System.out.println("Task found: " + task.getName());
 
                         //load the task info view fxml file

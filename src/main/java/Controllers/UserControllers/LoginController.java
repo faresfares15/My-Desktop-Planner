@@ -56,6 +56,7 @@ public class LoginController {
             UserSchema user = userModel.find(username); //If he doesn't exist an exception will be thrown
             if (!user.getPassword().equals(password)) throw new WrongPasswordException();
             HelloApplication.currentUserName = username;
+            HelloApplication.currentUserSettings = user.getSettings();
 
             //Load the DBs from the corresponding files
             HelloApplication.taskModel.load();
