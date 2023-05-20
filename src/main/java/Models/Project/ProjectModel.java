@@ -1,6 +1,7 @@
 package Models.Project;
 
 import Databases.*;
+import Exceptions.ProjectDoesNotExistException;
 import Models.Task.TaskSchema;
 import esi.tp_poo_final.HelloApplication;
 
@@ -37,13 +38,13 @@ public class ProjectModel {
     public ProjectSchema create(String name, String description, ArrayList<TaskSchema> tasksList){//Create from input
         return projectDataBase.create(name, description, tasksList);
     }
-    public ProjectSchema find(int id){
+    public ProjectSchema find(int id) throws ProjectDoesNotExistException {
         return projectDataBase.find(id);
     }
-    public ProjectSchema update(ProjectSchema projectSchema){//normally the id must not be changed
+    public ProjectSchema update(ProjectSchema projectSchema) throws ProjectDoesNotExistException{//normally the id must not be changed
         return projectDataBase.update(projectSchema);
     }
-    public ProjectSchema delete(ProjectSchema projectSchema){
+    public ProjectSchema delete(ProjectSchema projectSchema) throws ProjectDoesNotExistException{
         return projectDataBase.delete(projectSchema);
     }
 }

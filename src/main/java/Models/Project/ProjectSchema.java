@@ -30,6 +30,8 @@ public class ProjectSchema implements Serializable {
     }
 
     public void addTask(TaskSchema taskSchema){
+        //to ensure that this task corresponds to this project
+        taskSchema.setProjectId(this.getProjectId());
         tasksList.add(taskSchema);
     }
 

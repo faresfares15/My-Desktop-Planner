@@ -1,5 +1,6 @@
 package Databases;
 
+import Exceptions.ProjectDoesNotExistException;
 import Models.Project.ProjectSchema;
 import Models.Task.TaskSchema;
 
@@ -46,23 +47,25 @@ public class ProjectFileDataBase implements ProjectDataBase{
     }
 
     @Override
-    public ProjectSchema find(int id) {
-        return projectsTreeSet.getOrDefault(id, null);
+    public ProjectSchema find(int id) throws ProjectDoesNotExistException {
+        ProjectSchema project = projectsTreeSet.get(id);
+        if (project == null) throw new ProjectDoesNotExistException();
+        return project;
     }
 
     @Override
-    public ProjectSchema update(ProjectSchema projectSchema) {
+    public ProjectSchema update(ProjectSchema projectSchema) throws ProjectDoesNotExistException{
         //All of this is considered with the id not being changed from the beginning
         // So consider not changing the id at all
         if (projectsTreeSet.containsKey(projectSchema.getProjectId()))
             return projectsTreeSet.replace(projectSchema.getProjectId(), projectSchema);
         else
-            return null;
+            throw new ProjectDoesNotExistException();
     }
 
     @Override
-    public ProjectSchema delete(ProjectSchema projectSchema) {
+    public ProjectSchema delete(ProjectSchema projectSchema) throws ProjectDoesNotExistException{
         if (projectsTreeSet.containsKey(projectSchema.getProjectId())) return projectsTreeSet.remove(projectSchema.getProjectId());
-        else return null;
+        throw new ProjectDoesNotExistException();
     }
 }

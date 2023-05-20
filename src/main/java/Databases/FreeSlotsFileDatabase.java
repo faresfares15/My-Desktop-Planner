@@ -82,7 +82,6 @@ public class FreeSlotsFileDatabase implements FreeSlotsDatabase{
     }
     public FreeSlotSchema update(LocalDate dayDate, LocalTime startTime, LocalTime newStartTime) throws FreeSlotNotFoundException{
         //find the day in the map
-        ArrayList<FreeSlotSchema> freeSlotsList = this.freeSlotsMap.get(dayDate);
 
         //find the free slot in the list using the find method
         FreeSlotSchema freeSlotSchema = this.find(dayDate, startTime);

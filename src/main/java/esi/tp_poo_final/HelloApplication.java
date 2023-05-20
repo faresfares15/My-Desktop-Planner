@@ -39,7 +39,7 @@ public class HelloApplication extends Application {
     public static final String projectDbFileName = "projectFileDatabase.dat";
     public static final String usersDbFileName = "usersFileDatabase.dat";
     public static String currentUserName = null;
-    public static Settings currentUserSettings = null;
+    public static Settings currentUserSettings = new Settings();
 
     @Override
     public void start(Stage primaryStage) throws IOException {

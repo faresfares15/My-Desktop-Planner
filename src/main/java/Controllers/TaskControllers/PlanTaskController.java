@@ -83,6 +83,10 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
     ArrayList<SubTaskBlock> subTasksBlocks = new ArrayList<>(); //will be used for manually decomposed tasks
 
+    public PlanTaskController(TreeMap<TaskSchema, ArrayList<FreeSlotSchema>> preValidationMap) {
+        this.preValidationMap = preValidationMap;
+    }
+
     @FXML
     public void initialize() {
         //This method will be called when the view is loaded
@@ -228,6 +232,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                             boolean withConfirmation = true;
                             planSimpleTaskManually(date, name, startTime, duration,
                                     priority, deadline, category, status, 0, withConfirmation);
+
                             break;
                         case "true":
                             //planning a decomposable task manually
@@ -240,8 +245,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 //                                add(subtaskInfo2);
 //                            }};
 
-                            planDecomposableTaskManually(name, this.subTasksBlocks, priority,
-                                    deadline, category, status);
+                            planDecomposableTaskManually(name, this.subTasksBlocks, priority, deadline, category, status);
                             break;
                     }
                     break;
@@ -251,13 +255,15 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                     switch (Boolean.toString(decomposeTaskCheckBox.isSelected())) {
                         case "false":
                             //planning a simple task automatically
-                            planSimpleTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
+                            planSimpleTaskAutomatically(new DaySchema(datePicker.getValue()), name, duration,
                                     priority, deadline, category, status);
+                            this.moveToValidationView();
                             break;
                         case "true":
                             //planning a decomposable task automatically
-                            planDecomposableTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
+                            planDecomposableTaskAutomatically(new DaySchema(datePicker.getValue()), name, duration,
                                     Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status));
+                            this.moveToValidationView();
                             break;
                     }
             }
@@ -552,7 +558,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             //TODO: change the periodicity to it's actual value
         } else {
             //the free slot will be reduced (to the bottom) by the task's duration, and we'll save the old freeSlot by creating another instance for the validation phase
-            freeSlotList.add(new FreeSlotSchema(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getEndTime()));
+            freeSlotList.add(new FreeSlotSchema(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getStartTime().plus(duration)));
 
             this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getStartTime().plus(duration));
 //            this.taskModel.create(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
@@ -560,6 +566,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             preValidationMap.put(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
                     Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status), 0), freeSlotList);
         }
+        //validation pop-up
+
         System.out.println("task" + " \"" + name + "\" " + "created successfully on: " + day.getDate() + " at: " + startTime + " with duration: " + duration);
     }
 
@@ -592,7 +600,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                             priority, deadline, category, status, 0);
                     decomposableTask = new DecomposableTaskSchema(simpleTask);
                     //for the pre-validation
-                    freeSlotList.add(new FreeSlotSchema(day.getDate(), availableFreeSlot.getStartTime(),availableFreeSlot.getEndTime()));
+                    freeSlotList.add(new FreeSlotSchema(day.getDate(), availableFreeSlot.getStartTime(),newStartTime));
                     this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(),
                             newStartTime);
                 } else {
@@ -642,7 +650,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                         decomposableTask.addSubTask(new SimpleTaskSchema(day.getDate(), name + subTasksIndex,
                                 freeSlot.getStartTime(), duration,
                                 priority, deadline, category, status, 0));
-                        freeSlotList.add(freeSlot);
+                        freeSlotList.add(new FreeSlotSchema(day.getDate(), freeSlot.getStartTime(), freeSlot.getStartTime().plus(duration)));
                         freeSlotModel.update(day.getDate(), freeSlot.getStartTime(), freeSlot.getStartTime().plus(duration));
                     } else {
                         //it'll be deleted and the last subTask will take all the available time
@@ -862,7 +870,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                             //the free slot will be reduced (to the bottom) by the task's duration, which remains the same
 
                             LocalTime newStartTime = availableFreeSlot.getStartTime().plus(task.getDuration());
-                            freeSlotsList.add(availableFreeSlot); //for the pre-validation
+                            freeSlotsList.add(new FreeSlotSchema(availableFreeSlot.getDate(), availableFreeSlot.getStartTime(),
+                                    newStartTime)); //for the pre-validation
                             this.freeSlotModel.update(availableFreeSlot.getDate(), availableFreeSlot.getStartTime(),
                                     newStartTime);
                         } else {
@@ -906,7 +915,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                                                 task.getName() + subTaskIndex, availableFreeSlot.getStartTime(),
                                                 taskDurationLeft, task.getPriority(), task.getDeadline(),
                                                 task.getCategory(), task.getStatus(), 0));
-                                        freeSlotsList.add(availableFreeSlot); //for the pre-validation phase
+                                        freeSlotsList.add(new FreeSlotSchema(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getStartTime().plus(taskDurationLeft))); //for the pre-validation phase
                                         freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getStartTime().plus(taskDurationLeft));
                                     } else {
                                         taskDurationLeft = availableFreeSlot.getDuration();
@@ -1234,6 +1243,24 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             decompositionsPanel.getChildren().add(taskBlockView);
         }
     }
+
+    public void moveToValidationView() throws IOException{
+        //display a pop window where the user can insert decompositions for the tasks
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("validation-view.fxml"));
+        fxmlLoader.setControllerFactory(c -> new ValidationController(preValidationMap));
+        Scene validationScene = new Scene(fxmlLoader.load(), 600, 400);
+        Stage validationStage = new Stage();
+        validationStage.setTitle("Validate Planning");
+        validationStage.initModality(Modality.APPLICATION_MODAL);
+        validationStage.initOwner(taskNameField.getScene().getWindow());
+        validationStage.setScene(validationScene);
+        validationStage.showAndWait();
+
+        //get the controller of this stage
+//        ValidationController validationController = fxmlLoader.getController();
+//        return fxmlLoader.<ValidationController>getController().isValidated();
+    }
+
     private boolean confirmSchedule(String title, String message){
         Alert confirmationMessage = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationMessage.setContentText(message);

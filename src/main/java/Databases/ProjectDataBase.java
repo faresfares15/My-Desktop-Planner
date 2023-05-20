@@ -1,5 +1,6 @@
 package Databases;
 
+import Exceptions.ProjectDoesNotExistException;
 import Models.Project.ProjectSchema;
 import Models.Task.TaskSchema;
 
@@ -11,7 +12,7 @@ public interface ProjectDataBase extends Serializable {
     ProjectSchema create(ProjectSchema projectSchema); //Create directly
     ProjectSchema initialize(String name, String description); //Just for initialization
     ProjectSchema create(String name, String description, ArrayList<TaskSchema> tasksList); //Create from input
-    ProjectSchema find(int id);
-    ProjectSchema update(ProjectSchema projectSchema); //normally the id must not be changed
-    ProjectSchema delete(ProjectSchema projectSchema);
+    ProjectSchema find(int id) throws ProjectDoesNotExistException;
+    ProjectSchema update(ProjectSchema projectSchema) throws ProjectDoesNotExistException; //normally the id must not be changed
+    ProjectSchema delete(ProjectSchema projectSchema) throws ProjectDoesNotExistException;
 }
