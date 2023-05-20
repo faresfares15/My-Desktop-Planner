@@ -68,30 +68,27 @@ public class TaskInfoViewController {
                 projectName.setText(project.getName());
             }
         }catch (Exception e){
+            task.setProjectId(-1);
             projectName.setText("No project");
             e.printStackTrace();
         }
 //        status.setText(task.getStatus().toString());
 //        progress.setText(task.getProgress().toString());
     }
-    public void goToCalendar(){
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
+    public void goToCalendar() throws IOException {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
 //            fxmlLoader.setControllerFactory(c -> new ...());
-            Scene scene = new Scene(fxmlLoader.load(), 840, 500);
-            Stage stage = (Stage) taskName.getScene().getWindow();
-            stage.setTitle("Calendar");
+        Scene scene = new Scene(fxmlLoader.load(), 840, 500);
+        Stage stage = (Stage) taskName.getScene().getWindow();
+        stage.setTitle("Calendar");
 
-            //center the view on the user's screen
-            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-            stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
-            stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
 
-            stage.setScene(scene);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
+        stage.setScene(scene);
     }
 
     public void addTaskToProject() throws IOException {

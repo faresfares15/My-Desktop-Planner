@@ -1,5 +1,6 @@
 package Controllers.CalendarControllers;
 
+import Controllers.ProjectControllers.ViewProjectsController;
 import Controllers.TaskControllers.TaskInfoViewController;
 import Exceptions.TaskDoesNotExistException;
 import Models.FreeSlot.FreeSlotSchema;
@@ -243,6 +244,23 @@ public class ShowCalendarController{
         Scene scene = new Scene(fxmlLoader.load(), 800, 500);
         Stage stage = (Stage) calendarGrid.getScene().getWindow();
         stage.setTitle("Plan set of tasks");
+
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+
+        stage.setScene(scene);
+    }
+    public void viewProjects() throws IOException{
+
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view-projects-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 800, 500);
+        Stage stage = (Stage) calendarGrid.getScene().getWindow();
+        stage.setTitle("Projects");
+
+        ViewProjectsController viewProjectsController = fxmlLoader.getController();
+        viewProjectsController.initData();
 
         //center the view on the user's screen
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();

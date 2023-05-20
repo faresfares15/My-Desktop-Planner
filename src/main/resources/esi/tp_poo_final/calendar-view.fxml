@@ -74,5 +74,6 @@
       <Button layoutX="707.0" layoutY="148.0" mnemonicParsing="false" onAction="#moveToScheduleFreeSlotView" text="Schedule a free slot" />
       <Button layoutX="707.0" layoutY="207.0" mnemonicParsing="false" onAction="#moveToScheduleTaskView" text="Schedule a task" />
       <Button layoutX="707.0" layoutY="276.0" mnemonicParsing="false" onAction="#moveToScheduleSetOfTaskView" text="Schedule set of tasks" />
+      <Button layoutX="707.0" layoutY="322.0" mnemonicParsing="false" onAction="#viewProjects" text="View projects" />
    </children>
 </AnchorPane>

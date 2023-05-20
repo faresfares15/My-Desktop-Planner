@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.ProjectControllers.CreateNewProjectController">
+   <children>
+      <Text layoutX="193.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new project">
+         <font>
+            <Font name="Arial Bold" size="24.0" />
+         </font>
+      </Text>
+      <Button layoutX="193.0" layoutY="318.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+      <Button layoutX="356.0" layoutY="318.0" mnemonicParsing="false" onAction="#createProject" text="Create" />
+      <GridPane hgap="10.0" layoutX="169.0" layoutY="141.0" prefHeight="118.0" prefWidth="262.0" vgap="10.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.20001220703125" minWidth="10.0" prefWidth="78.4000244140625" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="121.5999755859375" minWidth="10.0" prefWidth="121.5999755859375" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="projectName" GridPane.columnIndex="1" />
+            <TextArea fx:id="projectDescription" prefHeight="133.0" prefWidth="119.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Name:" />
+            <Label text="Description:" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
