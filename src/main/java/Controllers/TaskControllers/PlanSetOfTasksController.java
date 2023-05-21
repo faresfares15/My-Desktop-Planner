@@ -170,12 +170,13 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         ViewInfos viewInfos = new ViewInfos();
         String name = viewInfos.getTaskName();
         LocalDate startOfPeriod = viewInfos.getStartOfPeriod();
-        LocalDate endOfPeriod = viewInfos.getEndOfPeriod();
-        Duration duration = viewInfos.getDuration();
+        Duration duration;
+                LocalDate endOfPeriod = viewInfos.getEndOfPeriod();
         String priority = viewInfos.getPriority();
         LocalDate deadline = viewInfos.getDeadline();
         String category = "";
         try{
+            duration = viewInfos.getDuration();
              category = viewInfos.getCategory();
         }catch (Exception e){
             showErrorMessage(e.getMessage());
@@ -1050,12 +1051,13 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         String name = viewInfos.getTaskName();
         LocalDate startOfPeriod = viewInfos.getStartOfPeriod();
         LocalDate endOfPeriod = viewInfos.getEndOfPeriod();
-        Duration duration = viewInfos.getDuration();
+        Duration duration;
         String priority = viewInfos.getPriority();
         LocalDate deadline = viewInfos.getDeadline();
         String category = "";
         int periodicity = viewInfos.getPeriodicity();
         try{
+             duration = viewInfos.getDuration();
             category = viewInfos.getCategory();
         }catch (Exception e){
             showErrorMessage(e.getMessage());
@@ -1082,7 +1084,11 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
             return taskNameField.getText();
         }
 
-        public Duration getDuration() {
+        public Duration getDuration() throws EmptyRequiredFieldException {
+            if (durationHoursSpinner.getValue() == null || durationMinutesSpinner.getValue() == null)
+                throw new EmptyRequiredFieldException("Duration is required");
+            if (durationHoursSpinner.getValue() == 0 && durationMinutesSpinner.getValue() == 0)
+                throw new EmptyRequiredFieldException("Duration is required");
             return Duration.ofHours(durationHoursSpinner.getValue()).plusMinutes(durationMinutesSpinner.getValue());
         }
         public LocalDate getStartOfPeriod() {

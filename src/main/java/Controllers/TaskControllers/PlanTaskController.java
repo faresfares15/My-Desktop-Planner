@@ -1222,7 +1222,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         public Duration getDuration() throws EmptyRequiredFieldException {
             if (durationHoursSpinner.getValue() == null || durationMinutesSpinner.getValue() == null)
                 throw new EmptyRequiredFieldException("Duration is required");
-
+            if (durationHoursSpinner.getValue() == 0 && durationMinutesSpinner.getValue() == 0)
+                throw new EmptyRequiredFieldException("Duration is required");
             return Duration.ofHours(durationHoursSpinner.getValue()).plusMinutes(durationMinutesSpinner.getValue());
         }
 
