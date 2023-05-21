@@ -42,9 +42,9 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
     @FXML
     TextField taskNameField;
     @FXML
-    Spinner<Integer> startTimeHoursSpinner;
+    DatePicker startOfPeriodSpinner;
     @FXML
-    Spinner<Integer> startTimeMinutesSpinner;
+    DatePicker endOfPeriodSpinner;
     @FXML
     Spinner<Integer> durationHoursSpinner;
     @FXML
@@ -148,12 +148,10 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         taskNameField.setPromptText("Task Name");
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
         valueFactory.setValue(LocalTime.now().getHour());
-        startTimeHoursSpinner.setValueFactory(valueFactory);
 
         //setting the start time minutes spinner
         valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0);
         valueFactory.setValue(LocalTime.now().getMinute());
-        startTimeMinutesSpinner.setValueFactory(valueFactory);
 
         //setting the duration hours spinner
         valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
@@ -227,7 +225,8 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
 //        TODO: give default values in case the input was empty
         ViewInfos viewInfos = new ViewInfos();
         String name = viewInfos.getTaskName();
-        LocalTime startTime = viewInfos.getStartTime();
+        LocalDate startOfPeriod = viewInfos.getStartOfPeriod();
+        LocalDate endOfPeriod = viewInfos.getEndOfPeriod();
         Duration duration = viewInfos.getDuration();
         String priority = viewInfos.getPriority();
         LocalDate deadline = viewInfos.getDeadline();
@@ -255,7 +254,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         //print the values of the inputs
         System.out.println("inputs: ");
         System.out.println("name: " + name);
-        System.out.println("startTime: " + startTime);
         System.out.println("duration: " + duration);
         System.out.println("priority: " + priority);
         System.out.println("category: " + category);
@@ -272,51 +270,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
             if (status == null) throw new EmptyRequiredFieldException();
             //TODO: verify the day in the past exception
 
-            //create the task
-            //boolean isSimpleTask = checkbox.value();
-            boolean isManual = true; //Change it to run tests
-            boolean isSimpleTask = false; //Change it to run tests
-
-//            switch (Boolean.toString(isManual)) {
-//                case "true":
-//                    //planning a task manually
-//                    switch (Boolean.toString(isSimpleTask)) {
-//                        case "true":
-//                            //planning a simple task manually
-//                            planSimpleTaskManually(new DaySchema(LocalDate.now()), name, startTime, duration,
-//                                    priority, deadline, category, status, 0);
-//                            break;
-//                        case "false":
-//                            //planning a decomposable task manually
-////                            planDecomposableTaskManually(new DaySchema(LocalDate.now()), name, startTime, duration,
-////                                    priority, deadline, category, status);
-//                            SubTaskInfo subtaskInfo1 = new SubTaskInfo(LocalTime.of(9, 0), Duration.ofHours(2));
-//                            SubTaskInfo subtaskInfo2 = new SubTaskInfo(LocalTime.of(12, 0), Duration.ofHours(1));
-//                            ArrayList<SubTaskInfo> subtasksInfos = new ArrayList<>() {{
-//                                add(subtaskInfo1);
-//                                add(subtaskInfo2);
-//                            }};
-//                            planDecomposableTaskManually(new DaySchema(LocalDate.now()), name, subtasksInfos, priority,
-//                                    deadline, category, status);
-//                            break;
-//                    }
-//                    break;
-//
-//                case "false":
-//                    //planning a task automatically
-//                    switch (Boolean.toString(isSimpleTask)) {
-//                        case "true":
-//                            //planning a simple task automatically
-//                            planSimpleTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
-//                                    priority, deadline, category, status);
-//                            break;
-//                        case "false":
-//                            //planning a decomposable task automatically
-//                            planDecomposableTaskAutomatically(new DaySchema(LocalDate.now()), name, duration,
-//                                    Priority.valueOf(priority), deadline, category, TaskStatus.valueOf(status));
-//                            break;
-//                    }
-//            }
 
             //Test the auto Plan set of tasks
             ArrayList<TaskSchema> tasks = new ArrayList<>();
@@ -325,7 +278,7 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
             tasks.add(new SimpleTaskSchema("fares task1", Duration.ofHours(1), Priority.LOW, LocalDate.now().plusDays(4), "category", TaskStatus.UNSCHEDULED, 0));
             tasks.add(new SimpleTaskSchema("fares task2", Duration.ofHours(2), Priority.MEDIUM, LocalDate.now(), "category", TaskStatus.UNSCHEDULED, 0));
             tasks.add(new SimpleTaskSchema("fares task3", Duration.ofHours(3), Priority.HIGH, LocalDate.now(), "category", TaskStatus.UNSCHEDULED, 0));
-            autoPlanSetOfTasks2(tasks, LocalDate.now(), LocalDate.now().plusDays(3));
+            autoPlanSetOfTasks2(tasks, startOfPeriod, endOfPeriod);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -1150,12 +1103,16 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
             return taskNameField.getText();
         }
 
-        LocalTime getStartTime() {
-            return LocalTime.of(startTimeHoursSpinner.getValue(), startTimeMinutesSpinner.getValue());
-        }
-
         public Duration getDuration() {
             return Duration.ofHours(durationHoursSpinner.getValue()).plusMinutes(durationMinutesSpinner.getValue());
+        }
+        public LocalDate getStartOfPeriod() {
+            if (startOfPeriodSpinner.getValue() == null) return LocalDate.now();
+            else return startOfPeriodSpinner.getValue();
+        }
+        public LocalDate getEndOfPeriod() {
+            if (startOfPeriodSpinner.getValue() == null) return LocalDate.now().plusMonths(1);
+            else return startOfPeriodSpinner.getValue();
         }
 
         public String getPriority() {
