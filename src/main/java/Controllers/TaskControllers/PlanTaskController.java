@@ -118,7 +118,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         priorityComboBox.setItems(priorities);
 
         //setting the category combo box
-        ObservableList<String> categories = FXCollections.observableArrayList("", "Work", "Study", "Personal", "New category");
+        ArrayList<String> categoriesNames = HelloApplication.categoryModel.getCategoriesNames();
+        ObservableList<String> categories = FXCollections.observableArrayList("");
+        categories.addAll(categoriesNames);
+        categories.add("New category");
+
+
         category.setValue("");
         category.getItems().clear();
         category.getItems().setAll(categories);

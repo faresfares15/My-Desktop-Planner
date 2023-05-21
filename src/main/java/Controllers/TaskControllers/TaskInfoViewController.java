@@ -1,5 +1,6 @@
 package Controllers.TaskControllers;
 
+import Controllers.CategoryControllers.AddTaskToCategoryController;
 import Controllers.ProjectControllers.AddTaskToProjectController;
 import Models.Project.ProjectSchema;
 import Models.Task.TaskSchema;
@@ -16,6 +17,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class TaskInfoViewController {
     @FXML
@@ -57,7 +59,11 @@ public class TaskInfoViewController {
         deadline.setText(task.getDeadline().toString());
 
         //set the task category
-        category.setText(task.getCategory());
+        if(Objects.equals(task.getCategory(), "")){
+            category.setText("No category");
+        }else{
+            category.setText(task.getCategory());
+        }
 
         //set the task project name
 
@@ -94,11 +100,11 @@ public class TaskInfoViewController {
     public void addTaskToProject() throws IOException {
         //show a new window to select a project
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("add-task-to-project-view.fxml"));
-        fxmlLoader.setControllerFactory(c -> new AddTaskToProjectController(task));
+        fxmlLoader.setControllerFactory(c -> new AddTaskToProjectController(task, projectName.getText()));
         Scene addTaskToProjectScene = new Scene(fxmlLoader.load());
 //        Scene addTaskToProjectScene = new Scene(fxmlLoader.load(), 600, 400);
         Stage addTaskToProjectStage = new Stage();
-        addTaskToProjectStage.setTitle("Validate Planning");
+        addTaskToProjectStage.setTitle("Add task to project");
         addTaskToProjectStage.initModality(Modality.APPLICATION_MODAL);
         addTaskToProjectStage.initOwner(taskName.getScene().getWindow());
         addTaskToProjectStage.setScene(addTaskToProjectScene);
@@ -108,6 +114,29 @@ public class TaskInfoViewController {
         addTaskToProjectController.initData();
 
         projectName.setText(addTaskToProjectController.getCurrentProjectName());
+    }
+    public void addTaskToCategory() throws IOException {
+
+        //show a new window to select a category
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("add-task-to-category-view.fxml"));
+        fxmlLoader.setControllerFactory(c -> new AddTaskToCategoryController(task));
+        Scene addTaskToCategoryScene = new Scene(fxmlLoader.load());
+        Stage addTaskToCategoryStage = new Stage();
+        addTaskToCategoryStage.setTitle("Add task to categoryadd-task-to-project-view.fxml");
+        addTaskToCategoryStage.initModality(Modality.APPLICATION_MODAL);
+        addTaskToCategoryStage.initOwner(taskName.getScene().getWindow());
+        addTaskToCategoryStage.setScene(addTaskToCategoryScene);
+        addTaskToCategoryStage.showAndWait();
+
+        AddTaskToCategoryController addTaskToCategoryController = fxmlLoader.getController();
+        addTaskToCategoryController.initData();
+
+        String newCategoryName = addTaskToCategoryController.getCurrentCategoryName();
+        if(Objects.equals(newCategoryName, "")){
+            category.setText("No category");
+        }else {
+            category.setText(newCategoryName);
+        }
     }
     public void changeTaskName(){
 //        HelloApplication.taskModel.update(task.getDate(), task.getId(), taskName.getText());

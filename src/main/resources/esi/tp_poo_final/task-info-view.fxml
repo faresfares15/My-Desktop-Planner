@@ -53,6 +53,7 @@
       </ScrollPane>
       <Button layoutX="280.0" layoutY="360.0" mnemonicParsing="false" onAction="#goToCalendar" text="Back" />
       <Button layoutX="474.0" layoutY="106.0" mnemonicParsing="false" onAction="#addTaskToProject" text="Add to project" />
-      <Button layoutX="475.0" layoutY="153.0" mnemonicParsing="false" onAction="#changeTaskName" text="Change name" />
+      <Button layoutX="475.0" layoutY="200.0" mnemonicParsing="false" onAction="#changeTaskName" text="Change name" />
+      <Button layoutX="473.0" layoutY="152.0" mnemonicParsing="false" onAction="#addTaskToCategory" text="Add to category" />
    </children>
 </AnchorPane>

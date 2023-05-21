@@ -2,13 +2,15 @@ module esi.tp_poo_final {
     requires javafx.controls;
     requires javafx.fxml;
 
-
     opens esi.tp_poo_final to javafx.fxml;
     opens Controllers.TaskControllers to javafx.fxml;
     opens Controllers.UserControllers to javafx.fxml;
     opens Controllers.CalendarControllers to javafx.fxml;
     opens Controllers.FreeSlotControllers to javafx.fxml;
     opens Controllers.ProjectControllers to javafx.fxml;
+    opens Controllers.CategoryControllers to javafx.fxml;
+
+    exports Controllers.CategoryControllers to javafx.fxml;
     exports esi.tp_poo_final;
 
     //Exporting models
@@ -18,6 +20,7 @@ module esi.tp_poo_final {
     exports Models.Project;
     exports Models.Task;
     exports Models.User;
+    exports Models.Category;
 
     //Exporting databases
     exports Databases;
@@ -28,5 +31,4 @@ module esi.tp_poo_final {
     exports Controllers.UserControllers;
 
     exports Exceptions;
-    exports Models.Category;
 }

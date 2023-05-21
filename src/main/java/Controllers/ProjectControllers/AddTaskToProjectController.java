@@ -28,15 +28,31 @@ public class AddTaskToProjectController {
     TextArea desctiptionBox;
     String currentProjectName;
     private TaskSchema task;
-    public AddTaskToProjectController(TaskSchema task){
+    public AddTaskToProjectController(TaskSchema task, String projectName){
         this.task = task;
+        this.currentProjectName = projectName;
     }
     @FXML
     public void initialize(){
         //initialize the projects list combobox
+
+        //set the project name text
+        currentProject.setText(currentProjectName);
+
         //setting the category combo box
-        //TODO: fetch the existing projects from the database and add them here
         ArrayList<ProjectSchema> projects = HelloApplication.projectsModel.findAll();
+
+        //check if the task belongs to a project, and find it if yes
+        if(task.getProjectId() != -1){
+            for (ProjectSchema project: projects){
+                if (project.getId() == task.getProjectId()){
+                    currentProjectName = project.getName();
+                    break;
+                }
+            }
+        }
+
+        //set the projects in the combobox
         ObservableList<String> projectsNames = FXCollections.observableArrayList();
         projects.forEach(project -> projectsNames.add(project.getName()));
         projectsNames.add("New project");
@@ -44,10 +60,6 @@ public class AddTaskToProjectController {
         projectsList.getItems().clear();
         projectsList.getItems().setAll(projectsNames);
 
-//        ObservableList<String> projects = FXCollections.observableArrayList("","Work", "Study", "Personal", "New project");
-//        projectsList.setValue(currentProjectName);
-//        projectsList.getItems().clear();
-//        projectsList.getItems().setAll(projects);
         projectsList.setOnAction(event -> {
             // If the user has selected "New category," then make the category text field visible.
             if (projectsList.getValue().equals("New project")) {

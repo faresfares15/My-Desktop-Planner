@@ -33,13 +33,14 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class ShowCalendarController{
     private static LocalDate currentWeekStartDate = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() -1);
     private final int NUM_HOURS = 24;
     private final int NUM_DAYS = 7;
-    private final Color taskColor = Color.RED;
+    private final Color defaultTaskColor = Color.RED;
     private final Color freeSlotColor = Color.GREEN;
     private final double hourBlockHeight = 30;
     private final double minuteBlockHeight = hourBlockHeight / 60;
@@ -76,7 +77,6 @@ public class ShowCalendarController{
                     String blockTitle = null;
                     int columnIndex = 0;
                     int taskId = 0;
-                    //TODO: the id property of the stack pane is set, now change the search code to use the id
 
                     //get the color and the title of the clicked block (if it is a block)
                     if(clickedItem instanceof StackPane){
@@ -125,14 +125,21 @@ public class ShowCalendarController{
                         return;
                     }
 
-                    if(blockColor.equals(taskColor)){
+                    if(blockColor.equals(freeSlotColor)){
+                        //the clicked block is a free slot block
+                        System.out.println("Free slot clicked: " + blockTitle);
+                        System.out.println("Free slot color: " + blockColor);
+                        //TODO: add a view for the free slot
+
+                    }else{
+
                         //the clicked block is a task block
                         System.out.println("Task clicked: " + blockTitle);
                         System.out.println("Task color: " + blockColor);
 
                         //search for the task object
                         TaskSchema task = HelloApplication.taskModel.find(currentWeekStartDate.plusDays(columnIndex -1), taskId);
-                        //TODO: change it to get the id
+
                         System.out.println("Task found: " + task.getName());
 
                         //load the task info view fxml file
@@ -158,11 +165,6 @@ public class ShowCalendarController{
 
                     }
 
-                    if(blockColor.equals(freeSlotColor)){
-                        //the clicked block is a free slot block
-                        System.out.println("Free slot clicked: " + blockTitle);
-                        System.out.println("Free slot color: " + blockColor);
-                    }
 
                 }catch (TaskDoesNotExistException e) {
                     System.out.println("Error loading task info view: " + e.getMessage());
@@ -361,6 +363,18 @@ public class ShowCalendarController{
 
                 // create blocks for the tasks
                 for(TaskSchema task: dayTasksList){
+                    Color taskColor = null;
+
+                    //check if the task has a category
+                    if(Objects.equals(task.getCategory(), "")){
+                        taskColor = this.defaultTaskColor;
+                    }else{
+                        try{
+                            taskColor = HelloApplication.categoryModel.getCategoryColor(task.getCategory());
+                        }catch (Exception e){
+                            taskColor = this.defaultTaskColor;
+                        }
+                    }
 
                     StackPane taskBlock = createBlock(70, taskColor, task.getName(), task.getDate().getDayOfWeek(), task.getStartTime(), task.getDuration());
                     taskBlock.setId(String.valueOf(task.getId()));

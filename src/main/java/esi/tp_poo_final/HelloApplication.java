@@ -6,14 +6,12 @@ import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
 import Models.FreeSlot.FreeSlotSchema;
 import Models.Project.ProjectModel;
-import Models.Task.Priority;
-import Models.Task.SimpleTaskSchema;
-import Models.Task.TaskModel;
-import Models.Task.TaskStatus;
+import Models.Task.*;
 import Models.User.UserModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -29,6 +27,7 @@ public class HelloApplication extends Application {
     public static final DayModel dayModel = new DayModel(new DayFileDataBase());
     public static final FreeSlotModel freeSlotModel = new FreeSlotModel(new FreeSlotsFileDatabase());
     public static final ProjectModel projectsModel = new ProjectModel(new ProjectFileDataBase());
+    public static final Category categoryModel = new Category();
 
     //TODO:The usernames file is a constant here, think about keeping it or changing this later
 //    public static final String usernamesFileName = "usernames.txt";
@@ -46,13 +45,13 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         //trash code
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(8), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(7), "task00", LocalTime.of(10, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(3), "task0", LocalTime.of(13, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(2), "task1", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task2", LocalTime.of(13, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(4), "task4", LocalTime.of(13, 30), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "categ1", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(8), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(7), "task00", LocalTime.of(10, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(3), "task0", LocalTime.of(13, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(2), "task1", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task2", LocalTime.of(13, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "Work", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(4), "task4", LocalTime.of(13, 30), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
 
         freeSlotModel.create(LocalDate.now(), LocalTime.of(15, 0), LocalTime.of(16,0));
         freeSlotModel.create(LocalDate.now().plusDays(1), LocalTime.of(13, 0), LocalTime.of(15,0));
@@ -119,6 +118,15 @@ public class HelloApplication extends Application {
         freeSlotModel.create(freeSlots);
         taskModel.initialize(date);
         //end of trash code
+
+        try{
+            categoryModel.addCategory("Work", Color.WHEAT);
+            categoryModel.addCategory("Study", Color.CYAN);
+            categoryModel.addCategory("Personal", Color.BEIGE);
+        }catch (Exception e){
+            //ignore
+            e.printStackTrace();
+        }
 
         System.setProperty("javafx.sg.warn", "true");
 
