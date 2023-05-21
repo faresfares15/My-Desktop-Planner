@@ -35,7 +35,7 @@
                 <Spinner fx:id="durationMinutesSpinner" editable="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                 <ComboBox fx:id="priorityComboBox" prefWidth="150.0" promptText="LOW" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <DatePicker fx:id="deadlinePicker" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                <Button mnemonicParsing="false" onAction="#handle" text="Add Task" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+                <Button mnemonicParsing="false" onAction="#addTask" text="Add Task" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
                 <Button mnemonicParsing="false" onAction="#moveToCalendarView" text="Go Back" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="9" />
                 <Label text="Category:" GridPane.rowIndex="5" />
                 <ComboBox fx:id="category" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
@@ -61,7 +61,7 @@
         </Label>
         <ColorPicker fx:id="newCategoryColor" layoutX="551.0" layoutY="230.0" visible="false" />
       <VBox fx:id="tasksPanel" alignment="TOP_CENTER" layoutX="626.0" layoutY="68.0" prefHeight="344.0" prefWidth="162.0" />
-      <Button layoutX="681.0" layoutY="422.0" mnemonicParsing="false" onAction="#planTasks" text="Plan" />
+      <Button layoutX="681.0" layoutY="422.0" mnemonicParsing="false" onAction="#handle" text="Plan" />
       <Label layoutX="646.0" layoutY="38.0" text="Added tasks">
           <font>
               <Font name="Arial Bold" size="20.0" />

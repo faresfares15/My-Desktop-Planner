@@ -4,6 +4,7 @@ import Databases.*;
 import Models.Calendar.Settings;
 import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
+import Models.FreeSlot.FreeSlotSchema;
 import Models.Project.ProjectModel;
 import Models.Task.Priority;
 import Models.Task.SimpleTaskSchema;
@@ -19,6 +20,7 @@ import java.io.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class HelloApplication extends Application {
     //TODO: assign those only when the user logs in
@@ -54,6 +56,68 @@ public class HelloApplication extends Application {
 
         freeSlotModel.create(LocalDate.now(), LocalTime.of(15, 0), LocalTime.of(16,0));
         freeSlotModel.create(LocalDate.now().plusDays(1), LocalTime.of(13, 0), LocalTime.of(15,0));
+
+
+
+        //TODO: consider initilizing the free slots and tasks in the dataBase always when creating a new day
+        //In general when creating an object we must initialize all the database that it uses !!!
+
+        //This is temporary test code: create some free slots to test
+        LocalDate date = LocalDate.now();
+        ArrayList<FreeSlotSchema> freeSlots = new ArrayList<>();
+        FreeSlotSchema freeSlot1 = new FreeSlotSchema(date, LocalTime.of(8, 0), LocalTime.of(10, 0));
+        FreeSlotSchema freeSlot2 = new FreeSlotSchema(date, LocalTime.of(11, 0), LocalTime.of(13, 0));
+        freeSlots.add(freeSlot1);
+//        freeSlots.add(freeSlot2);
+        dayModel.create(date);
+        freeSlotModel.create(freeSlots);
+        taskModel.initialize(date);
+
+
+        date = date.plusDays(1);
+        freeSlots = new ArrayList<>();
+        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
+        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
+//        freeSlots.add(freeSlot1);
+//        freeSlots.add(freeSlot2);
+        dayModel.create(date);
+        freeSlotModel.initialize(date);
+        taskModel.initialize(date);
+
+
+        date = date.plusDays(1);
+        freeSlots = new ArrayList<>();
+        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
+        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
+        freeSlots.add(freeSlot1);
+        freeSlots.add(freeSlot2);
+
+        dayModel.create(date);
+        freeSlotModel.create(freeSlots);
+        taskModel.initialize(date);
+
+
+        date = date.plusDays(1);
+        freeSlots = new ArrayList<>();
+        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
+        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
+        freeSlots.add(freeSlot1);
+        freeSlots.add(freeSlot2);
+
+        dayModel.create(date);
+        freeSlotModel.create(freeSlots);
+        taskModel.initialize(date);
+
+
+        date = date.plusDays(1);
+        freeSlots = new ArrayList<>();
+        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
+        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
+        freeSlots.add(freeSlot1);
+        freeSlots.add(freeSlot2);
+        dayModel.create(date);
+        freeSlotModel.create(freeSlots);
+        taskModel.initialize(date);
         //end of trash code
 
         System.setProperty("javafx.sg.warn", "true");

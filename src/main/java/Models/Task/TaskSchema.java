@@ -21,6 +21,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
     private TaskStatus status;
     private Progress progress;
     private int projectId = -1;
+    private boolean isBlocked = false;
 
     public TaskSchema(LocalDate date, String name, LocalTime startTime, Duration duration, Priority
             priority, LocalDate deadline, String category, TaskStatus status) {
@@ -33,7 +34,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
         this.deadline = deadline;
         this.category = category;
         this.status = status;
-        this.id = (name + category).hashCode() + date.hashCode() + random.nextInt(1000);
+        this.id = (name + category).hashCode() + duration.hashCode() + random.nextInt(1000);
         this.progress = Progress.NOT_REALIZED;
     }
     public TaskSchema(String name, LocalTime startTime, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status) {
@@ -46,13 +47,13 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
         this.category = category;
         this.status = status;
         this.progress = Progress.NOT_REALIZED;
-        this.id = (name + category).hashCode() + date.hashCode() + random.nextInt(1000);
+        this.id = (name + category).hashCode() + duration.hashCode() + random.nextInt(1000);
     }
 
     public TaskSchema(String name, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status) {
         Random random = new Random();
         this.name = name;
-        this.id = (name + category).hashCode() + date.hashCode() + random.nextInt(1000);
+        this.id = (name + category).hashCode() + duration.hashCode() + random.nextInt(1000);
         this.duration = duration;
         this.priority = priority;
         this.deadline = deadline;
@@ -64,6 +65,13 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
     public TaskSchema() {
     }
 
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
 
     public LocalDate getDeadline() {
         return deadline;

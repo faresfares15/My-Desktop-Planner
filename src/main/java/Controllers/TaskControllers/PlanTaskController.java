@@ -804,7 +804,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     }
 
     private void autoPlanSetOfTasks2(ArrayList<TaskSchema> tasksList, LocalDate startOfPeriod, LocalDate endOfPeriod) throws Exception {
-        Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority).thenComparing(TaskSchema::getDuration);
+        Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority).thenComparing(TaskSchema::getDuration, Comparator.reverseOrder());
         tasksList.sort(comparator);
         //TODO: Gotta put every task in the dataBase to track the statistics in the APP
         Iterator<TaskSchema> it = tasksList.iterator();

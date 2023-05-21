@@ -23,6 +23,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -37,6 +38,7 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
     final TaskModel taskModel = HelloApplication.taskModel;
     final DayModel dayModel = HelloApplication.dayModel;
     TreeMap<TaskSchema, ArrayList<FreeSlotSchema>> preValidationMap = new TreeMap<>();
+    ArrayList<TaskSchema> addedTasksList = new ArrayList<>();
     @FXML
     Label viewTitle;
     @FXML
@@ -71,65 +73,7 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
     public PlanSetOfTasksController() {
 
 
-        //TODO: consider initilizing the free slots and tasks in the dataBase always when creating a new day
-        //In general when creating an object we must initialize all the database that it uses !!!
 
-        //This is temporary test code: create some free slots to test
-        LocalDate date = LocalDate.now();
-        ArrayList<FreeSlotSchema> freeSlots = new ArrayList<>();
-        FreeSlotSchema freeSlot1 = new FreeSlotSchema(date, LocalTime.of(8, 0), LocalTime.of(10, 0));
-        FreeSlotSchema freeSlot2 = new FreeSlotSchema(date, LocalTime.of(11, 0), LocalTime.of(13, 0));
-        freeSlots.add(freeSlot1);
-//        freeSlots.add(freeSlot2);
-        this.dayModel.create(date);
-        this.freeSlotModel.create(freeSlots);
-        this.taskModel.initialize(date);
-
-
-        date = date.plusDays(1);
-        freeSlots = new ArrayList<>();
-        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
-        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
-//        freeSlots.add(freeSlot1);
-//        freeSlots.add(freeSlot2);
-        this.dayModel.create(date);
-        this.freeSlotModel.initialize(date);
-        this.taskModel.initialize(date);
-
-
-        date = date.plusDays(1);
-        freeSlots = new ArrayList<>();
-        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
-        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
-        freeSlots.add(freeSlot1);
-        freeSlots.add(freeSlot2);
-
-        this.dayModel.create(date);
-        this.freeSlotModel.create(freeSlots);
-        this.taskModel.initialize(date);
-
-
-        date = date.plusDays(1);
-        freeSlots = new ArrayList<>();
-        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
-        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
-        freeSlots.add(freeSlot1);
-        freeSlots.add(freeSlot2);
-
-        this.dayModel.create(date);
-        this.freeSlotModel.create(freeSlots);
-        this.taskModel.initialize(date);
-
-
-        date = date.plusDays(1);
-        freeSlots = new ArrayList<>();
-        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
-        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
-        freeSlots.add(freeSlot1);
-        freeSlots.add(freeSlot2);
-        this.dayModel.create(date);
-        this.freeSlotModel.create(freeSlots);
-        this.taskModel.initialize(date);
 
 
 
@@ -239,17 +183,17 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         }
 //        String status = viewInfos.getStatus();
 
-        boolean success = true;
-        if(success){
-            Label label = new Label(name);
-            label.setFont(new Font("Arial", 15));
-            label.setPadding(new Insets(10, 0, 10, 0));
-//            HBox taskRow = new HBox(label);
-
-            // Add the Label to the VBox.
-            tasksPanel.getChildren().add(label);
-            return;
-        }
+//        boolean success = true;
+//        if(success){
+//            Label label = new Label(name);
+//            label.setFont(new Font("Arial", 15));
+//            label.setPadding(new Insets(10, 0, 10, 0));
+////            HBox taskRow = new HBox(label);
+//
+//            // Add the Label to the VBox.
+//            tasksPanel.getChildren().add(label);
+//            return;
+//        }
 
         //print the values of the inputs
         System.out.println("inputs: ");
@@ -261,24 +205,29 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
 
         try {
             //validate the inputs
-            //TODO: move these exceptions to the view info class
-            if (name == "") throw new EmptyRequiredFieldException();
-            if (duration == null) throw new EmptyRequiredFieldException();
-            if (priority == null || !TaskSchema.validatePriority(priority)) throw new EmptyRequiredFieldException();
-            if (deadline == null) throw new EmptyRequiredFieldException();
-            if (category == null) throw new EmptyRequiredFieldException();
-            if (status == null) throw new EmptyRequiredFieldException();
+//            //TODO: move these exceptions to the view info class
+//            if (name == "") throw new EmptyRequiredFieldException();
+//            if (duration == null) throw new EmptyRequiredFieldException();
+//            if (priority == null || !TaskSchema.validatePriority(priority)) throw new EmptyRequiredFieldException();
+//            if (deadline == null) throw new EmptyRequiredFieldException();
+//            if (category == null) throw new EmptyRequiredFieldException();
+//            if (status == null) throw new EmptyRequiredFieldException();
             //TODO: verify the day in the past exception
 
 
             //Test the auto Plan set of tasks
-            ArrayList<TaskSchema> tasks = new ArrayList<>();
-            DecomposableTaskSchema longTask = new DecomposableTaskSchema(new SimpleTaskSchema("longTask2", Duration.ofHours(4).plus(Duration.ofMinutes(30)), Priority.HIGH, LocalDate.now().plusDays(4), "category", TaskStatus.UNSCHEDULED, 0));
-            tasks.add(longTask);
-            tasks.add(new SimpleTaskSchema("fares task1", Duration.ofHours(1), Priority.LOW, LocalDate.now().plusDays(4), "category", TaskStatus.UNSCHEDULED, 0));
-            tasks.add(new SimpleTaskSchema("fares task2", Duration.ofHours(2), Priority.MEDIUM, LocalDate.now(), "category", TaskStatus.UNSCHEDULED, 0));
-            tasks.add(new SimpleTaskSchema("fares task3", Duration.ofHours(3), Priority.HIGH, LocalDate.now(), "category", TaskStatus.UNSCHEDULED, 0));
-            autoPlanSetOfTasks2(tasks, startOfPeriod, endOfPeriod);
+//            ArrayList<TaskSchema> tasks = new ArrayList<>();
+//            DecomposableTaskSchema longTask = new DecomposableTaskSchema(new SimpleTaskSchema("longTask2", Duration.ofHours(4).plus(Duration.ofMinutes(30)), Priority.HIGH, LocalDate.now().plusDays(4), "category", TaskStatus.UNSCHEDULED, 0));
+//            tasks.add(longTask);
+//            tasks.add(new SimpleTaskSchema("fares task1", Duration.ofHours(1), Priority.LOW, LocalDate.now().plusDays(4), "category", TaskStatus.UNSCHEDULED, 0));
+//            tasks.add(new SimpleTaskSchema("fares task2", Duration.ofHours(2), Priority.MEDIUM, LocalDate.now(), "category", TaskStatus.UNSCHEDULED, 0));
+//            tasks.add(new SimpleTaskSchema("fares task3", Duration.ofHours(3), Priority.HIGH, LocalDate.now(), "category", TaskStatus.UNSCHEDULED, 0));
+            if (addedTasksList.isEmpty()) showErrorMessage("Please add tasks to the list");
+            else autoPlanSetOfTasks2(addedTasksList, startOfPeriod, endOfPeriod);
+            this.moveToValidationView();
+            tasksPanel.getChildren().clear();
+            addedTasksList.clear();
+            showSuccessMessage("Tasks planned successfully");
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -816,7 +765,7 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
     }
 
     private void autoPlanSetOfTasks2(ArrayList<TaskSchema> tasksList, LocalDate startOfPeriod, LocalDate endOfPeriod) throws Exception {
-        Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority).thenComparing(TaskSchema::getDuration);
+        Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority).thenComparing(TaskSchema::getDuration, Comparator.reverseOrder());
         tasksList.sort(comparator);
         //TODO: Gotta put every task in the dataBase to track the statistics in the APP
         Iterator<TaskSchema> it = tasksList.iterator();
@@ -1096,6 +1045,36 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
             return duration;
         }
     }
+    public void addTask(){
+        ViewInfos viewInfos = new ViewInfos();
+        String name = viewInfos.getTaskName();
+        LocalDate startOfPeriod = viewInfos.getStartOfPeriod();
+        LocalDate endOfPeriod = viewInfos.getEndOfPeriod();
+        Duration duration = viewInfos.getDuration();
+        String priority = viewInfos.getPriority();
+        LocalDate deadline = viewInfos.getDeadline();
+        String category = "";
+        int periodicity = viewInfos.getPeriodicity();
+        try{
+            category = viewInfos.getCategory();
+        }catch (Exception e){
+            showErrorMessage(e.getMessage());
+            return;
+        }
+        if (decomposeTaskCheckBox.isSelected()){
+            this.addedTasksList.add(new DecomposableTaskSchema(new SimpleTaskSchema(name,  duration,  Priority.valueOf(priority),  deadline,  category, TaskStatus.UNSCHEDULED,  periodicity)));
+        } else {
+            this.addedTasksList.add(new SimpleTaskSchema(name,  duration,  Priority.valueOf(priority),  deadline,  category, TaskStatus.UNSCHEDULED,  periodicity));
+        }
+        Label label = new Label(name);
+            label.setFont(new Font("Arial", 15));
+            label.setPadding(new Insets(10, 0, 10, 0));
+            HBox taskRow = new HBox(label);
+
+            // Add the Label to the VBox.
+            tasksPanel.getChildren().add(label);
+            viewInfos.resetInputs();
+    }
 
     private class ViewInfos {
         String getTaskName() {
@@ -1136,6 +1115,23 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
 
             return categoryName;
 
+        }
+        public int getPeriodicity(){
+            if (periodicitySpinner.getValue() == null) return 0;
+            return periodicitySpinner.getValue();
+        }
+        public void resetInputs(){
+
+            taskNameField.clear();
+            durationHoursSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0));
+            durationMinutesSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0));
+
+            priorityComboBox.setValue("LOW");
+            deadlinePicker.setValue(LocalDate.now());
+//            category.setValue(null);
+            newCategoryName.clear();
+            periodicitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
+            decomposeTaskCheckBox.setSelected(false);
         }
 
     }
@@ -1203,6 +1199,27 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         Optional<ButtonType> clickedButton = confirmationMessage.showAndWait();
 
         return clickedButton.get() == ButtonType.OK;
+    }
+    public void moveToValidationView() throws IOException, ScheduleConfirmationException {
+        //display a pop window where the user can insert decompositions for the tasks
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("validation-view.fxml"));
+        fxmlLoader.setControllerFactory(c -> new ValidationController(preValidationMap));
+        Scene validationScene = new Scene(fxmlLoader.load(), 600, 400);
+        Stage validationStage = new Stage();
+        validationStage.setTitle("Validate Planning");
+        validationStage.initModality(Modality.APPLICATION_MODAL);
+        validationStage.initOwner(taskNameField.getScene().getWindow());
+        validationStage.setScene(validationScene);
+        validationStage.showAndWait();
+
+        //get the controller of this stage
+//        ValidationController validationController = fxmlLoader.getController();
+        if(!fxmlLoader.<ValidationController>getController().isValidated()){
+            preValidationMap = new TreeMap<>();
+            addedTasksList.clear();
+            tasksPanel.getChildren().clear();
+            throw new ScheduleConfirmationException("Planning declined");
+        }
     }
     private void showSuccessMessage(String message){
         Alert successMessage = new Alert(Alert.AlertType.INFORMATION);

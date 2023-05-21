@@ -19,7 +19,7 @@ public class DecomposableTaskSchema extends TaskSchema {
         this.setName(task.getName());
         this.setCategory(task.getCategory());
         this.setDeadline(task.getDeadline());
-        this.setId((getName() + getCategory()).hashCode() + getDate().hashCode());
+        this.setId((getName() + getCategory()).hashCode() + getDuration().hashCode());
     }
 
     public DecomposableTaskSchema() {
