@@ -41,7 +41,7 @@ public class UserSchema implements Comparable<UserSchema>, Serializable {
         this.username = username;
         this.password = password;
         this.settings = new Settings();
-        this.mostProductiveDate = LocalDate.now(); //TODO: in the view gotta put a placeHolder when it's null meaning it's a new user
+        this.mostProductiveDate = LocalDate.now();
         this.mostTasksCompletedInADay = 0;
         this.congratsInARowCounter = 0;
         this.mostCongratsReceivedInARow = 0;
@@ -53,7 +53,7 @@ public class UserSchema implements Comparable<UserSchema>, Serializable {
 
     public UserSchema() {
         this.settings = new Settings();
-        this.mostProductiveDate = LocalDate.now(); //TODO: in the view gotta put a placeHolder when it's null meaning it's a new user
+        this.mostProductiveDate = LocalDate.now();
         this.mostTasksCompletedInADay = 0;
         this.congratsInARowCounter = 0;
         this.mostCongratsReceivedInARow = 0;

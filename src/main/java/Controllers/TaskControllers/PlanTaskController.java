@@ -85,7 +85,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
 
         //setting the start time hours spinner
-//        TODO: Set the start time to the actual moment
         taskNameField.setPromptText("Task Name");
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
         valueFactory.setValue(LocalTime.now().getHour());
@@ -169,12 +168,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
         try {
 
-            //TODO: give default values in case the input was empty
             ViewInfos viewInfos = new ViewInfos();
 
             String name = viewInfos.getTaskName();
             Duration duration = viewInfos.getDuration();
             String priority = viewInfos.getPriority();
+            int periodicity = viewInfos.getPeriodicity();
             LocalDate date = viewInfos.getDate();
             LocalDate deadline = viewInfos.getDeadline();
 //        String status = viewInfos.getStatus();
@@ -185,9 +184,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             System.out.println("duration: " + duration);
             System.out.println("priority: " + priority);
             System.out.println("deadline: " + deadline);
-
-
-            //TODO: verify the day in the past exception
+            System.out.println("periodicity: " + periodicity);
             String status = "UNSCHEDULED";
 
             //create the task
@@ -199,10 +196,9 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                     switch (Boolean.toString(decomposeTaskCheckBox.isSelected())) {
                         case "false":
                             //planning a simple task manually
-                            //TODO: implement periodicity
                             boolean withConfirmation = true;
                             planSimpleTaskManually(date, name, startTime, duration,
-                                    priority, deadline, status, 0, withConfirmation);
+                                    priority, deadline, status, periodicity, withConfirmation);
 
                             break;
                         case "true":
@@ -219,7 +215,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
                         case "false":
                             //planning a simple task automatically
                             planSimpleTaskAutomatically(new DaySchema(datePicker.getValue()), name, duration,
-                                    priority, deadline, status);
+                                    priority, deadline, status, periodicity);
                             this.moveToValidationView();
                             break;
                         case "true":
@@ -321,14 +317,14 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         SimpleTaskSchema simpleTask = null;
 
         //check the minimal duration condition
-        Duration minimalDuration = Duration.ofMinutes(30); //TODO: get the minimal duration from the settings of calendar
+        Duration minimalDuration = HelloApplication.currentUserSettings.getMinimalDuration();
         if (availableFreeSlot.getDuration().compareTo((duration.plus(minimalDuration))) <= 0) {
             //allocate the whole free slot for this task
             duration = availableFreeSlot.getDuration();
             this.freeSlotModel.delete(date, availableFreeSlot.getStartTime());
 
             return (SimpleTaskSchema) this.taskModel.create(new SimpleTaskSchema(date, name, taskStartTime, duration,
-                    Priority.valueOf(priority), deadline, TaskStatus.valueOf(status), 0));
+                    Priority.valueOf(priority), deadline, TaskStatus.valueOf(status), periodicity));
 
         } else {
             //allocate a part of the free slot for this task and split the task into two parts
@@ -362,7 +358,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             }
 
             return (SimpleTaskSchema) this.taskModel.create(new SimpleTaskSchema(date, name, taskStartTime, duration,
-                    Priority.valueOf(priority), deadline, TaskStatus.valueOf(status), 0));
+                    Priority.valueOf(priority), deadline, TaskStatus.valueOf(status), periodicity));
         }
     }
 
@@ -411,9 +407,8 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     }
 
     private void planSimpleTaskAutomatically(DaySchema day, String name, Duration duration,
-                                             String priority, LocalDate deadline, String status) throws Exception {
+                                             String priority, LocalDate deadline, String status, int periodicity) throws Exception {
         //This method will create a simple task.
-        //TODO: check whether you're going to add periodicity
 
         //Get the necessary data for verification
         ArrayList<FreeSlotSchema> freeslots = freeSlotModel.findMany(day.getDate()); //throws DayDoesNotHaveFreeSlotsException
@@ -425,11 +420,10 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         }
         ArrayList<FreeSlotSchema> freeSlotList = new ArrayList<>();
 
-        Duration minimalDuration = HelloApplication.currentUserSettings.getMinimalDuration(); //TODO: get the minimal duration from the settings of calendar
+        Duration minimalDuration = HelloApplication.currentUserSettings.getMinimalDuration();
         if (duration.compareTo(minimalDuration) < 0) {
-            //TODO: decide what to do for tasks with duration < 30 minutes (minimal duration)
-            //TODO: make their duration = minDuration
-            //TODO: Just do it !!!
+
+            duration = minimalDuration;
         }
 
         //set the start time of the task
@@ -445,15 +439,14 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
             freeSlotList.add(availableFreeSlot);
             preValidationMap.put(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
-                    Priority.valueOf(priority), deadline, TaskStatus.valueOf(status), 0), freeSlotList);
-            //TODO: change the periodicity to it's actual value
+                    Priority.valueOf(priority), deadline, TaskStatus.valueOf(status), periodicity), freeSlotList);
         } else {
             //the free slot will be reduced (to the bottom) by the task's duration, and we'll save the old freeSlot by creating another instance for the validation phase
             freeSlotList.add(new FreeSlotSchema(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getStartTime().plus(duration)));
 
             this.freeSlotModel.update(day.getDate(), availableFreeSlot.getStartTime(), availableFreeSlot.getStartTime().plus(duration));
             preValidationMap.put(new SimpleTaskSchema(day.getDate(), name, startTime, duration,
-                    Priority.valueOf(priority), deadline, TaskStatus.valueOf(status), 0), freeSlotList);
+                    Priority.valueOf(priority), deadline, TaskStatus.valueOf(status), periodicity), freeSlotList);
         }
 
         System.out.println("task" + " \"" + name + "\" " + "created successfully on: " + day.getDate() + " at: " + startTime + " with duration: " + duration);
@@ -575,138 +568,10 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
     }
 
-    private void autoPlanSetOfTasks(ArrayList<TaskSchema> tasksList) throws Exception {
-        Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority);
-        tasksList.sort(comparator);
-        //TODO: Gotta put every task in the dataBase to track the statistics in the APP
-        Iterator<TaskSchema> it = tasksList.iterator();
-        ArrayList<DaySchema> days = dayModel.findMany(LocalDate.now(), LocalDate.now().plusYears(1));
-        //The plus 1 year is temporary for now
-        TaskSchema task;
-        boolean isScheduled = false;
-        while (it.hasNext()) {
-            task = it.next();
-            // all the exceptions will be handled in the handle method only
-            for (DaySchema day : days) {
-                isScheduled = false;
-                if (day.getDate().isBefore(task.getDeadline()) || day.getDate().equals(task.getDeadline())) {
-                    //Plan it with the automatic plan method
-                    //the plan methods will take care of updating the freeSlotsDataBase and TaskDataBase
-                    if (task instanceof SimpleTaskSchema) {
-
-                        try {
-                            planSimpleTaskAutomatically(day, task.getName(), task.getDuration(), task.getPriority().toString(),
-                                    task.getDeadline(), TaskStatus.SCHEDULED.toString());
-                            isScheduled = true;
-                            break;
-                            //Because we're sure that if the execution will reach this point that we have found an
-                            // emptySlot otherwise it'll throw an exception
-
-
-                        } catch (Exception e) {
-                            //pass to the nextIteration
-
-                        }
-
-                    } else if (task instanceof DecomposableTaskSchema) {
-
-                        try {
-                            planDecomposableTaskAutomatically(day, task.getName(), task.getDuration(), task.getPriority(),
-                                    task.getDeadline(), TaskStatus.SCHEDULED);
-                            isScheduled = true;
-                            break;
-                        } catch (Exception e) {
-                            //pass to the nextIteration
-                        }
-
-                    }
-                } else {
-                    task.setStatus(TaskStatus.UNSCHEDULED);
-                    break;
-                    //put it here even though it looks redandent but it'll save a looooooooot of iterations
-                }
-            }
-            if (!isScheduled) {
-                task.setStatus(TaskStatus.UNSCHEDULED);
-                System.out.println(task.getName() + " is not scheduled");
-
-            } else {
-                //Remove the task from the list, and it's in the DB now
-                it.remove();
-            }
-
-        }
-
-    }
-
-    private void autoPlanSetOfTasks(ArrayList<TaskSchema> tasksList, LocalDate startOfPeriod, LocalDate endOfPeriod) throws Exception {
-        Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority);
-        tasksList.sort(comparator);
-        //TODO: Gotta put every task in the dataBase to track the statistics in the APP
-        Iterator<TaskSchema> it = tasksList.iterator();
-        ArrayList<DaySchema> days = dayModel.findMany(startOfPeriod, endOfPeriod);
-        //The plus 1 year is temporary for now
-        TaskSchema task;
-        boolean isScheduled = false;
-        while (it.hasNext()) {
-            task = it.next();
-            // all the exceptions will be handled in the handle method only
-            for (DaySchema day : days) {
-                isScheduled = false;
-                if (day.getDate().isBefore(task.getDeadline()) || day.getDate().equals(task.getDeadline())) {
-                    //Plan it with the automatic plan method
-                    //the plan methods will take care of updating the freeSlotsDataBase and TaskDataBase
-                    if (task instanceof SimpleTaskSchema) {
-
-                        try {
-                            planSimpleTaskAutomatically(day, task.getName(), task.getDuration(), task.getPriority().toString(),
-                                    task.getDeadline(), TaskStatus.SCHEDULED.toString());
-                            isScheduled = true;
-                            break;
-                            //Because we're sure that if the execution will reach this point that we have found an
-                            // emptySlot otherwise it'll throw an exception
-
-
-                        } catch (Exception e) {
-                            //pass to the nextIteration
-
-                        }
-
-                    } else if (task instanceof DecomposableTaskSchema) {
-
-                        try {
-                            planDecomposableTaskAutomatically(day, task.getName(), task.getDuration(), task.getPriority(),
-                                    task.getDeadline(), TaskStatus.SCHEDULED);
-                            isScheduled = true;
-                            break;
-                        } catch (Exception e) {
-                            //pass to the nextIteration
-                        }
-
-                    }
-                } else {
-                    task.setStatus(TaskStatus.UNSCHEDULED);
-                    break;
-                    //put it here even though it looks redandent but it'll save a looooooooot of iterations
-                }
-            }
-            if (!isScheduled) {
-                task.setStatus(TaskStatus.UNSCHEDULED);
-                System.out.println(task.getName() + " is not scheduled");
-
-            } else {
-                //Remove the task from the list, and it's in the DB now
-                it.remove();
-            }
-
-        }
-
-    }
-
     private void autoPlanSetOfTasks2(ArrayList<TaskSchema> tasksList, LocalDate startOfPeriod, LocalDate endOfPeriod) throws Exception {
         Comparator<TaskSchema> comparator = Comparator.comparing(TaskSchema::getDeadline).thenComparing(TaskSchema::getPriority).thenComparing(TaskSchema::getDuration, Comparator.reverseOrder());
         tasksList.sort(comparator);
-        //TODO: Gotta put every task in the dataBase to track the statistics in the APP
+
         Iterator<TaskSchema> it = tasksList.iterator();
         ArrayList<DaySchema> days = dayModel.findMany(startOfPeriod, endOfPeriod);
         //The wrappers that we'll use to pass the values by reference
@@ -735,7 +600,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
 
                         try {
                             planSimpleTaskAutomatically(day, task.getName(), task.getDuration(), task.getPriority().toString(),
-                                    task.getDeadline(), TaskStatus.SCHEDULED.toString());
+                                    task.getDeadline(), TaskStatus.SCHEDULED.toString(), ((SimpleTaskSchema) task).getPeriodicity());
                             isScheduled = true;
                             break;
                             //Because we're sure that if the execution will reach this point that we have found an
@@ -1128,12 +993,18 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             return priorityComboBox.getValue();
         }
 
-        public LocalDate getDate() {
+        public LocalDate getDate() throws DayInThePastException {
+            if (datePicker.getValue().isBefore(LocalDate.now())) throw new DayInThePastException();
             return datePicker.getValue();
         }
 
-        public LocalDate getDeadline() {
+        public LocalDate getDeadline() throws DayInThePastException {
+            if (deadlinePicker.getValue().isBefore(LocalDate.now())) throw new DayInThePastException();
             return deadlinePicker.getValue();
+        }
+        public int getPeriodicity() {
+            if (periodicitySpinner.getValue() == null) return 0;
+            return periodicitySpinner.getValue();
         }
     }
 

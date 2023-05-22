@@ -16,6 +16,6 @@ public interface DayDatabase extends Serializable {
     public DaySchema find(LocalDate date);
     DaySchema create(LocalDate dayDate);
 
-    DaySchema update() throws FreeSlotNotFoundException;
+//    DaySchema update() throws FreeSlotNotFoundException;
     DaySchema delete(LocalDate date);
 }

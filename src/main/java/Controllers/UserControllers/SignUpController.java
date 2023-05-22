@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -78,7 +79,6 @@ public class SignUpController {
 //                dayModel.load();
 //                projectModel.load();
 //                taskModel.load();
-                //TODO: create a file for the calendar db if we're going to have one
 
 
 
@@ -104,7 +104,7 @@ public class SignUpController {
 
         } catch (UniqueUsernameViolationException | UserNameNotProvidedException | PasswordNotProvidedException e) {
             System.out.println(e.getMessage());
-            //TODO: add a pop up view with the exception message
+            showErrorMessage(e.getMessage());
         } finally {
 
             System.out.println("\nUsersDB content");
@@ -116,5 +116,12 @@ public class SignUpController {
         }
 
 
+    }
+    private void showErrorMessage(String message) {
+        Alert errorMessage = new Alert(Alert.AlertType.ERROR);
+        errorMessage.setContentText(message);
+        errorMessage.setHeaderText("Error");
+        errorMessage.setTitle("Error");
+        errorMessage.showAndWait();
     }
 }

@@ -36,18 +36,17 @@ public class DayFileDataBase implements DayDatabase{
         else return null;
     }
 
-    @Override
-    public DaySchema update() throws FreeSlotNotFoundException {
-        return null;
-    //TODO: Check if it's necessary or the update in the tasks and freeSLot DBs will be enough because everything is passed as a reference
-    }
+//    @Override
+//    public DaySchema update() throws FreeSlotNotFoundException {
+//        return null;
+//    }
 
     //CRUD operations
     @Override
     public DaySchema find(LocalDate date){
         DaySchema tempDay = new DaySchema(date);
-        //TODO: Check if we're going to let it like this because it's returning the one that's greater than or equal to what we're looking for
-        return days.ceiling(tempDay);
+        if (tempDay.getDate().equals(date)) return days.ceiling(tempDay);
+        else return null;
     }
     public void update(DaySchema daySchema){
         if (days.contains(daySchema)){

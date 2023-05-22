@@ -191,7 +191,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
 
     @Override
     public int compareTo(TaskSchema o) {
-//        return this.deadline.compareTo(o.getDeadline()); //TODO: the task here is supposed to compare by start time, no?
+//        return this.deadline.compareTo(o.getDeadline());
         int dateComparison = this.date.compareTo(o.getDate());
         if(dateComparison == 0){
             int startTimeComparison = this.startTime.compareTo(o.getStartTime());

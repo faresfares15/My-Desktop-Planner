@@ -22,7 +22,7 @@ public class SetTaskAsCompletedController implements EventHandler<ActionEvent> {
     final UserModel userModel = HelloApplication.userModel;
     @FXML
     Button setTaskAsCompletedButton;
-    TaskSchema task; //TODO: Get it from the viewTaskInfoController
+    TaskSchema task;
 
     @Override
     public void handle(ActionEvent event) {

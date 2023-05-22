@@ -24,7 +24,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class HelloApplication extends Application {
-    //TODO: assign those only when the user logs in
     public static final TaskModel taskModel = new TaskModel(new TaskFileDatabase());
     public static final UserModel userModel = new UserModel(new UserFileDataBase());
     public static final DayModel dayModel = new DayModel(new DayFileDataBase());
@@ -32,8 +31,7 @@ public class HelloApplication extends Application {
     public static final ProjectModel projectsModel = new ProjectModel(new ProjectFileDataBase());
     public static final CategoryModel categoryModel = new CategoryModel(new CategoryFileDataBase());
 
-    //TODO:The usernames file is a constant here, think about keeping it or changing this later
-//    public static final String usernamesFileName = "usernames.txt";
+
     public static final String usersDirectoryName = "users_Directoy";
 
     //File names to keep consistency between classes
@@ -199,7 +197,6 @@ public class HelloApplication extends Application {
             //save the user model
             userModel.save();
 
-            //TODO: create the calendar model to save it here
             System.out.println("Files saved successfully");
         } //else the user didn't login so we don't need to save anything
         super.stop();
