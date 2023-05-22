@@ -100,7 +100,9 @@ public class TaskInfoViewController {
             e.printStackTrace();
         }
 //        status.setText(task.getStatus().toString());
-//        progress.setText(task.getProgress().toString());
+
+        //set the task progress
+        progress.setText(task.getProgress().toString());
     }
 
     public void goToCalendar() throws IOException {
@@ -229,7 +231,7 @@ public class TaskInfoViewController {
 
     public void addTaskToCategory() throws IOException {
 
-        //show a new window to select a category
+        //display a new window to select a category
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("add-task-to-category-view.fxml"));
         fxmlLoader.setControllerFactory(c -> new AddTaskToCategoryController(task));
         Scene addTaskToCategoryScene = new Scene(fxmlLoader.load());
@@ -252,6 +254,27 @@ public class TaskInfoViewController {
         } else {
             category.setText(newCategoryName);
         }
+    }
+    public void updateTaskProgress() throws IOException {
+        //display a new window to select a category
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("update-task-progress-view.fxml"));
+        fxmlLoader.setControllerFactory(c -> new SetTaskProgressController(task, task.getProgress().toString()));
+        Scene updateTaskProgressScene = new Scene(fxmlLoader.load());
+        Stage updateTaskProgressStage = new Stage();
+        updateTaskProgressStage.setTitle("Update task progress");
+        updateTaskProgressStage.initModality(Modality.APPLICATION_MODAL);
+        updateTaskProgressStage.initOwner(taskName.getScene().getWindow());
+        updateTaskProgressStage.setScene(updateTaskProgressScene);
+
+        //init the data in the new view
+        SetTaskProgressController addTaskToCategoryController = fxmlLoader.getController();
+        addTaskToCategoryController.initData();
+
+        //show the new view
+        updateTaskProgressStage.showAndWait();
+
+        progress.setText(addTaskToCategoryController.getCurrentProgressName());
+
     }
 
     private void showErrorMessage(String message) {

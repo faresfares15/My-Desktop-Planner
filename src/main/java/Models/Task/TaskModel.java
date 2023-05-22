@@ -56,7 +56,7 @@ public class TaskModel {
         return this.taskDatabase.find(id);
     }
     public TreeMap<LocalDate, ArrayList<TaskSchema>> findAll(){
-        this.taskDatabase.findAll();
+        return this.taskDatabase.findAll();
     }
     public ArrayList<TaskSchema> findAll(String taskType){
         return this.taskDatabase.findAll(taskType);

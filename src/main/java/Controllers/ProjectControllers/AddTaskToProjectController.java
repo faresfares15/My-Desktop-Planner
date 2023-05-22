@@ -33,8 +33,6 @@ public class AddTaskToProjectController {
     }
     @FXML
     public void initialize(){
-        //initialize the projects list combobox
-
         //set the project name text
         currentProject.setText(currentProjectName);
 
@@ -95,8 +93,7 @@ public class AddTaskToProjectController {
                 task.setProjectId(currentProject.getId());
 
                 setCurrentProjectName(projectName);
-            }
-            else{
+            } else{
                 //find the project in the database
                 ProjectSchema currentProject = HelloApplication.projectsModel.find(projectName);
 

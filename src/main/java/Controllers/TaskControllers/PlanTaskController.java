@@ -3,7 +3,6 @@ package Controllers.TaskControllers;
 //my imports
 
 import Exceptions.*;
-import Models.Category.CategorySchema;
 import Models.Day.DayModel;
 import Models.Day.DaySchema;
 import Models.FreeSlot.FreeSlotModel;
@@ -29,7 +28,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
@@ -723,10 +721,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         ArrayList<FreeSlotSchema> freeSlots = new ArrayList<>(); //to loop through the freeSLots of the day
         ArrayList<FreeSlotSchema> freeSlotsList; //to put it in the pre-validation map
         int subTaskIndex = 1;
+
         while (it.hasNext()) {
             task = it.next();
             // all the exceptions will be handled in the handle method only
             isScheduled = false;
+
             if (task instanceof SimpleTaskSchema) {
                 for (DaySchema day : days) {
                     if (day.getDate().isBefore(task.getDeadline()) || day.getDate().equals(task.getDeadline())) {

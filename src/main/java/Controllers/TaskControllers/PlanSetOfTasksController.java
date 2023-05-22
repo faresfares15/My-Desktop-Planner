@@ -170,7 +170,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         System.out.println("name: " + name);
         System.out.println("duration: " + duration);
         System.out.println("priority: " + priority);
-        System.out.println("category: " + category);
         System.out.println("deadline: " + deadline);
 
         try {
@@ -230,6 +229,7 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
                         }
 
                     }
+
                     System.out.println("-------------------------------------------------");
                 }
 
@@ -241,7 +241,7 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
     }
     public void moveToCalendarView() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 840, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 840, 500);
         Stage stage = (Stage) viewTitle.getScene().getWindow();
         stage.setTitle("Calendar");
 

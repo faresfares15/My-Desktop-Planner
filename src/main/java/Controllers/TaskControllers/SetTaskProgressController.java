@@ -5,29 +5,67 @@ import Models.Day.DayModel;
 import Models.Day.DaySchema;
 import Models.Task.DecomposableTaskSchema;
 import Models.Task.Progress;
-import Models.Task.TaskModel;
 import Models.Task.TaskSchema;
 import Models.User.UserModel;
 import Models.User.UserSchema;
 import esi.tp_poo_final.HelloApplication;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.text.Text;
 
-public class SetTaskAsCompletedController implements EventHandler<ActionEvent> {
-    final TaskModel taskModel = HelloApplication.taskModel;
+public class SetTaskProgressController {
     final DayModel dayModel= HelloApplication.dayModel;
     final UserModel userModel = HelloApplication.userModel;
     @FXML
-    Button setTaskAsCompletedButton;
-    TaskSchema task; //TODO: Get it from the viewTaskInfoController
+    Text taskName;
+    @FXML
+    Text currentProgress;
+    @FXML
+    ComboBox<String> progressesList;
+    String currentProgressName;
+    private TaskSchema task;
+    public SetTaskProgressController(TaskSchema task, String currentProgressName){
+        this.task = task;
+        this.currentProgressName = currentProgressName;
+    }
+    @FXML
+    public void initialize(){
+        //set the current status text
+        currentProgress.setText(currentProgressName);
 
-    @Override
-    public void handle(ActionEvent event) {
+        //initialize the status list combobox
+        progressesList.getItems().clear(); //clear the combobox
+
+        //add the statuses to the combobox
+        Progress[] progresses = Progress.values();
+        for (Progress progress: progresses){
+            progressesList.getItems().add(progress.toString());
+        }
+
+        //set the current status in the combobox
+        progressesList.setValue(currentProgressName);
+    }
+    public void updateProgress(){
+        //get the new status
+        ViewInfos infos = new ViewInfos();
+        Progress newProgress = infos.getProgress();
+        currentProgressName = newProgress.toString();
+
+        //update the task's progress
+        switch (newProgress.toString()){
+            case "COMPLETED":
+                markTaskAsComplete();
+                break;
+        }
+        task.setProgress(newProgress);
+
+        //close the window
+        progressesList.getScene().getWindow().hide();
+    }
+
+    private void markTaskAsComplete(){
         //Fetch the task from the database and set its progress to completed
-
         task.setProgress(Progress.COMPLETED);
 
         if (task instanceof DecomposableTaskSchema){
@@ -36,6 +74,7 @@ public class SetTaskAsCompletedController implements EventHandler<ActionEvent> {
                 subtask.setProgress(Progress.COMPLETED);
             }
         }
+
         //add the tasks the taskCompltedInADay count
         DaySchema day = dayModel.find(task.getDate());
         day.setNumberOfTasksCompletedOnThisDay(day.getNumberOfTasksCompletedOnThisDay()+1);
@@ -54,14 +93,31 @@ public class SetTaskAsCompletedController implements EventHandler<ActionEvent> {
             }
 
         } catch (UserDoesNotExistException e) {
-            showErrorMessage("No user is logged, the changes won't be saved");
+            showErrorMessage("No user is logged in, the changes won't be saved");
         }
 
         //Evaluating the progress of the day
 
-
-
     }
+    public void cancel(){
+        quit();
+    }
+    private void quit(){
+        taskName.getScene().getWindow().hide();
+    }
+    public void initData(){
+        taskName.setText(task.getName());
+    }
+    private class ViewInfos{
+        private Progress getProgress(){
+            return Progress.valueOf(progressesList.getValue());
+        }
+    }
+
+    public String getCurrentProgressName() {
+        return currentProgressName;
+    }
+
     private void showErrorMessage(String message){
         Alert errorMessage = new Alert(Alert.AlertType.ERROR);
         errorMessage.setContentText(message);
