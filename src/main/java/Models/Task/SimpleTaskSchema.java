@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class SimpleTaskSchema extends TaskSchema {
+public class SimpleTaskSchema extends TaskSchema{
 //    private Duration periodicity;
     private int periodicity;
 //    public SimpleTaskSchema(LocalDate date, String name, LocalTime startTime, Duration duration, Priority priority, LocalDate deadline, String category, TaskStatus status, Duration periodicity) {

@@ -12,7 +12,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AddTaskToProjectController {
@@ -25,7 +24,7 @@ public class AddTaskToProjectController {
     @FXML
     TextField newProjectName;
     @FXML
-    TextArea desctiptionBox;
+    TextArea descriptionBox;
     String currentProjectName;
     private TaskSchema task;
     public AddTaskToProjectController(TaskSchema task, String projectName){
@@ -64,9 +63,11 @@ public class AddTaskToProjectController {
             // If the user has selected "New category," then make the category text field visible.
             if (projectsList.getValue().equals("New project")) {
                 newProjectName.setDisable(false);
+                descriptionBox.setDisable(false);
 
             } else {
                 newProjectName.setDisable(true);
+                descriptionBox.setDisable(true);
             }
         });
     }
@@ -151,7 +152,7 @@ public class AddTaskToProjectController {
             return projectName;
         }
         private String getDescription() throws Exception {
-            String description = desctiptionBox.getText();
+            String description = descriptionBox.getText();
             if(description.isBlank()) throw new Exception("No description provided");
             return description;
         }

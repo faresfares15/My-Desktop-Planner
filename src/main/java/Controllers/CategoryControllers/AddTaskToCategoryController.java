@@ -1,6 +1,6 @@
 package Controllers.CategoryControllers;
 
-import Models.Project.ProjectSchema;
+import Models.Category.CategorySchema;
 import Models.Task.TaskSchema;
 import esi.tp_poo_final.HelloApplication;
 import javafx.collections.FXCollections;
@@ -78,9 +78,8 @@ public class AddTaskToCategoryController {
                 ArrayList<TaskSchema> tasks = new ArrayList<>();
                 tasks.add(task);
 
-
                 //create a new category
-                HelloApplication.categoryModel.addCategory(categoryName, color);
+                HelloApplication.categoryModel.create(categoryName, color, task.getDuration());
 
                 //update the category name in the task
                 task.setCategory(categoryName);
@@ -95,7 +94,15 @@ public class AddTaskToCategoryController {
                     //ignore
                 }
 
-                //add the task to the category
+                //remove the task duration from the previous category
+                CategorySchema oldCategory = HelloApplication.categoryModel.find(task.getCategory());
+                oldCategory.setTotalDuration(oldCategory.getTotalDuration().minus(task.getDuration()));
+
+                //add the task duration to the category
+                CategorySchema category = HelloApplication.categoryModel.find(categoryName);
+                category.setTotalDuration(category.getTotalDuration().plus(task.getDuration()));
+
+                //set the category name in the task
                 task.setCategory(categoryName);
 
                 //set the current category text

@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="840.0" stylesheets="@general.css,@calendar.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CalendarControllers.ShowCalendarController">
+<AnchorPane prefHeight="500.0" prefWidth="840.0" stylesheets="@general.css,@calendar.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.CalendarControllers.ShowCalendarController">
    <children>
-      <VBox layoutX="63.0" layoutY="79.0" prefHeight="282.0" prefWidth="597.0">
+      <VBox layoutX="63.0" layoutY="79.0" prefHeight="390.0" prefWidth="598.0">
          <children>
-            <ScrollPane fx:id="scrollPane" prefHeight="283.0" prefWidth="589.0">
+            <ScrollPane fx:id="scrollPane" prefHeight="283.0" prefWidth="598.0" VBox.vgrow="ALWAYS">
                <content>
                   <GridPane fx:id="calendarGrid" prefWidth="400.0">
                     <columnConstraints>
@@ -74,6 +74,7 @@
       <Button layoutX="707.0" layoutY="148.0" mnemonicParsing="false" onAction="#moveToScheduleFreeSlotView" text="Schedule a free slot" />
       <Button layoutX="707.0" layoutY="207.0" mnemonicParsing="false" onAction="#moveToScheduleTaskView" text="Schedule a task" />
       <Button layoutX="707.0" layoutY="276.0" mnemonicParsing="false" onAction="#moveToScheduleSetOfTaskView" text="Schedule set of tasks" />
-      <Button layoutX="707.0" layoutY="322.0" mnemonicParsing="false" onAction="#viewProjects" text="View projects" />
+      <Button layoutX="707.0" layoutY="336.0" mnemonicParsing="false" onAction="#viewProjects" text="View projects" />
+      <Button layoutX="707.0" layoutY="391.0" mnemonicParsing="false" onAction="#updateSettings" text="Update settings" />
    </children>
 </AnchorPane>

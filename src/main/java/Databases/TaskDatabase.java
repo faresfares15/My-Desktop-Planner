@@ -14,6 +14,7 @@ public interface TaskDatabase extends Serializable {
     public TaskSchema create(TaskSchema taskSchema);
     public TaskSchema read(int id, LocalDate date) throws TaskDoesNotExistException;
     public TaskSchema find(LocalDate date, int id) throws TaskDoesNotExistException;
+    public ArrayList<TaskSchema> findAll(String taskType);
     void initialize(LocalDate date);
     public void update(LocalDate date, int id, String newName) throws TaskDoesNotExistException;
     public void delete(TaskSchema taskSchema) throws TaskDoesNotExistException;

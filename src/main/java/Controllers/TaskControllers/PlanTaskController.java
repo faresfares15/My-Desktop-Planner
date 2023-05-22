@@ -3,6 +3,7 @@ package Controllers.TaskControllers;
 //my imports
 
 import Exceptions.*;
+import Models.Category.CategorySchema;
 import Models.Day.DayModel;
 import Models.Day.DaySchema;
 import Models.FreeSlot.FreeSlotModel;
@@ -28,6 +29,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
@@ -205,7 +207,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             String priority = viewInfos.getPriority();
             LocalDate date = viewInfos.getDate();
             LocalDate deadline = viewInfos.getDeadline();
-            String category = viewInfos.getCategory();
+            String category = viewInfos.getCategoryName();
 //        String status = viewInfos.getStatus();
 
             //print the values of the inputs
@@ -463,6 +465,17 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             } else {
                 //create the free slot
                 this.freeSlotModel.create(date, taskEndTime, availableFreeSlot.getEndTime());
+            }
+
+            //add the task to the category
+            if(!Objects.equals(category, "")){
+                if(Objects.equals(category, "New category")){
+                    ViewInfos viewInfos = new ViewInfos();
+                    HelloApplication.categoryModel.create(category, viewInfos.getCategoryColor(), duration);
+                }else {
+                    CategorySchema categorySchema = HelloApplication.categoryModel.find(category);
+                    categorySchema.setTotalDuration(categorySchema.getTotalDuration().plus(duration));
+                }
             }
 
             return (SimpleTaskSchema) this.taskModel.create(new SimpleTaskSchema(date, name, taskStartTime, duration,
@@ -1239,7 +1252,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             return deadlinePicker.getValue();
         }
 
-        public String getCategory() throws Exception {
+        public String getCategoryName() throws Exception {
             String categoryName = category.getValue();
             if (categoryName == null) throw new Exception("No category selected");
             if (categoryName.equals("New category")) {
@@ -1252,7 +1265,9 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             }
 
             return categoryName;
-
+        }
+        public Color getCategoryColor(){
+            return newCategoryColor.getValue();
         }
 
     }

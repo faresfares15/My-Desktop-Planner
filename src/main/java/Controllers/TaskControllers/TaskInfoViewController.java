@@ -55,8 +55,12 @@ public class TaskInfoViewController {
         //set the task priority
         priority.setText(task.getPriority().toString());
 
-        //set the task deadline
-        deadline.setText(task.getDeadline().toString());
+        try{
+            //set the task deadline
+            deadline.setText(task.getDeadline().toString());
+        }catch (Exception e){
+            deadline.setText("No deadline");
+        }
 
         //set the task category
         if(Objects.equals(task.getCategory(), "")){
@@ -108,10 +112,14 @@ public class TaskInfoViewController {
         addTaskToProjectStage.initModality(Modality.APPLICATION_MODAL);
         addTaskToProjectStage.initOwner(taskName.getScene().getWindow());
         addTaskToProjectStage.setScene(addTaskToProjectScene);
-        addTaskToProjectStage.showAndWait();
 
+        //init the data in the new view
         AddTaskToProjectController addTaskToProjectController = fxmlLoader.getController();
         addTaskToProjectController.initData();
+
+        //show the new view
+        addTaskToProjectStage.showAndWait();
+
 
         projectName.setText(addTaskToProjectController.getCurrentProjectName());
     }
@@ -126,10 +134,13 @@ public class TaskInfoViewController {
         addTaskToCategoryStage.initModality(Modality.APPLICATION_MODAL);
         addTaskToCategoryStage.initOwner(taskName.getScene().getWindow());
         addTaskToCategoryStage.setScene(addTaskToCategoryScene);
-        addTaskToCategoryStage.showAndWait();
 
+        //init the data in the new view
         AddTaskToCategoryController addTaskToCategoryController = fxmlLoader.getController();
         addTaskToCategoryController.initData();
+
+        //show the new view
+        addTaskToCategoryStage.showAndWait();
 
         String newCategoryName = addTaskToCategoryController.getCurrentCategoryName();
         if(Objects.equals(newCategoryName, "")){

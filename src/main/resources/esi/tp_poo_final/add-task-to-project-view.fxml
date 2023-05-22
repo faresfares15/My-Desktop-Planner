@@ -61,7 +61,7 @@
                   <Font size="15.0" />
                </font>
             </Text>
-            <TextArea fx:id="desctiptionBox" disable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <TextArea fx:id="descriptionBox" disable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
          </children>
       </GridPane>
    </children>

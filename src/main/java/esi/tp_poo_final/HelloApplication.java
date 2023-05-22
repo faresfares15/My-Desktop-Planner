@@ -2,6 +2,7 @@ package esi.tp_poo_final;
 
 import Databases.*;
 import Models.Calendar.Settings;
+import Models.Category.CategoryModel;
 import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
 import Models.FreeSlot.FreeSlotSchema;
@@ -27,7 +28,7 @@ public class HelloApplication extends Application {
     public static final DayModel dayModel = new DayModel(new DayFileDataBase());
     public static final FreeSlotModel freeSlotModel = new FreeSlotModel(new FreeSlotsFileDatabase());
     public static final ProjectModel projectsModel = new ProjectModel(new ProjectFileDataBase());
-    public static final Category categoryModel = new Category();
+    public static final CategoryModel categoryModel = new CategoryModel(new CategoryFileDataBase());
 
     //TODO:The usernames file is a constant here, think about keeping it or changing this later
 //    public static final String usernamesFileName = "usernames.txt";
@@ -46,17 +47,16 @@ public class HelloApplication extends Application {
     public void start(Stage primaryStage) throws IOException {
         //trash code
         taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(8), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(7), "task00", LocalTime.of(10, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(3), "task0", LocalTime.of(13, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(2), "task1", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task2", LocalTime.of(13, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "Work", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task2", LocalTime.of(1, 0), Duration.ofHours(3), Priority.LOW, LocalDate.of(2023, 5, 17), "Work", TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(4), "task4", LocalTime.of(13, 30), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
 
-        freeSlotModel.create(LocalDate.now(), LocalTime.of(15, 0), LocalTime.of(16,0));
-        freeSlotModel.create(LocalDate.now().plusDays(1), LocalTime.of(13, 0), LocalTime.of(15,0));
-
-
+        //create a decomposed task
+        DecomposableTaskSchema decomposedTaskSchema = new DecomposableTaskSchema(new SimpleTaskSchema(LocalDate.now().plusDays(1), "sub1", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "Work", TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(3), "sub2", LocalTime.of(10, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(5), "sub3", LocalTime.of(13, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(6), "sub4", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(9), "sub5", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(decomposedTaskSchema);
 
         //TODO: consider initilizing the free slots and tasks in the dataBase always when creating a new day
         //In general when creating an object we must initialize all the database that it uses !!!
@@ -67,14 +67,14 @@ public class HelloApplication extends Application {
         FreeSlotSchema freeSlot1 = new FreeSlotSchema(date, LocalTime.of(8, 0), LocalTime.of(10, 0));
         FreeSlotSchema freeSlot2 = new FreeSlotSchema(date, LocalTime.of(11, 0), LocalTime.of(13, 0));
         freeSlots.add(freeSlot1);
-//        freeSlots.add(freeSlot2);
+        freeSlots.add(freeSlot2);
+
         dayModel.create(date);
         freeSlotModel.create(freeSlots);
         taskModel.initialize(date);
 
 
         date = date.plusDays(1);
-        freeSlots = new ArrayList<>();
         freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
         freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
 //        freeSlots.add(freeSlot1);
@@ -86,8 +86,8 @@ public class HelloApplication extends Application {
 
         date = date.plusDays(1);
         freeSlots = new ArrayList<>();
-        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
-        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
+        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(8, 0), LocalTime.of(10, 0));
+        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(16, 0));
         freeSlots.add(freeSlot1);
         freeSlots.add(freeSlot2);
 
@@ -98,8 +98,8 @@ public class HelloApplication extends Application {
 
         date = date.plusDays(1);
         freeSlots = new ArrayList<>();
-        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
-        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
+        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(5, 0), LocalTime.of(7, 0));
+        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(14, 0), LocalTime.of(16, 0));
         freeSlots.add(freeSlot1);
         freeSlots.add(freeSlot2);
 
@@ -110,8 +110,8 @@ public class HelloApplication extends Application {
 
         date = date.plusDays(1);
         freeSlots = new ArrayList<>();
-        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
-        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
+        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(12, 0), LocalTime.of(15, 0));
+        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(17, 0), LocalTime.of(20, 0));
         freeSlots.add(freeSlot1);
         freeSlots.add(freeSlot2);
         dayModel.create(date);
@@ -120,9 +120,9 @@ public class HelloApplication extends Application {
         //end of trash code
 
         try{
-            categoryModel.addCategory("Work", Color.WHEAT);
-            categoryModel.addCategory("Study", Color.CYAN);
-            categoryModel.addCategory("Personal", Color.BEIGE);
+            categoryModel.create("Work", Color.WHEAT);
+            categoryModel.create("Study", Color.CYAN);
+            categoryModel.create("Personal", Color.BEIGE);
         }catch (Exception e){
             //ignore
             e.printStackTrace();

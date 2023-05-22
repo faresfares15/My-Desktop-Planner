@@ -1,24 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.UserControllers.ChangeSettingsController">
+<AnchorPane prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.UserControllers.ChangeSettingsController">
    <children>
-      <GridPane layoutX="200.0" layoutY="155.0">
+      <GridPane hgap="10.0" layoutX="84.0" layoutY="153.0" prefHeight="122.0" prefWidth="478.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.99998779296874" minWidth="10.0" prefWidth="196.99998779296874" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.79998779296872" minWidth="10.0" prefWidth="133.79998779296872" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.19997558593752" minWidth="10.0" prefWidth="107.60000000000002" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Label" />
+            <Label text="Minimal duration:" />
+            <Label text="Minimal number of tasks per day:" GridPane.rowIndex="1" />
+            <Spinner fx:id="minDurationHoursSpinner" GridPane.columnIndex="1" />
+            <Spinner fx:id="minDurationMinutesSpinner" GridPane.columnIndex="2" />
+            <Spinner fx:id="minTasksPerDaySpinner" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
+      <Text layoutX="252.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings">
+         <font>
+            <Font name="Arial Bold" size="36.0" />
+         </font>
+      </Text>
+      <Button layoutX="196.0" layoutY="364.0" mnemonicParsing="false" onAction="#moveToCalendarView" text="Back" />
+      <Button layoutX="398.0" layoutY="364.0" mnemonicParsing="false" onAction="#submit" text="Submit" />
    </children>
 </AnchorPane>

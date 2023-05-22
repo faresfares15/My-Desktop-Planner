@@ -51,6 +51,9 @@ public class TaskModel {
     public TaskSchema find(LocalDate date, int id) throws TaskDoesNotExistException {
         return this.taskDatabase.find(date, id);
     }
+    public ArrayList<TaskSchema> findAll(String taskType){
+        return this.taskDatabase.findAll(taskType);
+    }
     public void update(LocalDate date, int id, String newName) throws TaskDoesNotExistException {
             this.taskDatabase.update(date, id, newName);
     }

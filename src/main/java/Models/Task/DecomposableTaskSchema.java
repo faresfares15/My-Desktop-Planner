@@ -1,6 +1,8 @@
 package Models.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DecomposableTaskSchema extends TaskSchema {
     private ArrayList<SimpleTaskSchema> subTasks;
@@ -37,6 +39,8 @@ public class DecomposableTaskSchema extends TaskSchema {
     public void addSubTask(SimpleTaskSchema simpleTaskSchema){
         simpleTaskSchema.setId(this.getId());
         subTasks.add(simpleTaskSchema);
+        //sort subtasks by date
+        Collections.sort(subTasks);
     }
 
     @Override

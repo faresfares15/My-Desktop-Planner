@@ -2,11 +2,13 @@ package Databases;
 
 import Exceptions.DayDoesNotHaveTasksException;
 import Exceptions.TaskDoesNotExistException;
+import Models.Task.DecomposableTaskSchema;
 import Models.Task.TaskSchema;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class TaskFileDatabase implements TaskDatabase{
@@ -66,6 +68,20 @@ public class TaskFileDatabase implements TaskDatabase{
         }
 
         throw new TaskDoesNotExistException();
+    }
+    @Override
+    public ArrayList<TaskSchema> findAll(String taskType){
+        ArrayList<TaskSchema> tasksList = new ArrayList<>();
+
+        if(Objects.equals(taskType, "DecomposableTaskSchema")) {
+            for (LocalDate date: tasksMap.keySet()) {
+                for (TaskSchema taskSchema: tasksMap.get(date)) {
+                    if (taskSchema instanceof DecomposableTaskSchema) tasksList.add(taskSchema);
+                }
+            }
+        }
+
+        return tasksList;
     }
 
     @Override

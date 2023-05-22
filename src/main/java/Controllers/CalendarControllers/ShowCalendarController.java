@@ -1,9 +1,10 @@
 package Controllers.CalendarControllers;
 
+import Controllers.FreeSlotControllers.FreeSlotInfoViewController;
 import Controllers.ProjectControllers.ViewProjectsController;
 import Controllers.TaskControllers.TaskInfoViewController;
-import Exceptions.TaskDoesNotExistException;
 import Models.FreeSlot.FreeSlotSchema;
+import Models.Task.DecomposableTaskSchema;
 import Models.Task.TaskSchema;
 import esi.tp_poo_final.HelloApplication;
 import javafx.event.Event;
@@ -76,13 +77,25 @@ public class ShowCalendarController{
                     Color blockColor = null;
                     String blockTitle = null;
                     int columnIndex = 0;
-                    int taskId = 0;
+                    LocalTime blockStartTime = LocalTime.of(0,0);
+                    double blockId = 0;
 
                     //get the color and the title of the clicked block (if it is a block)
                     if(clickedItem instanceof StackPane){
                         //get the stack pane object
                         StackPane taskBlock = (StackPane) clickedItem;
-                        taskId = Integer.parseInt(taskBlock.getId());
+
+                        //get the start time of the block
+                        double startMinutes = taskBlock.getTranslateY() / minuteBlockHeight;
+                        double startHours = GridPane.getRowIndex(taskBlock) - 1;
+                        blockStartTime = LocalTime.of((int) startHours, (int) startMinutes);
+
+                        if(Objects.equals(taskBlock.getId(), "subtask")){
+                            blockId = 0.1; //arbitrary id value for a subtask
+                        }else{
+                            blockId = Integer.parseInt(taskBlock.getId());
+                        }
+
                         columnIndex = GridPane.getColumnIndex(taskBlock);
 
                         //get the color of its rectangle
@@ -99,7 +112,17 @@ public class ShowCalendarController{
 
                         //get the stack pane object to access the text
                         StackPane taskBlock = (StackPane) rectangle.getParent();
-                        taskId = Integer.parseInt(taskBlock.getId());
+
+                        //get the start time of the block
+                        double startMinutes = taskBlock.getTranslateY() / minuteBlockHeight;
+                        double startHours = GridPane.getRowIndex(taskBlock) - 1;
+                        blockStartTime = LocalTime.of((int) startHours, (int) startMinutes);
+
+                        if(Objects.equals(taskBlock.getId(), "subtask")){
+                            blockId = 0.1; //arbitrary value
+                        }else{
+                            blockId = Integer.parseInt(taskBlock.getId());
+                        }
                         columnIndex = GridPane.getColumnIndex(taskBlock);
 
                         //get the text form the stack pane container
@@ -109,7 +132,19 @@ public class ShowCalendarController{
                     else if(clickedItem instanceof Text text){
                         //get the stack pane object to access the rectangle
                         StackPane taskBlock = (StackPane) text.getParent();
-                        taskId = Integer.parseInt(taskBlock.getId());
+
+
+                        //get the start time of the block
+                        double startMinutes = taskBlock.getTranslateY() / minuteBlockHeight;
+                        double startHours = GridPane.getRowIndex(taskBlock) - 1;
+                        blockStartTime = LocalTime.of((int) startHours, (int) startMinutes);
+
+
+                        if(Objects.equals(taskBlock.getId(), "subtask")){
+                            blockId = 0.1; //arbitrary value
+                        }else{
+                            blockId = Integer.parseInt(taskBlock.getId());
+                        }
                         columnIndex = GridPane.getColumnIndex(taskBlock);
 
                         //get the rectangle's color
@@ -129,45 +164,49 @@ public class ShowCalendarController{
                         //the clicked block is a free slot block
                         System.out.println("Free slot clicked: " + blockTitle);
                         System.out.println("Free slot color: " + blockColor);
-                        //TODO: add a view for the free slot
+
+                        //get the date of the clicked block
+                        LocalDate clickedDate = currentWeekStartDate.plusDays(columnIndex-1);
+
+                        //get the start time of the clicked block
+
+                        //find the free slot
+                        FreeSlotSchema freeSlot = HelloApplication.freeSlotModel.find(clickedDate, blockStartTime);
+
+                        showFreeSlotInfo(freeSlot);
 
                     }else{
-
                         //the clicked block is a task block
-                        System.out.println("Task clicked: " + blockTitle);
-                        System.out.println("Task color: " + blockColor);
+
+                        TaskSchema clickedTask = null;
 
                         //search for the task object
-                        TaskSchema task = HelloApplication.taskModel.find(currentWeekStartDate.plusDays(columnIndex -1), taskId);
 
-                        System.out.println("Task found: " + task.getName());
+                        //if the task is a subtask, search in the subtasks list of all decomposable tasks
+                        if(blockId == 0.1){
+                            //the task is a subtask ==> search in the subtasks list of all decomposable tasks
+                            ArrayList<TaskSchema> decomposedTasks = HelloApplication.taskModel.findAll("DecomposableTaskSchema");
 
-                        //load the task info view fxml file
-                        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("task-info-view.fxml"));
+                            for(TaskSchema task: decomposedTasks){
+                                DecomposableTaskSchema decomposableTask = (DecomposableTaskSchema) task;
+                                for(TaskSchema subTask: decomposableTask.getSubTasks()){
+                                    //check if the subtask's name is the same as the clicked block's title
+                                    if(subTask.getName().equals(blockTitle)){
+                                        clickedTask = subTask;
+                                        break;
+                                    }
+                                }
+                            }
+                        }else{
+                            //else, search in the tasks list of all simple tasks
+                            clickedTask = HelloApplication.taskModel.find(currentWeekStartDate.plusDays(columnIndex -1), (int) blockId);
+                        }
 
-                        //set a custom controller with arguments
-                        fxmlLoader.setControllerFactory(c -> new TaskInfoViewController(task));
-
-                        //initialize the data of the new view
-                        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-                        fxmlLoader.<TaskInfoViewController>getController().initData();
-
-                        //get the current stage
-                        Stage stage = (Stage) calendarGrid.getScene().getWindow();
-
-                        //center the view on the user's screen
-                        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-                        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
-                        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
-
-                        //set the new scene
-                        stage.setScene(scene);
+                        //load the task info view
+                        showTaskInfo(clickedTask);
 
                     }
 
-
-                }catch (TaskDoesNotExistException e) {
-                    System.out.println("Error loading task info view: " + e.getMessage());
                 }catch (Exception e){
                     e.printStackTrace();
                     System.out.println("Error while loading the task info view: "+e.getMessage());
@@ -213,6 +252,52 @@ public class ShowCalendarController{
 
         calendarGrid.setGridLinesVisible(true);
 
+    }
+    public void showTaskInfo(TaskSchema task) throws IOException {
+        //load the task info view fxml file
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("task-info-view.fxml"));
+
+        //set a custom controller with arguments
+        fxmlLoader.setControllerFactory(c -> new TaskInfoViewController(task));
+
+        //initialize the data of the new view
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        fxmlLoader.<TaskInfoViewController>getController().initData();
+
+        //get the current stage
+        Stage stage = (Stage) calendarGrid.getScene().getWindow();
+        stage.setTitle("Task info");
+
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+
+        //set the new scene
+        stage.setScene(scene);
+    }
+    public void showFreeSlotInfo(FreeSlotSchema freeslot) throws IOException{
+        //load the free slot info view fxml file
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("free-slot-info-view.fxml"));
+
+        //set a custom controller with arguments
+        fxmlLoader.setControllerFactory(c -> new FreeSlotInfoViewController(freeslot));
+
+        //initialize the data of the new view
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        fxmlLoader.<FreeSlotInfoViewController>getController().initData();
+
+        //get the current stage
+        Stage stage = (Stage) calendarGrid.getScene().getWindow();
+        stage.setTitle("Free slot info");
+
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+
+        //set the new scene
+        stage.setScene(scene);
     }
 
     public void moveToScheduleFreeSlotView() throws IOException{
@@ -271,8 +356,23 @@ public class ShowCalendarController{
 
         stage.setScene(scene);
     }
+    public void updateSettings() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("change-settings-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 650, 450);
+        Stage stage = (Stage) calendarGrid.getScene().getWindow();
+        stage.setTitle("Change settings");
 
-    //helper methods
+
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+
+        stage.setScene(scene);
+
+    }
+
+    //=========================================== HELPERS =============================================================//
     private StackPane createBlock(double width, Color color, String text, DayOfWeek day, LocalTime startTime, Duration duration){
         //create a rectangular background
         double blockHeight = duration.toMinutes() * minuteBlockHeight;
@@ -341,11 +441,13 @@ public class ShowCalendarController{
         try{
 
             //================ show the free slots of the current week ===========================//
+
             TreeMap<LocalDate, ArrayList<FreeSlotSchema>> weekFreeSlots = HelloApplication.freeSlotModel.findMany(currentWeekStartDate, currentWeekStartDate.plusDays(6));
             for(LocalDate day: weekFreeSlots.keySet()){
                 ArrayList<FreeSlotSchema> dayFreeSlotsList = weekFreeSlots.get(day);
                 for(FreeSlotSchema freeSlot: dayFreeSlotsList){
                     StackPane freeSlotBlock = createBlock(70, freeSlotColor, "Free Slot", freeSlot.getDate().getDayOfWeek(), freeSlot.getStartTime(), freeSlot.getDuration());
+                    freeSlotBlock.setId("subtask"); //just to say it's not a task
                     calendarGrid.getChildren().add(freeSlotBlock);
                 }
             }
@@ -363,26 +465,33 @@ public class ShowCalendarController{
 
                 // create blocks for the tasks
                 for(TaskSchema task: dayTasksList){
-                    Color taskColor = null;
-
-                    //check if the task has a category
-                    if(Objects.equals(task.getCategory(), "")){
-                        taskColor = this.defaultTaskColor;
-                    }else{
-                        try{
-                            taskColor = HelloApplication.categoryModel.getCategoryColor(task.getCategory());
-                        }catch (Exception e){
-                            taskColor = this.defaultTaskColor;
-                        }
+                    if(task instanceof DecomposableTaskSchema){
+                        //task is decomposable, skip it because it will be displayed later
+                        continue;
                     }
 
-                    StackPane taskBlock = createBlock(70, taskColor, task.getName(), task.getDate().getDayOfWeek(), task.getStartTime(), task.getDuration());
-                    taskBlock.setId(String.valueOf(task.getId()));
-                    calendarGrid.getChildren().add(taskBlock);
+                    //task is not decomposable, so it's simple
+                    displayTask(task, false); //false because it's not a subtask
 
                 }
             }
 
+            //================ search for decomposed tasks that have sub tasks in the current week ================================//
+            ArrayList<TaskSchema> decomposedTasks = HelloApplication.taskModel.findAll("DecomposableTaskSchema");
+
+            for(TaskSchema task: decomposedTasks){
+                DecomposableTaskSchema decomposableTask = (DecomposableTaskSchema) task;
+                for(TaskSchema subTask: decomposableTask.getSubTasks()){
+                    //task is decomposable, so it has subtasks
+
+                    //check if the subtask's date is in the current week
+                    if(subTask.getDate().isBefore(currentWeekStartDate) || subTask.getDate().isAfter(currentWeekStartDate.plusDays(6))){
+                        continue;
+                    }
+
+                    displayTask(subTask, true); //true because it's a subtask
+                }
+            }
 
         }catch (Exception e){
 
@@ -391,5 +500,32 @@ public class ShowCalendarController{
 
     private static void setCurrentWeekStartDate(LocalDate currentWeekStartDate) {
         ShowCalendarController.currentWeekStartDate = currentWeekStartDate;
+    }
+    private void displayTask(TaskSchema task, boolean isSubTask){
+        //task is not decomposable, so it's simple
+        Color taskColor = null;
+
+        //check if the task has a category
+        if(Objects.equals(task.getCategory(), "")){
+            taskColor = this.defaultTaskColor;
+        }else{
+            try{
+                taskColor = HelloApplication.categoryModel.find(task.getCategory()).getColor();
+            }catch (Exception e){
+                taskColor = this.defaultTaskColor;
+            }
+        }
+
+        StackPane taskBlock = createBlock(70, taskColor, task.getName(), task.getDate().getDayOfWeek(), task.getStartTime(), task.getDuration());
+
+        //if the task is a subtask, set the id of the task block to "subtask"
+        if(isSubTask){
+            taskBlock.setId("subtask");
+        }else{
+            //set the id of the task block to the id of the task
+            taskBlock.setId(String.valueOf(task.getId()));
+        }
+
+        calendarGrid.getChildren().add(taskBlock);
     }
 }

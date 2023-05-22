@@ -31,4 +31,5 @@ module esi.tp_poo_final {
     exports Controllers.UserControllers;
 
     exports Exceptions;
+    exports Controllers.FreeSlotControllers;
 }
