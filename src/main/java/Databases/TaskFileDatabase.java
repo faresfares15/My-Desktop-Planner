@@ -45,6 +45,14 @@ public class TaskFileDatabase implements TaskDatabase{
 
         return taskSchema;
     }
+    public TaskSchema find(int id) throws TaskDoesNotExistException{
+        for (LocalDate date: tasksMap.keySet()) {
+            for (TaskSchema taskSchema: tasksMap.get(date)) {
+                if (taskSchema.getId() == id) return taskSchema;
+            }
+        }
+        throw new TaskDoesNotExistException();
+    }
 
     @Override
     public TaskSchema read(int id, LocalDate date) throws TaskDoesNotExistException {
@@ -124,5 +132,10 @@ public class TaskFileDatabase implements TaskDatabase{
         }
 
         return resultMap;
+    }
+
+    @Override
+    public TreeMap<LocalDate, ArrayList<TaskSchema>> findAll() {
+        return tasksMap;
     }
 }

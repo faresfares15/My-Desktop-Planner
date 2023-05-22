@@ -1,36 +1,48 @@
 package Models.Day;
 
-import Models.Task.TaskSchema;
-import Models.FreeSlot.FreeSlotSchema;
-
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class DaySchema implements Comparable<DaySchema>, Serializable {
     private LocalDate date;
-    private int tasksCompletedOnThisDay;
+    private int numberOfTasksCompletedOnThisDay;
     private boolean wasCongratulatedToday;
+    private boolean receivedBadgeToday;
 
     public DaySchema(LocalDate date) {
         this.date = date;
-        this.tasksCompletedOnThisDay = 0;
+        this.numberOfTasksCompletedOnThisDay = 0;
         this.wasCongratulatedToday = false;
+        this.receivedBadgeToday = false;
     }
     public DaySchema(){
         this.date = LocalDate.now();
+        this.numberOfTasksCompletedOnThisDay = 0;
+        this.wasCongratulatedToday = false;
+        this.receivedBadgeToday = false;
     }
 
     public DaySchema(int year, int month, int day){
         this.date = LocalDate.of(year, month, day);
+        this.numberOfTasksCompletedOnThisDay = 0;
+        this.wasCongratulatedToday = false;
+        this.receivedBadgeToday = false;
     }
 
-    public int getTasksCompletedOnThisDay() {
-        return tasksCompletedOnThisDay;
+    public boolean isReceivedBadgeToday() {
+        return receivedBadgeToday;
     }
 
-    public void setTasksCompletedOnThisDay(int tasksCompletedOnThisDay) {
-        this.tasksCompletedOnThisDay = tasksCompletedOnThisDay;
+    public void setReceivedBadgeToday(boolean receivedBadgeToday) {
+        this.receivedBadgeToday = receivedBadgeToday;
+    }
+
+    public int getNumberOfTasksCompletedOnThisDay() {
+        return numberOfTasksCompletedOnThisDay;
+    }
+
+    public void setNumberOfTasksCompletedOnThisDay(int tasksCompletedOnThisDay) {
+        this.numberOfTasksCompletedOnThisDay = tasksCompletedOnThisDay;
     }
 
     public LocalDate getDate() {

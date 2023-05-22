@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@general.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TaskControllers.TaskInfoViewController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@general.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.TaskControllers.TaskInfoViewController">
    <children>
       <ScrollPane layoutX="155.0" layoutY="63.0" prefHeight="274.0" prefWidth="290.0">
          <content>
@@ -55,5 +50,6 @@
       <Button layoutX="474.0" layoutY="106.0" mnemonicParsing="false" onAction="#addTaskToProject" text="Add to project" />
       <Button layoutX="475.0" layoutY="200.0" mnemonicParsing="false" onAction="#changeTaskName" text="Change name" />
       <Button layoutX="473.0" layoutY="152.0" mnemonicParsing="false" onAction="#addTaskToCategory" text="Add to category" />
+      <Button mnemonicParsing="false" text="Button" />
    </children>
 </AnchorPane>

@@ -11,8 +11,12 @@ public class UserSchema implements Comparable<UserSchema>, Serializable {
     private String password;
     private LocalDate mostProductiveDate;
     private int mostTasksCompletedInADay;
-    private int congratsReceivedInARow;
-    private boolean wasCongratulatedToday;
+    private int mostCongratsReceivedInARow;
+    private int congratsInARowCounter;
+    private int totalCongratsReceived;
+    private int numberOfGoodBadges;
+    private int numberOfVeryGoodBadges;
+    private int numberOfExcellentBadges;
     private Settings settings;
 //    private String email;
 
@@ -23,33 +27,80 @@ public class UserSchema implements Comparable<UserSchema>, Serializable {
 //        this.email = email;
 //    }
 
-    public int getCongratsReceivedInARow() {
-        return congratsReceivedInARow;
+    public int getMostCongratsReceivedInARow() {
+        return mostCongratsReceivedInARow;
     }
 
-    public void setCongratsReceivedInARow(int congratsReceivedInARow) {
-        this.congratsReceivedInARow = congratsReceivedInARow;
+    public void setMostCongratsReceivedInARow(int mostCongratsReceivedInARow) {
+        this.mostCongratsReceivedInARow = mostCongratsReceivedInARow;
     }
 
-    public boolean isWasCongratulatedToday() {
-        return wasCongratulatedToday;
-    }
 
-    public void setWasCongratulatedToday(boolean wasCongratulatedToday) {
-        this.wasCongratulatedToday = wasCongratulatedToday;
-    }
 
     public UserSchema(String username, String password) {
         this.username = username;
         this.password = password;
         this.settings = new Settings();
-        this.mostProductiveDate = null; //TODO: in the view gotta put a placeHolder when it's null meaning it's a new user
+        this.mostProductiveDate = LocalDate.now(); //TODO: in the view gotta put a placeHolder when it's null meaning it's a new user
         this.mostTasksCompletedInADay = 0;
-        this.wasCongratulatedToday = false;
-        this.congratsReceivedInARow = 0;
+        this.congratsInARowCounter = 0;
+        this.mostCongratsReceivedInARow = 0;
+        this.totalCongratsReceived = 0;
+        this.numberOfGoodBadges = 0;
+        this.numberOfVeryGoodBadges = 0;
+        this.numberOfExcellentBadges = 0;
     }
 
     public UserSchema() {
+        this.settings = new Settings();
+        this.mostProductiveDate = LocalDate.now(); //TODO: in the view gotta put a placeHolder when it's null meaning it's a new user
+        this.mostTasksCompletedInADay = 0;
+        this.congratsInARowCounter = 0;
+        this.mostCongratsReceivedInARow = 0;
+        this.totalCongratsReceived = 0;
+        this.numberOfGoodBadges = 0;
+        this.numberOfVeryGoodBadges = 0;
+        this.numberOfExcellentBadges = 0;
+    }
+
+    public int getNumberOfGoodBadges() {
+        return numberOfGoodBadges;
+    }
+
+    public void setNumberOfGoodBadges(int numberOfGoodBadges) {
+        this.numberOfGoodBadges = numberOfGoodBadges;
+    }
+
+    public int getNumberOfVeryGoodBadges() {
+        return numberOfVeryGoodBadges;
+    }
+
+    public void setNumberOfVeryGoodBadges(int numberOfVeryGoodBadges) {
+        this.numberOfVeryGoodBadges = numberOfVeryGoodBadges;
+    }
+
+    public int getNumberOfExcellentBadges() {
+        return numberOfExcellentBadges;
+    }
+
+    public void setNumberOfExcellentBadges(int numberOfExcellentBadges) {
+        this.numberOfExcellentBadges = numberOfExcellentBadges;
+    }
+
+    public int getCongratsInARowCounter() {
+        return congratsInARowCounter;
+    }
+
+    public void setCongratsInARowCounter(int congratsInARowCounter) {
+        this.congratsInARowCounter = congratsInARowCounter;
+    }
+
+    public int getTotalCongratsReceived() {
+        return totalCongratsReceived;
+    }
+
+    public void setTotalCongratsReceived(int totalCongratsReceived) {
+        this.totalCongratsReceived = totalCongratsReceived;
     }
 
     public String getUsername() {

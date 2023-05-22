@@ -15,7 +15,7 @@ public class SimpleTaskSchema extends TaskSchema{
     }
     @Override
     public double getProgressPercentage() {
-        return (double) this.getProgress().ordinal() / (Progress.values().length -1 );
+        return this.getProgress().pourcentage;
     }
 
     public SimpleTaskSchema(String name, Duration duration, Priority priority, LocalDate deadline, TaskStatus status, int periodicity){

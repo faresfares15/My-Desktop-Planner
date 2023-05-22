@@ -5,6 +5,7 @@ import Databases.TaskFileDatabase;
 import Exceptions.DayDoesNotHaveTasksException;
 import Exceptions.TaskDoesNotExistException;
 import esi.tp_poo_final.HelloApplication;
+import javafx.concurrent.Task;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -50,6 +51,12 @@ public class TaskModel {
     }
     public TaskSchema find(LocalDate date, int id) throws TaskDoesNotExistException {
         return this.taskDatabase.find(date, id);
+    }
+    public TaskSchema find(int id) throws TaskDoesNotExistException{
+        return this.taskDatabase.find(id);
+    }
+    public TreeMap<LocalDate, ArrayList<TaskSchema>> findAll(){
+        this.taskDatabase.findAll();
     }
     public ArrayList<TaskSchema> findAll(String taskType){
         return this.taskDatabase.findAll(taskType);

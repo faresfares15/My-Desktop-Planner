@@ -38,25 +38,29 @@ public class SetTaskAsCompletedController implements EventHandler<ActionEvent> {
         }
         //add the tasks the taskCompltedInADay count
         DaySchema day = dayModel.find(task.getDate());
-        day.setTasksCompletedOnThisDay(day.getTasksCompletedOnThisDay()+1);
+        day.setNumberOfTasksCompletedOnThisDay(day.getNumberOfTasksCompletedOnThisDay()+1);
         //Compare with the bestDayOfTheUser
         try {
             UserSchema currentUser = userModel.find(HelloApplication.currentUserName);
 
-            if(day.getTasksCompletedOnThisDay() > currentUser.getMostTasksCompletedInADay()){
-                currentUser.setMostTasksCompletedInADay(day.getTasksCompletedOnThisDay());
+            if(day.getNumberOfTasksCompletedOnThisDay() > currentUser.getMostTasksCompletedInADay()){
+                currentUser.setMostTasksCompletedInADay(day.getNumberOfTasksCompletedOnThisDay());
                 currentUser.setMostProductiveDate(day.getDate());
             }
-            if (day.getTasksCompletedOnThisDay() >= currentUser.getSettings().getMinimalNumberOfTasksPerDay() && !day.isWasCongratulatedToday()){
+            if (day.getNumberOfTasksCompletedOnThisDay() >= currentUser.getSettings().getMinimalNumberOfTasksPerDay() && !day.isWasCongratulatedToday()){
                 day.setWasCongratulatedToday(true);
-                currentUser.setCongratsReceivedInARow(currentUser.getCongratsReceivedInARow()+1);
-                showSuccessMessage("Congratulations, you have completed "+day.getTasksCompletedOnThisDay()+" tasks today, keep up the good work!");
+                currentUser.setMostCongratsReceivedInARow(currentUser.getMostCongratsReceivedInARow()+1);
+                showSuccessMessage("Congratulations, you have completed "+day.getNumberOfTasksCompletedOnThisDay()+" tasks today, keep up the good work!");
             }
 
 
         } catch (UserDoesNotExistException e) {
             showErrorMessage("No user is logged, the changes won't be saved");
         }
+
+        //Evaluating the progress of the day
+
+
 
     }
     private void showErrorMessage(String message){
