@@ -32,7 +32,7 @@ public class UserModel {
         return this.userDataBase.create(userSchema);
     }
     public UserSchema create(String username, String password) throws UniqueUsernameViolationException {
-        return this.userDataBase.create(new UserSchema(username, password));
+        return this.userDataBase.create(username, password);
     }
     public UserSchema find(String username) throws UserDoesNotExistException{
         return this.userDataBase.find(username);

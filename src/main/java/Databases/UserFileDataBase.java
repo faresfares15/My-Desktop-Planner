@@ -17,9 +17,19 @@ public class UserFileDataBase implements UserDataBase, Serializable {
     }
 
     //CRUD operations implementation using an MVC architecture
-    public UserSchema create(UserSchema userSchema) throws UniqueUsernameViolationException {
-        if (users.containsKey(userSchema.getUsername())) throw new UniqueUsernameViolationException();
-        return users.put(userSchema.getUsername(), userSchema);
+    public UserSchema create(UserSchema newUser) throws UniqueUsernameViolationException {
+        if (users.containsKey(newUser.getUsername())) throw new UniqueUsernameViolationException();
+        users.put(newUser.getUsername(), newUser);
+        return  newUser;
+    }
+    public UserSchema create(String username, String password) throws UniqueUsernameViolationException {
+        //check if the user already exists
+        if (users.containsKey(username)) throw new UniqueUsernameViolationException();
+
+        //create the new user
+        UserSchema newUser = new UserSchema(username, password);
+        users.put(username, newUser);
+        return newUser;
     }
 
     public UserSchema find(String username) throws UserDoesNotExistException {

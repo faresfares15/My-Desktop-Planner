@@ -14,10 +14,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalTime;
 
 public class ChangeSettingsController{
-
     @FXML
     Spinner<Integer> minDurationHoursSpinner;
     @FXML

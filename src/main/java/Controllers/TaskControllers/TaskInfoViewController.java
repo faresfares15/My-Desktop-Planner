@@ -99,7 +99,9 @@ public class TaskInfoViewController {
             projectName.setText("No project");
             e.printStackTrace();
         }
-//        status.setText(task.getStatus().toString());
+
+        //set the task status
+        status.setText(task.getStatus().toString());
 
         //set the task progress
         progress.setText(task.getProgress().toString());

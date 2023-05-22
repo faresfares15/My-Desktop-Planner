@@ -75,7 +75,7 @@ public class SetTaskProgressController {
             }
         }
 
-        //add the tasks the taskCompltedInADay count
+        //add the tasks the taskCompletedInADay count
         DaySchema day = dayModel.find(task.getDate());
         day.setNumberOfTasksCompletedOnThisDay(day.getNumberOfTasksCompletedOnThisDay()+1);
         //Compare with the bestDayOfTheUser

@@ -50,8 +50,9 @@ public class HelloApplication extends Application {
 
         //trash code
         try{
-            userModel.create("user", "user");
-            currentUserName = "user";
+            UserSchema newUser = userModel.create("user", "user");
+            currentUserName = newUser.getUsername();
+            currentUserSettings = newUser.getSettings();
 
             categoryModel.create("Work", Color.WHEAT);
             categoryModel.create("Personal", Color.LIGHTBLUE);
@@ -66,8 +67,8 @@ public class HelloApplication extends Application {
 
         taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(8), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task21", LocalTime.of(1, 0), Duration.ofHours(3), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task22", LocalTime.of(5, 0), Duration.ofHours(2), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task23", LocalTime.of(8, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(3), "task22", LocalTime.of(5, 0), Duration.ofHours(2), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(3), "task23", LocalTime.of(8, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task24", LocalTime.of(10, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task25", LocalTime.of(12, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task26", LocalTime.of(14, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
