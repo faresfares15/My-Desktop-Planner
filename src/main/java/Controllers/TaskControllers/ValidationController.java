@@ -3,6 +3,7 @@ package Controllers.TaskControllers;
 import Exceptions.DayDoesNotHaveFreeSlotsException;
 import Exceptions.FreeSlotNotFoundException;
 import Exceptions.ScheduleConfirmationException;
+import Models.Category.CategorySchema;
 import Models.FreeSlot.FreeSlotModel;
 import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.TaskModel;
@@ -15,6 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class ValidationController implements EventHandler<ActionEvent> {
@@ -44,6 +46,8 @@ public class ValidationController implements EventHandler<ActionEvent> {
     }
     public void validatePlanification(){
         for (TaskSchema task : preValidationMap.keySet()) {
+            task.getCategory().incrementTotalTasks();
+            task.getCategory().addDuration(task.getDuration());
             taskModel.create(task);
         }
         planningValidated = true;
@@ -88,6 +92,7 @@ public class ValidationController implements EventHandler<ActionEvent> {
                     freeSlotModel.create(freeSlot);
                 }
             }
+
         }
         planningValidated = false;
         declineButton.getScene().getWindow().hide();

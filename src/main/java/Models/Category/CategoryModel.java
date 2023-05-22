@@ -12,13 +12,14 @@ public class CategoryModel {
     public CategoryModel(CategoryDatabase categoryDatabase){
         this.categoryDatabase = categoryDatabase;
     }
-    public void create(String name, Color color) throws Exception {
+    public CategorySchema create(String name, Color color) throws Exception {
         //create the category
-        categoryDatabase.create(name, color);
+        return categoryDatabase.create(name, color);
+
     }
-    public void create(String name, Color color, Duration duration) throws Exception {
+    public CategorySchema create(String name, Color color, Duration duration) throws Exception {
         //create the category
-        categoryDatabase.create(name, color, duration);
+        return categoryDatabase.create(name, color, duration);
     }
     public CategorySchema find(String name) throws Exception {
         //find the category

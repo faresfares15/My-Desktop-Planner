@@ -3,6 +3,7 @@ package esi.tp_poo_final;
 import Databases.*;
 import Models.Calendar.Settings;
 import Models.Category.CategoryModel;
+import Models.Category.CategorySchema;
 import Models.Day.DayModel;
 import Models.FreeSlot.FreeSlotModel;
 import Models.FreeSlot.FreeSlotSchema;
@@ -45,17 +46,30 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
         //trash code
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(8), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task2", LocalTime.of(1, 0), Duration.ofHours(3), Priority.LOW, LocalDate.of(2023, 5, 17), "Work", TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        try{
+            categoryModel.create("Work", Color.WHEAT);
+            categoryModel.create("Personal", Color.LIGHTBLUE);
+            categoryModel.create("School", Color.LIGHTGREEN);
+            categoryModel.create("Sport", Color.LIGHTPINK);
+            categoryModel.create("", Color.TRANSPARENT);
+
+        }catch (Exception e){
+            //ignore
+            e.printStackTrace();
+        }
+
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(8), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task2", LocalTime.of(1, 0), Duration.ofHours(3), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
 
         //create a decomposed task
-        DecomposableTaskSchema decomposedTaskSchema = new DecomposableTaskSchema(new SimpleTaskSchema(LocalDate.now().plusDays(1), "sub1", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), "Work", TaskStatus.UNSCHEDULED, 0));
-        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(3), "sub2", LocalTime.of(10, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
-        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(5), "sub3", LocalTime.of(13, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
-        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(6), "sub4", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
-        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(9), "sub5", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), "", TaskStatus.UNSCHEDULED, 0));
+        DecomposableTaskSchema decomposedTaskSchema = new DecomposableTaskSchema(new SimpleTaskSchema(LocalDate.now().plusDays(1), "sub1", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(3), "sub2", LocalTime.of(10, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(5), "sub3", LocalTime.of(13, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(6), "sub4", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(9), "sub5", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
         taskModel.create(decomposedTaskSchema);
 
         //TODO: consider initilizing the free slots and tasks in the dataBase always when creating a new day
@@ -119,14 +133,6 @@ public class HelloApplication extends Application {
         taskModel.initialize(date);
         //end of trash code
 
-        try{
-            categoryModel.create("Work", Color.WHEAT);
-            categoryModel.create("Study", Color.CYAN);
-            categoryModel.create("Personal", Color.BEIGE);
-        }catch (Exception e){
-            //ignore
-            e.printStackTrace();
-        }
 
         System.setProperty("javafx.sg.warn", "true");
 

@@ -28,8 +28,8 @@ public class AddTaskToCategoryController {
     private TaskSchema task;
     public AddTaskToCategoryController(TaskSchema task){
         this.task = task;
-        if(!Objects.equals(task.getCategory(), "")){
-            this.currentCategoryName = task.getCategory();
+        if(!Objects.equals(task.getCategory().getName(), "")){
+            this.currentCategoryName = task.getCategory().getName();
         }
     }
     @FXML
@@ -63,7 +63,7 @@ public class AddTaskToCategoryController {
     }
     public void initData(){
         taskName.setText(task.getName());
-        currentCategoryName = task.getCategory();
+        currentCategoryName = task.getCategory().getName();
     }
 
     public void addTaskToCategory(){
@@ -79,10 +79,10 @@ public class AddTaskToCategoryController {
                 tasks.add(task);
 
                 //create a new category
-                HelloApplication.categoryModel.create(categoryName, color, task.getDuration());
+                CategorySchema categorySchema = HelloApplication.categoryModel.create(categoryName, color, task.getDuration());
 
                 //update the category name in the task
-                task.setCategory(categoryName);
+                task.setCategory(categorySchema);
 
                 setCurrentCategoryName(categoryName);
             }
@@ -95,7 +95,7 @@ public class AddTaskToCategoryController {
                 }
 
                 //remove the task duration from the previous category
-                CategorySchema oldCategory = HelloApplication.categoryModel.find(task.getCategory());
+                CategorySchema oldCategory = HelloApplication.categoryModel.find(task.getCategory().getName());
                 oldCategory.setTotalDuration(oldCategory.getTotalDuration().minus(task.getDuration()));
 
                 //add the task duration to the category
@@ -103,7 +103,7 @@ public class AddTaskToCategoryController {
                 category.setTotalDuration(category.getTotalDuration().plus(task.getDuration()));
 
                 //set the category name in the task
-                task.setCategory(categoryName);
+                task.setCategory(category);
 
                 //set the current category text
                 setCurrentCategoryName(categoryName);

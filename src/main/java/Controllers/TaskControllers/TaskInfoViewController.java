@@ -63,10 +63,10 @@ public class TaskInfoViewController {
         }
 
         //set the task category
-        if(Objects.equals(task.getCategory(), "")){
+        if(Objects.equals(task.getCategory().getName(), "")){
             category.setText("No category");
         }else{
-            category.setText(task.getCategory());
+            category.setText(task.getCategory().getName());
         }
 
         //set the task project name

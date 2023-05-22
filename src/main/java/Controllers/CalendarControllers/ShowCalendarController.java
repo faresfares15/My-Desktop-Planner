@@ -494,7 +494,7 @@ public class ShowCalendarController{
             }
 
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 
@@ -506,11 +506,11 @@ public class ShowCalendarController{
         Color taskColor = null;
 
         //check if the task has a category
-        if(Objects.equals(task.getCategory(), "")){
+        if(Objects.equals(task.getCategory().getName(), "")){
             taskColor = this.defaultTaskColor;
         }else{
             try{
-                taskColor = HelloApplication.categoryModel.find(task.getCategory()).getColor();
+                taskColor = HelloApplication.categoryModel.find(task.getCategory().getName()).getColor();
             }catch (Exception e){
                 taskColor = this.defaultTaskColor;
             }

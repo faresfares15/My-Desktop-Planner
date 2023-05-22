@@ -8,7 +8,8 @@ import java.util.TreeMap;
 public class CategorySchema implements Comparable<CategorySchema> {
     private String name;
     private Color color;
-    private Duration totalDuration;
+    private int totalTasks = 0;
+    private Duration totalDuration = Duration.ZERO;
     public CategorySchema(String name, Color color) {
         this.name = name;
         this.color = color;
@@ -37,6 +38,23 @@ public class CategorySchema implements Comparable<CategorySchema> {
 
     public void setTotalDuration(Duration totalDuration) {
         this.totalDuration = totalDuration;
+    }
+
+    public int getTotalTasks() {
+        return totalTasks;
+    }
+
+    public void setTotalTasks(int totalTasks) {
+        this.totalTasks = totalTasks;
+    }
+    public void incrementTotalTasks(){
+        this.totalTasks++;
+    }
+    public void decrementTotalTasks(){
+        this.totalTasks--;
+    }
+    public void addDuration(Duration duration){
+        this.totalDuration = this.totalDuration.plus(duration);
     }
 
     @Override
