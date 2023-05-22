@@ -59,10 +59,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
     @FXML
     ComboBox<String> category;
     @FXML
-    TextField newCategoryName;
-    @FXML
-    ColorPicker newCategoryColor;
-    @FXML
     Spinner<Integer> periodicitySpinner;
     @FXML
     CheckBox decomposeTaskCheckBox;
@@ -72,12 +68,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
     VBox tasksPanel;
 
     public PlanSetOfTasksController() {
-
-
-
-
-
-
 //        this.freeSlotModel.create(date, LocalTime.of(8, 0), LocalTime.of(13, 0));
     }
 
@@ -107,27 +97,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59, 0);
         valueFactory.setValue(0);
         durationMinutesSpinner.setValueFactory(valueFactory);
-
-        //setting the priority combo box
-        ObservableList<String> priorities = FXCollections.observableArrayList("LOW", "MEDIUM", "HIGH");
-        priorityComboBox.setValue("LOW");
-        priorityComboBox.setItems(priorities);
-
-        //setting the category combo box
-        ObservableList<String> categories = FXCollections.observableArrayList("Work", "Study", "Personal", "New category");
-        category.setValue("Work");
-        category.getItems().clear();
-        category.getItems().setAll(categories);
-        category.setOnAction(event -> {
-            // If the user has selected "New category," then make the category text field visible.
-            if (category.getValue().equals("New category")) {
-                newCategoryName.setVisible(true);
-                newCategoryColor.setVisible(true);
-            } else {
-                newCategoryName.setVisible(false);
-                newCategoryColor.setVisible(false);
-            }
-        });
 
         //set periodicity spinner
         valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0);
@@ -178,7 +147,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         String category = "";
         try{
             duration = viewInfos.getDuration();
-             category = viewInfos.getCategory();
         }catch (Exception e){
             showErrorMessage(e.getMessage());
             return;
@@ -939,11 +907,10 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         Duration duration;
         String priority = viewInfos.getPriority();
         LocalDate deadline = viewInfos.getDeadline();
-        String category = "";
         int periodicity = viewInfos.getPeriodicity();
+
         try{
-             duration = viewInfos.getDuration();
-            category = viewInfos.getCategory();
+            duration = viewInfos.getDuration();
         }catch (Exception e){
             showErrorMessage(e.getMessage());
             return;
@@ -992,24 +959,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
         public LocalDate getDeadline() {
             return deadlinePicker.getValue();
         }
-        public String getCategory() throws Exception{
-            String categoryName = category.getValue();
-            if (categoryName == null) throw new Exception("No category selected");
-            if(categoryName.equals("New category")){
-                categoryName = newCategoryName.getText();
-                if(categoryName.isBlank()) throw new Exception("No name provided for new category");
-                //check if the category already exists (from the list of the categories combobox)
-                for(String category : category.getItems()){
-                    if(category.equals(categoryName)) throw new Exception("Category already exists");
-                }
-            }
-
-            return categoryName;
-
-        }
-        public Color getCategoryColor(){
-            return newCategoryColor.getValue();
-        }
         public int getPeriodicity(){
             if (periodicitySpinner.getValue() == null) return 0;
             return periodicitySpinner.getValue();
@@ -1022,8 +971,6 @@ public class PlanSetOfTasksController implements EventHandler<ActionEvent> {
 
             priorityComboBox.setValue("LOW");
             deadlinePicker.setValue(LocalDate.now());
-//            category.setValue(null);
-            newCategoryName.clear();
             periodicitySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0));
             decomposeTaskCheckBox.setSelected(false);
         }

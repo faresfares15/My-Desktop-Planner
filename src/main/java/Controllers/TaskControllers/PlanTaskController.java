@@ -61,12 +61,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
     @FXML
     DatePicker datePicker;
     @FXML
-    ComboBox<String> category;
-    @FXML
-    TextField newCategoryName;
-    @FXML
-    ColorPicker newCategoryColor;
-    @FXML
     Spinner<Integer> periodicitySpinner;
     @FXML
     CheckBox decomposeTaskCheckBox;
@@ -118,28 +112,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         ObservableList<String> priorities = FXCollections.observableArrayList("LOW", "MEDIUM", "HIGH");
         priorityComboBox.setValue("LOW");
         priorityComboBox.setItems(priorities);
-
-        //setting the category combo box
-        ArrayList<String> categoriesNames = HelloApplication.categoryModel.getCategoriesNames();
-        ObservableList<String> categories = FXCollections.observableArrayList("");
-        categories.addAll(categoriesNames);
-        categories.add("New category");
-
-
-        category.setValue("");
-        category.getItems().clear();
-        category.getItems().setAll(categories);
-        category.setOnAction(event -> {
-            // If the user has selected "New category," then make the category text field visible.
-            if (category.getValue().equals("New category")) {
-                newCategoryName.setDisable(false);
-                newCategoryColor.setDisable(false);
-
-            } else {
-                newCategoryName.setDisable(true);
-                newCategoryColor.setDisable(true);
-            }
-        });
 
         //set periodicity spinner
         valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0);
@@ -1163,25 +1135,6 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         public LocalDate getDeadline() {
             return deadlinePicker.getValue();
         }
-
-        public String getCategoryName() throws Exception {
-            String categoryName = category.getValue();
-            if (categoryName == null) throw new Exception("No category selected");
-            if (categoryName.equals("New category")) {
-                categoryName = newCategoryName.getText();
-                if (categoryName.isBlank()) throw new Exception("No name provided for new category");
-                //check if the category already exists (from the list of the categories combobox)
-                for (String category : category.getItems()) {
-                    if (category.equals(categoryName)) throw new Exception("Category already exists");
-                }
-            }
-
-            return categoryName;
-        }
-        public Color getCategoryColor(){
-            return newCategoryColor.getValue();
-        }
-
     }
 
     private class LocalTimeWrapper {
