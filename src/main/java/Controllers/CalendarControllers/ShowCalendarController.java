@@ -5,6 +5,7 @@ import Controllers.ProjectControllers.ViewProjectsController;
 import Controllers.TaskControllers.TaskInfoViewController;
 import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.DecomposableTaskSchema;
+import Models.Task.SimpleTaskSchema;
 import Models.Task.TaskSchema;
 import esi.tp_poo_final.HelloApplication;
 import javafx.event.Event;
@@ -179,12 +180,14 @@ public class ShowCalendarController{
                         //the clicked block is a task block
 
                         TaskSchema clickedTask = null;
+                        boolean isSubtask = false;
 
                         //search for the task object
 
                         //if the task is a subtask, search in the subtasks list of all decomposable tasks
                         if(blockId == 0.1){
                             //the task is a subtask ==> search in the subtasks list of all decomposable tasks
+                            isSubtask = true;
                             ArrayList<TaskSchema> decomposedTasks = HelloApplication.taskModel.findAll("DecomposableTaskSchema");
 
                             for(TaskSchema task: decomposedTasks){
@@ -203,7 +206,7 @@ public class ShowCalendarController{
                         }
 
                         //load the task info view
-                        showTaskInfo(clickedTask);
+                        showTaskInfo(clickedTask, isSubtask);
 
                     }
 
@@ -253,12 +256,12 @@ public class ShowCalendarController{
         calendarGrid.setGridLinesVisible(true);
 
     }
-    public void showTaskInfo(TaskSchema task) throws IOException {
+    public void showTaskInfo(TaskSchema task, boolean isSubtask) throws IOException {
         //load the task info view fxml file
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("task-info-view.fxml"));
 
         //set a custom controller with arguments
-        fxmlLoader.setControllerFactory(c -> new TaskInfoViewController(task));
+        fxmlLoader.setControllerFactory(c -> new TaskInfoViewController(task, isSubtask));
 
         //initialize the data of the new view
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
@@ -481,15 +484,16 @@ public class ShowCalendarController{
 
             for(TaskSchema task: decomposedTasks){
                 DecomposableTaskSchema decomposableTask = (DecomposableTaskSchema) task;
-                for(TaskSchema subTask: decomposableTask.getSubTasks()){
+                ArrayList<SimpleTaskSchema> subTasks = decomposableTask.getSubTasks();
+                for(int i = 1; i < subTasks.size(); i++){
                     //task is decomposable, so it has subtasks
 
                     //check if the subtask's date is in the current week
-                    if(subTask.getDate().isBefore(currentWeekStartDate) || subTask.getDate().isAfter(currentWeekStartDate.plusDays(6))){
+                    if(subTasks.get(i).getDate().isBefore(currentWeekStartDate) || subTasks.get(i).getDate().isAfter(currentWeekStartDate.plusDays(6))){
                         continue;
                     }
 
-                    displayTask(subTask, true); //true because it's a subtask
+                    displayTask(subTasks.get(i), true); //true because it's a subtask
                 }
             }
 

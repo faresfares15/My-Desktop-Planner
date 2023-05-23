@@ -58,9 +58,6 @@ public class SetTaskAsCompletedController implements EventHandler<ActionEvent> {
         }
 
         //Evaluating the progress of the day
-
-
-
     }
     private void showErrorMessage(String message){
         Alert errorMessage = new Alert(Alert.AlertType.ERROR);

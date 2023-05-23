@@ -93,4 +93,16 @@ public class LoginController {
         errorMessage.setTitle("Error");
         errorMessage.showAndWait();
     }
+    public void moveToSignupView() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Stage stage = (Stage) userName.getScene().getWindow();
+        stage.setTitle("Login");
+
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+        stage.setScene(scene);
+    }
 }

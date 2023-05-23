@@ -20,7 +20,7 @@ public class UserFileDataBase implements UserDataBase, Serializable {
     public UserSchema create(UserSchema newUser) throws UniqueUsernameViolationException {
         if (users.containsKey(newUser.getUsername())) throw new UniqueUsernameViolationException();
         users.put(newUser.getUsername(), newUser);
-        return  newUser;
+        return newUser;
     }
     public UserSchema create(String username, String password) throws UniqueUsernameViolationException {
         //check if the user already exists

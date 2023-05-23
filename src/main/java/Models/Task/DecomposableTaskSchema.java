@@ -2,7 +2,6 @@ package Models.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class DecomposableTaskSchema extends TaskSchema {
     private ArrayList<SimpleTaskSchema> subTasks;

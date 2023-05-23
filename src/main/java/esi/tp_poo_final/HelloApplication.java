@@ -63,6 +63,12 @@ public class HelloApplication extends Application {
             e.printStackTrace();
         }
 
+        //create days from today to 30 days from now
+        for (int i = 0; i < 30; i++) {
+            dayModel.create(LocalDate.now().plusDays(i));
+        }
+
+        //create random simple tasks
         taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(8), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task21", LocalTime.of(1, 0), Duration.ofHours(3), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(3), "task22", LocalTime.of(5, 0), Duration.ofHours(2), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
@@ -73,11 +79,11 @@ public class HelloApplication extends Application {
         taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
 
         //create a decomposed task
-        DecomposableTaskSchema decomposedTaskSchema = new DecomposableTaskSchema(new SimpleTaskSchema(LocalDate.now().plusDays(1), "sub1", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(3), "sub2", LocalTime.of(10, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(5), "sub3", LocalTime.of(13, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(6), "sub4", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(9), "sub5", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        DecomposableTaskSchema decomposedTaskSchema = new DecomposableTaskSchema(new SimpleTaskSchema(LocalDate.now().plusDays(1), "sub", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(3), "sub1", LocalTime.of(10, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(5), "sub2", LocalTime.of(13, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(6), "sub3", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        decomposedTaskSchema.addSubTask(new SimpleTaskSchema(LocalDate.now().plusDays(9), "sub4", LocalTime.of(17, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
         taskModel.create(decomposedTaskSchema);
 
         //TODO: consider initilizing the free slots and tasks in the dataBase always when creating a new day
@@ -95,7 +101,6 @@ public class HelloApplication extends Application {
         freeSlotModel.create(freeSlots);
         taskModel.initialize(date);
 
-
         date = date.plusDays(1);
         freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
         freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
@@ -104,7 +109,6 @@ public class HelloApplication extends Application {
         dayModel.create(date);
         freeSlotModel.initialize(date);
         taskModel.initialize(date);
-
 
         date = date.plusDays(1);
         freeSlots = new ArrayList<>();
@@ -116,7 +120,6 @@ public class HelloApplication extends Application {
         dayModel.create(date);
         freeSlotModel.create(freeSlots);
         taskModel.initialize(date);
-
 
         date = date.plusDays(1);
         freeSlots = new ArrayList<>();
@@ -151,16 +154,15 @@ public class HelloApplication extends Application {
 //        Scene scene = new Scene(fxmlLoader.load(), 840, 400);
 //        primaryStage.setTitle("Login");
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-task-view.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup-view.fxml"));
+//        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 840, 500);
 //        primaryStage.setTitle("Plan Task");
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
 
         //get the controller from the view
 //        PlanTaskController planTaskController = fxmlLoader.getController();

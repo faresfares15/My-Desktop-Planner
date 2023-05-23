@@ -314,6 +314,12 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             }
         }
 
+        //create the day if it doesn't exist
+        if (dayModel.find(date) == null) {
+            dayModel.create(date);
+        }
+
+        //create the task
         SimpleTaskSchema simpleTask = null;
 
         //check the minimal duration condition
@@ -393,6 +399,11 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
             throw new ScheduleConfirmationException("Task schedule has been canceled");
         }
 
+        //create the day for the decomposable task if it doesn't exist
+        if (dayModel.find(date) == null) {
+            dayModel.create(date);
+        }
+
         //create a DecomposableTaskSchema object
         DecomposableTaskSchema decomposableTask = new DecomposableTaskSchema(new SimpleTaskSchema(subtasks.get(0).getDate(), name, subtasks.get(0).getStartTime(), subtasks.get(0).getDuration(),
                 Priority.valueOf(priority), deadline, TaskStatus.valueOf(status), 0));
@@ -400,10 +411,16 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         //add the subtasks to the DecomposableTaskSchema object
         boolean withConfirmation = false;
         for (SubTaskBlock subtask : subtasks) {
+
+            //create the day if it doesn't exist
+            if (dayModel.find(date) == null) {
+                dayModel.create(date);
+            }
+
+            //add the subtask to the decomposable task
             decomposableTask.addSubTask(planSimpleTaskManually(subtask.getDate(), name + (1 + subtasks.indexOf(subtask)), subtask.getStartTime(), subtask.getDuration(),
                     priority, deadline, status, 0, withConfirmation));
         }
-
     }
 
     private void planSimpleTaskAutomatically(DaySchema day, String name, Duration duration,
@@ -418,6 +435,7 @@ public class PlanTaskController implements EventHandler<ActionEvent> {
         if ((availableFreeSlot = getAvailableFreeSlot(duration, freeslots)) == null) {
             throw new SimpleTaskDoesNotFitException();
         }
+
         ArrayList<FreeSlotSchema> freeSlotList = new ArrayList<>();
 
         Duration minimalDuration = HelloApplication.currentUserSettings.getMinimalDuration();

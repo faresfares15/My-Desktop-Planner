@@ -39,19 +39,6 @@ public class SignUpController {
     private Button signUpButton;
 
     public void handle() throws IOException {
-        boolean successful = true;
-        //go to login page (view)
-//            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-//            fxmlLoader.setControllerFactory(c -> new LoginController());
-//            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-//            Stage stage = (Stage) userNameField.getScene().getWindow();
-//            stage.setTitle("Login");
-//
-//            //center the view on the user's screen
-//            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-//            stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
-//            stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
-//            stage.setScene(scene);
 
         String username = userNameField.getText();
         String password = passwordField.getText();
@@ -75,32 +62,21 @@ public class SignUpController {
                 new File(HelloApplication.usersDirectoryName + "/" + username + "/" + HelloApplication.dayDbFileName).createNewFile();
                 new File(HelloApplication.usersDirectoryName + "/" + username + "/" + HelloApplication.projectDbFileName).createNewFile();
 
-//                freeSlotModel.load();
-//                dayModel.load();
-//                projectModel.load();
-//                taskModel.load();
-
-
-
                 //Show the calendar view
 
                 FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
-//            fxmlLoader.setControllerFactory(c -> new LoginController());
-            Scene scene = new Scene(fxmlLoader.load(), 840, 400);
-            Stage stage = (Stage) userNameField.getScene().getWindow();
-            stage.setTitle("Calendar");
+                Scene scene = new Scene(fxmlLoader.load(), 840, 400);
+                Stage stage = (Stage) userNameField.getScene().getWindow();
+                stage.setTitle("Calendar");
 
-            //center the view on the user's screen
-            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-            stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
-            stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
-            stage.setScene(scene);
+                //center the view on the user's screen
+                Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+                stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+                stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+                stage.setScene(scene);
             } else {
                 throw new IOException("A problem occurred when creating the directory");
             }
-
-
-
 
         } catch (UniqueUsernameViolationException | UserNameNotProvidedException | PasswordNotProvidedException e) {
             System.out.println(e.getMessage());
@@ -123,5 +99,17 @@ public class SignUpController {
         errorMessage.setHeaderText("Error");
         errorMessage.setTitle("Error");
         errorMessage.showAndWait();
+    }
+    public void moveToLoginView() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Stage stage = (Stage) userNameField.getScene().getWindow();
+        stage.setTitle("Login");
+
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+        stage.setScene(scene);
     }
 }

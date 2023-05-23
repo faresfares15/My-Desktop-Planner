@@ -8,7 +8,6 @@ public class DaySchema implements Comparable<DaySchema>, Serializable {
     private int numberOfTasksCompletedOnThisDay;
     private boolean wasCongratulatedToday;
     private boolean receivedBadgeToday;
-
     public DaySchema(LocalDate date) {
         this.date = date;
         this.numberOfTasksCompletedOnThisDay = 0;
@@ -21,7 +20,6 @@ public class DaySchema implements Comparable<DaySchema>, Serializable {
         this.wasCongratulatedToday = false;
         this.receivedBadgeToday = false;
     }
-
     public DaySchema(int year, int month, int day){
         this.date = LocalDate.of(year, month, day);
         this.numberOfTasksCompletedOnThisDay = 0;
