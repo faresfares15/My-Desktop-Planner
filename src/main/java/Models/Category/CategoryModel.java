@@ -1,8 +1,13 @@
 package Models.Category;
 
 import Databases.CategoryDatabase;
+import Databases.CategoryFileDataBase;
+import Databases.ProjectFileDataBase;
+import Exceptions.CategoryDoesNotExistException;
+import esi.tp_poo_final.HelloApplication;
 import javafx.scene.paint.Color;
 
+import java.io.*;
 import java.time.Duration;
 import java.util.ArrayList;
 
@@ -11,6 +16,16 @@ public class CategoryModel {
     private CategoryDatabase categoryDatabase;
     public CategoryModel(CategoryDatabase categoryDatabase){
         this.categoryDatabase = categoryDatabase;
+    }
+    public void save() throws IOException {
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.categoryDbFileName));
+        objectOutputStream.writeObject(categoryDatabase);
+    }
+    public void load() throws IOException, ClassNotFoundException {
+        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(HelloApplication.usersDirectoryName
+                + "/" + HelloApplication.currentUserName + "/" + HelloApplication.categoryDbFileName));
+        categoryDatabase = (CategoryFileDataBase) objectInputStream.readObject();
     }
     public CategorySchema create(String name, Color color) throws Exception {
         //create the category
@@ -21,7 +36,7 @@ public class CategoryModel {
         //create the category
         return categoryDatabase.create(name, color, duration);
     }
-    public CategorySchema find(String name) throws Exception {
+    public CategorySchema find(String name) throws CategoryDoesNotExistException {
         //find the category
         return categoryDatabase.find(name);
     }

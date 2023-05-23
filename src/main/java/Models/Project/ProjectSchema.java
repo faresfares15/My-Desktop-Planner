@@ -10,7 +10,7 @@ public class ProjectSchema implements Serializable {
     private String name;
     private String description;
     private int id;
-    ArrayList<TaskSchema> tasksList;
+    ArrayList<TaskSchema> tasksList = new ArrayList<>();
     //TODO: update this list and the corresponding tasks in the dataBases everytime we do a modification on the tasks
 
     public ProjectSchema(String name, String description) {
@@ -47,10 +47,6 @@ public class ProjectSchema implements Serializable {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public int getId() {
         return id;
     }
@@ -58,22 +54,16 @@ public class ProjectSchema implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
-    public ArrayList<TaskSchema> getTasksList() {
-        return tasksList;
-    }
-
-    public void setTasksList(ArrayList<TaskSchema> tasksList) {
-        this.tasksList = tasksList;
-    }
     public double getProgressPercentage(){
         double total = 0;
         for (TaskSchema task: tasksList) {
             total += task.getProgressPercentage();
         }
-        return total/tasksList.size();
+        return tasksList.size() == 0 ? 0 :  ( total/tasksList.size() ) * 100;
     }
-
+    public int getTotalTasks(){
+        return tasksList.size();
+    }
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

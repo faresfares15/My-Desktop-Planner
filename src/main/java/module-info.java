@@ -10,7 +10,6 @@ module esi.tp_poo_final {
     opens Controllers.ProjectControllers to javafx.fxml;
     opens Controllers.CategoryControllers to javafx.fxml;
 
-    exports Controllers.CategoryControllers to javafx.fxml;
     exports esi.tp_poo_final;
 
     //Exporting models
@@ -32,4 +31,5 @@ module esi.tp_poo_final {
 
     exports Exceptions;
     exports Controllers.FreeSlotControllers;
+    exports Controllers.CategoryControllers;
 }

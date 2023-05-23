@@ -4,6 +4,7 @@ import Models.Project.ProjectSchema;
 import esi.tp_poo_final.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -23,6 +24,8 @@ public class ViewProjectsController {
     public void initData() {
         //clear the content of the container
         projectsContainer.getChildren().clear();
+        projectsContainer.setPadding(new Insets(10, 10, 10, 10));
+        projectsContainer.setSpacing(10);
 
         //get the projects from the database
         ArrayList<ProjectSchema> projects = HelloApplication.projectsModel.findAll();
@@ -39,14 +42,17 @@ public class ViewProjectsController {
             //create the texts objects
             Text projectName = new Text("Name: "+project.getName());
             Text projectDescription = new Text("Description: "+project.getDescription());
+            Text projectTotalTasks = new Text("Total tasks: "+project.getTotalTasks());
+            Text projectProgressPercentage = new Text("Progress percentage: "+project.getProgressPercentage()+"%");
             projectDescription.setWrappingWidth(230);
 
             //create the container for the texts
-            VBox projectContainer = new VBox(projectName, projectDescription);
+            VBox projectContainer = new VBox(projectName, projectDescription, projectTotalTasks, projectProgressPercentage);
 
             //add a bottom border for the container
             Border border = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1)));
             projectContainer.setBorder(border);
+            projectContainer.setPadding(new Insets(5, 5, 5, 5));
 
             //add the container to the scroll container
             projectsContainer.getChildren().add(projectContainer);
@@ -59,7 +65,7 @@ public class ViewProjectsController {
         Scene addTaskToProjectScene = new Scene(fxmlLoader.load());
 //        Scene addTaskToProjectScene = new Scene(fxmlLoader.load(), 600, 400);
         Stage addTaskToProjectStage = new Stage();
-        addTaskToProjectStage.setTitle("Validate Planning");
+        addTaskToProjectStage.setTitle("Create new project");
         addTaskToProjectStage.initModality(Modality.APPLICATION_MODAL);
         addTaskToProjectStage.initOwner(projectsContainer.getScene().getWindow());
         addTaskToProjectStage.setScene(addTaskToProjectScene);

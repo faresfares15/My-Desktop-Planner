@@ -1,6 +1,7 @@
 package Controllers.ProjectControllers;
 
 import Exceptions.ProjectDoesNotExistException;
+import Utils.Popups;
 import esi.tp_poo_final.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -30,7 +31,7 @@ public class CreateNewProjectController {
                 //do nothing
             }
             catch (Exception e){
-                showErrorMessage("Error", e.getMessage());
+                Popups.showErrorMessage("Error", e.getMessage());
                 return;
             }
 
@@ -38,13 +39,13 @@ public class CreateNewProjectController {
             HelloApplication.projectsModel.create(name, description, new ArrayList<>());
 
             //show success message
-            showSuccessMessage("Success", "Project created successfully");
+            Popups.showSuccessMessage("Success", "Project created successfully");
 
             //close the window
             quit();
         } catch (Exception e) {
             //show an error message
-            showErrorMessage("Error", e.getMessage());
+            Popups.showErrorMessage("Error", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -69,19 +70,5 @@ public class CreateNewProjectController {
 
     private void quit(){
         projectName.getScene().getWindow().hide();
-    }
-    private void showSuccessMessage(String title, String message) {
-        Alert successMessage = new Alert(Alert.AlertType.INFORMATION);
-        successMessage.setContentText(message);
-        successMessage.setHeaderText(title);
-        successMessage.setTitle(title);
-        successMessage.showAndWait();
-    }
-    private void showErrorMessage(String title, String message){
-        Alert errorMessage = new Alert(Alert.AlertType.ERROR);
-        errorMessage.setContentText(message);
-        errorMessage.setHeaderText(title);
-        errorMessage.setTitle(title);
-        errorMessage.showAndWait();
     }
 }

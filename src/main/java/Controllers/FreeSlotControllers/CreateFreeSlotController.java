@@ -166,7 +166,7 @@ public class CreateFreeSlotController {
 
     public void moveToCalendarView() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 840, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 840, 500);
         Stage stage = (Stage) viewTitle.getScene().getWindow();
         stage.setTitle("Calendar");
 

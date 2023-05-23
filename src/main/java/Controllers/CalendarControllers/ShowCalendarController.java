@@ -1,11 +1,15 @@
 package Controllers.CalendarControllers;
 
+import Controllers.CategoryControllers.ViewCategoryController;
 import Controllers.FreeSlotControllers.FreeSlotInfoViewController;
 import Controllers.ProjectControllers.ViewProjectsController;
 import Controllers.TaskControllers.TaskInfoViewController;
 import Controllers.UserControllers.StatisticsController;
+import Databases.UserDoesNotExistException;
+import Models.Day.DaySchema;
 import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.DecomposableTaskSchema;
+import Models.Task.Progress;
 import Models.Task.SimpleTaskSchema;
 import Models.Task.TaskSchema;
 import esi.tp_poo_final.HelloApplication;
@@ -17,6 +21,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
@@ -375,15 +380,40 @@ public class ShowCalendarController{
 
         stage.setScene(scene);
     }
+    public void viewCategories() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view-categories-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Stage stage = (Stage) calendarGrid.getScene().getWindow();
+        stage.setTitle("Categories");
+
+        ViewCategoryController viewCategoryController = fxmlLoader.getController();
+        viewCategoryController.initData();
+
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+
+        stage.setScene(scene);
+    }
     public void viewStatistics() throws IOException{
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("statistics-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 500);
+
+        fxmlLoader.setControllerFactory(c -> {
+            try {
+                return new StatisticsController(HelloApplication.userModel.find(HelloApplication.currentUserName));
+            } catch (UserDoesNotExistException e) {
+                throw new RuntimeException(e); //code suggested by the IDE
+            }
+        });
+
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         Stage stage = (Stage) calendarGrid.getScene().getWindow();
         stage.setTitle("Statistics");
 
-        StatisticsController viewProjectsController = fxmlLoader.getController();
-        viewProjectsController.initData();
+        StatisticsController statisticsController = fxmlLoader.getController();
+        statisticsController.initData();
 
         //center the view on the user's screen
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
@@ -447,6 +477,17 @@ public class ShowCalendarController{
             dayBlock.setAlignment(Pos.CENTER);
             GridPane.setColumnIndex(dayBlock, day + 1);
             calendarGrid.getChildren().add(dayBlock); //add the label to the grid
+
+            //set an event on dayBlock click to show stats for that day
+            dayBlock.setOnMouseClicked(event -> {
+                try {
+                    //get the date of the day clicked
+                    LocalDate date = currentWeekStartDate.plusDays(GridPane.getColumnIndex(dayBlock)-1);
+                    showDayStats(date);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }
 
         //Add rectangles for time slots
@@ -520,7 +561,17 @@ public class ShowCalendarController{
             e.printStackTrace();
         }
     }
+    private void showDayStats(LocalDate date){
+        //get the day schema
+        DaySchema day = HelloApplication.dayModel.find(date);
 
+        //display the stats
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Day Stats");
+        alert.setHeaderText("Day Stats");
+        alert.setContentText("Total tasks completed in this day: " + day.getNumberOfTasksCompletedOnThisDay());
+        alert.showAndWait();
+    }
     private static void setCurrentWeekStartDate(LocalDate currentWeekStartDate) {
         ShowCalendarController.currentWeekStartDate = currentWeekStartDate;
     }
@@ -540,6 +591,9 @@ public class ShowCalendarController{
         }
 
         StackPane taskBlock = createBlock(70, taskColor, task.getName(), task.getDate().getDayOfWeek(), task.getStartTime(), task.getDuration());
+        if(task.getProgress() == Progress.COMPLETED){
+            taskBlock = createBlock(70, taskColor, task.getName()+"\n(c)", task.getDate().getDayOfWeek(), task.getStartTime(), task.getDuration());
+        }
 
         //if the task is a subtask, set the id of the task block to "subtask"
         if(isSubTask){

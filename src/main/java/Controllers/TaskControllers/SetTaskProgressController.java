@@ -16,7 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.time.LocalDate;
 
 public class SetTaskProgressController {
@@ -61,11 +60,10 @@ public class SetTaskProgressController {
         currentProgressName = newProgress.toString();
 
         //update the task's progress
-        switch (newProgress.toString()){
-            case "COMPLETED":
-                markTaskAsComplete();
-                break;
+        if (newProgress.toString().equals("COMPLETED")) {
+            markTaskAsComplete();
         }
+
         task.setProgress(newProgress);
 
         //close the window
@@ -74,7 +72,6 @@ public class SetTaskProgressController {
     private void markTaskAsComplete(){
         //Fetch the task from the database and set its progress to completed
         task.setProgress(Progress.COMPLETED);
-        //TODO: set the value of isSubtask from the viewInfo
 
         //add the tasks the taskCompletedInADay count
         DaySchema day = dayModel.find(task.getDate());
@@ -91,8 +88,8 @@ public class SetTaskProgressController {
                 day.setWasCongratulatedToday(true);
                 currentUser.setTotalCongratsReceived(currentUser.getTotalCongratsReceived() + 1);
                 showSuccessMessage("Congratulations, you have completed the minimal number of tasks per day");
-
             }
+
             if (day.getNumberOfTasksCompletedOnThisDay() > currentUser.getMostTasksCompletedInADay()) {
                 showSuccessMessage("Congrats you just surpassed your best day!, you have completed " + day.getNumberOfTasksCompletedOnThisDay() + " tasks today, keep up the good work!");
                 currentUser.setMostTasksCompletedInADay(day.getNumberOfTasksCompletedOnThisDay());
@@ -159,11 +156,9 @@ public class SetTaskProgressController {
             return Progress.valueOf(progressesList.getValue());
         }
     }
-
     public String getCurrentProgressName() {
         return currentProgressName;
     }
-
     private void showErrorMessage(String message){
         Alert errorMessage = new Alert(Alert.AlertType.ERROR);
         errorMessage.setContentText(message);

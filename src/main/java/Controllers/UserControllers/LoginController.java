@@ -1,12 +1,12 @@
 package Controllers.UserControllers;
 
-import Databases.UniqueUsernameViolationException;
 import Databases.UserDoesNotExistException;
 import Exceptions.PasswordNotProvidedException;
 import Exceptions.UserNameNotProvidedException;
 import Exceptions.WrongPasswordException;
 import Models.User.UserModel;
 import Models.User.UserSchema;
+import Utils.Popups;
 import esi.tp_poo_final.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -31,21 +32,6 @@ public class LoginController {
     Button loginButton;
 
     public void handle() throws IOException {
-        boolean successful = false;
-
-        //go to calendar page (view)
-//            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
-//            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("plan-task-view.fxml"));
-////            fxmlLoader.setControllerFactory(c -> new ...());
-//            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-//            Stage stage = (Stage) userName.getScene().getWindow();
-//            stage.setTitle("Calendar");
-//
-//            //center the view on the user's screen
-//            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-//            stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
-//            stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
-//            stage.setScene(scene);
 
         String username = this.userName.getText();
         String password = this.password.getText();
@@ -64,11 +50,12 @@ public class LoginController {
             HelloApplication.dayModel.load();
             HelloApplication.freeSlotModel.load();
             HelloApplication.projectsModel.load();
+            HelloApplication.categoryModel.load();
             System.out.println("Logged in successfully");
 
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
 //            fxmlLoader.setControllerFactory(c -> new LoginController());
-            Scene scene = new Scene(fxmlLoader.load(), 840, 400);
+            Scene scene = new Scene(fxmlLoader.load(), 840, 500);
             Stage stage = (Stage) userName.getScene().getWindow();
             stage.setTitle("Calendar");
 
@@ -80,10 +67,10 @@ public class LoginController {
 
         } catch (PasswordNotProvidedException | UserNameNotProvidedException | UserDoesNotExistException | WrongPasswordException e) {
             System.out.println(e.getMessage());
-            showErrorMessage(e.getMessage());
+            Popups.showErrorMessage(e.getMessage());
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
-            showErrorMessage("An error has occurred while loading the files");
+            Popups.showErrorMessage("An error has occurred while loading the files");
         }
     }
     private void showErrorMessage(String message) {

@@ -10,6 +10,7 @@ import Models.FreeSlot.FreeSlotModel;
 import Models.Project.ProjectModel;
 import Models.Task.TaskModel;
 import Models.User.UserModel;
+import Utils.Popups;
 import esi.tp_poo_final.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,7 +66,7 @@ public class SignUpController {
                 //Show the calendar view
 
                 FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
-                Scene scene = new Scene(fxmlLoader.load(), 840, 400);
+                Scene scene = new Scene(fxmlLoader.load(), 840, 500);
                 Stage stage = (Stage) userNameField.getScene().getWindow();
                 stage.setTitle("Calendar");
 
@@ -80,25 +81,19 @@ public class SignUpController {
 
         } catch (UniqueUsernameViolationException | UserNameNotProvidedException | PasswordNotProvidedException | IOException e) {
             System.out.println(e.getMessage());
-            showErrorMessage(e.getMessage());
-        } finally {
+            Popups.showErrorMessage(e.getMessage());
+        }
+        finally {
 
             System.out.println("\nUsersDB content");
             try {
                 System.out.println(userModel.find(username));
             } catch (UserDoesNotExistException e) {
-                showErrorMessage("User does not exist");
+                Popups.showErrorMessage("User does not exist");
             }
         }
 
 
-    }
-    private void showErrorMessage(String message) {
-        Alert errorMessage = new Alert(Alert.AlertType.ERROR);
-        errorMessage.setContentText(message);
-        errorMessage.setHeaderText("Error");
-        errorMessage.setTitle("Error");
-        errorMessage.showAndWait();
     }
     public void moveToLoginView() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));

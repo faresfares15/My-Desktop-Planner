@@ -58,7 +58,6 @@ public class DaySchema implements Comparable<DaySchema>, Serializable {
     public void setWasCongratulatedToday(boolean wasCongratulatedToday) {
         this.wasCongratulatedToday = wasCongratulatedToday;
     }
-
     @Override
     public int compareTo(DaySchema o) {
         return this.date.compareTo(o.getDate());

@@ -12,21 +12,12 @@ public class UserSchema implements Comparable<UserSchema>, Serializable {
     private LocalDate mostProductiveDate;
     private int mostTasksCompletedInADay;
     private int mostCongratsReceivedInARow;
-    private int congratsInARowCounter;
     private int totalCongratsReceived;
+    private int congratsInARowCounter;
     private int numberOfGoodBadges;
     private int numberOfVeryGoodBadges;
     private int numberOfExcellentBadges;
     private Settings settings;
-//    private String email;
-
-//    public UserSchema(String lastName, String firstName, String password, String email) {
-//        this.lastName = lastName;
-//        this.firstName = firstName;
-//        this.password = password;
-//        this.email = email;
-//    }
-
     public int getMostCongratsReceivedInARow() {
         return mostCongratsReceivedInARow;
     }
@@ -34,9 +25,6 @@ public class UserSchema implements Comparable<UserSchema>, Serializable {
     public void setMostCongratsReceivedInARow(int mostCongratsReceivedInARow) {
         this.mostCongratsReceivedInARow = mostCongratsReceivedInARow;
     }
-
-
-
     public UserSchema(String username, String password) {
         this.username = username;
         this.password = password;

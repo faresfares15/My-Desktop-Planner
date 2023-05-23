@@ -58,9 +58,9 @@
                </content>
             </ScrollPane>
          </children></VBox>
-      <Text layoutX="579.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current date:" />
-      <Text fx:id="todayDate" layoutX="665.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Button layoutX="393.0" layoutY="38.0" mnemonicParsing="false" onAction="#goToCurrentWeek" text="Back to current week" />
+      <Text layoutX="607.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current date:" />
+      <Text fx:id="todayDate" layoutX="693.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Button layoutX="333.0" layoutY="38.0" mnemonicParsing="false" onAction="#goToCurrentWeek" text="Back to current week" />
       <HBox alignment="CENTER" layoutX="88.0" layoutY="25.0" prefHeight="50.0" prefWidth="219.0" spacing="40.0">
          <children>
             <Button mnemonicParsing="false" onAction="#goToPreviousWeek" prefHeight="26.0" prefWidth="25.0" text="&lt;" />
@@ -71,11 +71,16 @@
             <Insets />
          </opaqueInsets>
       </HBox>
-      <Button layoutX="707.0" layoutY="148.0" mnemonicParsing="false" onAction="#moveToScheduleFreeSlotView" text="Schedule a free slot" />
-      <Button layoutX="707.0" layoutY="207.0" mnemonicParsing="false" onAction="#moveToScheduleTaskView" text="Schedule a task" />
-      <Button layoutX="707.0" layoutY="261.0" mnemonicParsing="false" onAction="#moveToScheduleSetOfTaskView" text="Schedule set of tasks" />
-      <Button layoutX="706.0" layoutY="376.0" mnemonicParsing="false" onAction="#viewProjects" text="View projects" />
-      <Button layoutX="706.0" layoutY="317.0" mnemonicParsing="false" onAction="#updateSettings" text="Update settings" />
-      <Button layoutX="707.0" layoutY="428.0" mnemonicParsing="false" onAction="#viewStatistics" text="View statistics" />
+      <VBox layoutX="693.0" layoutY="110.0" prefHeight="200.0" prefWidth="127.0" spacing="25.0">
+         <children>
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveToScheduleFreeSlotView" text="Schedule a free slot" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveToScheduleTaskView" prefHeight="26.0" text="Schedule a task" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#moveToScheduleSetOfTaskView" prefHeight="26.0" text="Schedule set of tasks" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateSettings" text="Update settings" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewProjects" text="View projects" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewCategories" text="View categories" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#viewStatistics" text="View statistics" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

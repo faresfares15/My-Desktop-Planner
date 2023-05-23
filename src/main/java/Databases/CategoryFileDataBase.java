@@ -1,5 +1,6 @@
 package Databases;
 
+import Exceptions.CategoryDoesNotExistException;
 import Exceptions.TaskDoesNotExistException;
 import Models.Category.CategorySchema;
 import Models.Task.TaskSchema;
@@ -46,9 +47,9 @@ public class CategoryFileDataBase implements CategoryDatabase{
     }
 
     @Override
-    public CategorySchema find(String name) throws Exception {
+    public CategorySchema find(String name) throws CategoryDoesNotExistException {
         //check if the category already exists, throw an error if it doesn't
-        if(!categories.containsKey(name)) throw new Exception("Category doesn't exist");
+        if(!categories.containsKey(name)) throw new CategoryDoesNotExistException("Category doesn't exist");
 
         //return the color
         return categories.get(name);
