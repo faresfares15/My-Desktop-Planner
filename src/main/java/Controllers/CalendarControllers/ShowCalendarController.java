@@ -3,6 +3,7 @@ package Controllers.CalendarControllers;
 import Controllers.FreeSlotControllers.FreeSlotInfoViewController;
 import Controllers.ProjectControllers.ViewProjectsController;
 import Controllers.TaskControllers.TaskInfoViewController;
+import Controllers.UserControllers.StatisticsController;
 import Models.FreeSlot.FreeSlotSchema;
 import Models.Task.DecomposableTaskSchema;
 import Models.Task.SimpleTaskSchema;
@@ -342,6 +343,21 @@ public class ShowCalendarController{
 
         stage.setScene(scene);
     }
+    public void updateSettings() throws IOException{
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("change-settings-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 650, 450);
+        Stage stage = (Stage) calendarGrid.getScene().getWindow();
+        stage.setTitle("Change settings");
+
+
+        //center the view on the user's screen
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((screenBounds.getWidth() - scene.getWidth()) / 2);
+        stage.setY((screenBounds.getHeight() - scene.getHeight()) / 2);
+
+        stage.setScene(scene);
+
+    }
     public void viewProjects() throws IOException{
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view-projects-view.fxml"));
@@ -359,12 +375,15 @@ public class ShowCalendarController{
 
         stage.setScene(scene);
     }
-    public void updateSettings() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("change-settings-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 650, 450);
-        Stage stage = (Stage) calendarGrid.getScene().getWindow();
-        stage.setTitle("Change settings");
+    public void viewStatistics() throws IOException{
 
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("statistics-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 800, 500);
+        Stage stage = (Stage) calendarGrid.getScene().getWindow();
+        stage.setTitle("Statistics");
+
+        StatisticsController viewProjectsController = fxmlLoader.getController();
+        viewProjectsController.initData();
 
         //center the view on the user's screen
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();

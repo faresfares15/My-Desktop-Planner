@@ -64,8 +64,8 @@ public class HelloApplication extends Application {
             e.printStackTrace();
         }
 
-        //create days from today to 30 days from now
-        for (int i = -10; i < 30; i++) {
+        //create days from today to 30 days from now, and 10 days before
+        for (int i = -10; i < 40; i++) {
             dayModel.create(LocalDate.now().plusDays(i));
         }
 
@@ -103,10 +103,6 @@ public class HelloApplication extends Application {
         taskModel.initialize(date);
 
         date = date.plusDays(1);
-        freeSlot1 = new FreeSlotSchema(date, LocalTime.of(13, 0), LocalTime.of(15, 0));
-        freeSlot2 = new FreeSlotSchema(date, LocalTime.of(18, 0), LocalTime.of(20, 0));
-//        freeSlots.add(freeSlot1);
-//        freeSlots.add(freeSlot2);
         dayModel.create(date);
         freeSlotModel.initialize(date);
         taskModel.initialize(date);
@@ -132,7 +128,6 @@ public class HelloApplication extends Application {
         dayModel.create(date);
         freeSlotModel.create(freeSlots);
         taskModel.initialize(date);
-
 
         date = date.plusDays(1);
         freeSlots = new ArrayList<>();

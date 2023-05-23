@@ -73,8 +73,9 @@
       </HBox>
       <Button layoutX="707.0" layoutY="148.0" mnemonicParsing="false" onAction="#moveToScheduleFreeSlotView" text="Schedule a free slot" />
       <Button layoutX="707.0" layoutY="207.0" mnemonicParsing="false" onAction="#moveToScheduleTaskView" text="Schedule a task" />
-      <Button layoutX="707.0" layoutY="276.0" mnemonicParsing="false" onAction="#moveToScheduleSetOfTaskView" text="Schedule set of tasks" />
-      <Button layoutX="707.0" layoutY="336.0" mnemonicParsing="false" onAction="#viewProjects" text="View projects" />
-      <Button layoutX="707.0" layoutY="391.0" mnemonicParsing="false" onAction="#updateSettings" text="Update settings" />
+      <Button layoutX="707.0" layoutY="261.0" mnemonicParsing="false" onAction="#moveToScheduleSetOfTaskView" text="Schedule set of tasks" />
+      <Button layoutX="706.0" layoutY="376.0" mnemonicParsing="false" onAction="#viewProjects" text="View projects" />
+      <Button layoutX="706.0" layoutY="317.0" mnemonicParsing="false" onAction="#updateSettings" text="Update settings" />
+      <Button layoutX="707.0" layoutY="428.0" mnemonicParsing="false" onAction="#viewStatistics" text="View statistics" />
    </children>
 </AnchorPane>

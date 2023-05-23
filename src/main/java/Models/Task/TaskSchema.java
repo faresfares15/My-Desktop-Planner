@@ -70,7 +70,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
     public TaskSchema(String name, Duration duration, Priority priority, LocalDate deadline, TaskStatus status) {
         Random random = new Random();
         this.name = name;
-        this.category = new CategorySchema("", Color.TRANSPARENT);
+        this.category = new CategorySchema("", String.valueOf(Color.TRANSPARENT));
         this.id = (name + category.getName()).hashCode() + duration.hashCode() + random.nextInt(1000);
         this.duration = duration;
         this.priority = priority;
@@ -84,7 +84,7 @@ public abstract class TaskSchema implements Comparable<TaskSchema>, Serializable
         this.date = date;
         this.name = name;
         this.startTime = startTime;
-        this.category = new CategorySchema("", Color.TRANSPARENT);
+        this.category = new CategorySchema("", String.valueOf(Color.TRANSPARENT));
         this.id = (name + category.getName()).hashCode() + duration.hashCode() + random.nextInt(1000);
         this.duration = duration;
         this.priority = priority;

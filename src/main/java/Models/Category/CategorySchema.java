@@ -3,18 +3,17 @@ package Models.Category;
 import javafx.scene.paint.Color;
 
 import java.time.Duration;
-import java.util.TreeMap;
 
 public class CategorySchema implements Comparable<CategorySchema> {
     private String name;
-    private Color color;
+    private String color;
     private int totalTasks = 0;
     private Duration totalDuration = Duration.ZERO;
-    public CategorySchema(String name, Color color) {
+    public CategorySchema(String name, String color) {
         this.name = name;
         this.color = color;
     }
-    public CategorySchema(String name, Color color, Duration duration) {
+    public CategorySchema(String name, String color, Duration duration) {
         this.name = name;
         this.color = color;
         this.totalDuration = duration;
@@ -26,9 +25,9 @@ public class CategorySchema implements Comparable<CategorySchema> {
         this.name = name;
     }
     public Color getColor() {
-        return color;
+        return Color.valueOf(color);
     }
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
 

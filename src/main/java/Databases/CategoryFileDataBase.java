@@ -18,7 +18,7 @@ public class CategoryFileDataBase implements CategoryDatabase{
         if(categories.containsKey(name)) throw new Exception("Category already exists");
 
         //create the new category instance
-        CategorySchema newCategory = new CategorySchema(name, color);
+        CategorySchema newCategory = new CategorySchema(name, String.valueOf(color));
 
         //add the category
         categories.put(name, newCategory);
@@ -32,7 +32,7 @@ public class CategoryFileDataBase implements CategoryDatabase{
         if(categories.containsKey(name)) throw new Exception("Category already exists");
 
         //create the new category instance
-        CategorySchema newCategory = new CategorySchema(name, color, duration);
+        CategorySchema newCategory = new CategorySchema(name, String.valueOf(color), duration);
 
         //add the category
         categories.put(name, newCategory);
