@@ -51,6 +51,7 @@ public class HelloApplication extends Application {
             UserSchema newUser = userModel.create("user", "user");
             currentUserName = newUser.getUsername();
             currentUserSettings = newUser.getSettings();
+            currentUserSettings.setMinimalNumberOfTasksPerDay(1);
 
             categoryModel.create("Work", Color.WHEAT);
             categoryModel.create("Personal", Color.LIGHTBLUE);
@@ -64,18 +65,18 @@ public class HelloApplication extends Application {
         }
 
         //create days from today to 30 days from now
-        for (int i = 0; i < 30; i++) {
+        for (int i = -10; i < 30; i++) {
             dayModel.create(LocalDate.now().plusDays(i));
         }
 
         //create random simple tasks
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(8), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task21", LocalTime.of(1, 0), Duration.ofHours(3), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(3), "task22", LocalTime.of(5, 0), Duration.ofHours(2), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(3), "task23", LocalTime.of(8, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task24", LocalTime.of(10, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task25", LocalTime.of(12, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
-        taskModel.create(new SimpleTaskSchema(LocalDate.now().plusDays(2), "task26", LocalTime.of(14, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(1), "task000", LocalTime.of(8, 20), Duration.ofHours(4).plusMinutes(30), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(2), "task21", LocalTime.of(1, 0), Duration.ofHours(3), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(3), "task22", LocalTime.of(5, 0), Duration.ofHours(2), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(4), "task23", LocalTime.of(8, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(5), "task24", LocalTime.of(10, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(6), "task25", LocalTime.of(12, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
+        taskModel.create(new SimpleTaskSchema(LocalDate.now().minusDays(7), "task26", LocalTime.of(14, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
         taskModel.create(new SimpleTaskSchema(LocalDate.now(), "task3", LocalTime.of(22, 0), Duration.ofHours(1), Priority.LOW, LocalDate.of(2023, 5, 17), TaskStatus.UNSCHEDULED, 0));
 
         //create a decomposed task

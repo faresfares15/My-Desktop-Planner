@@ -91,11 +91,6 @@ public class SetTaskProgressController {
                 day.setWasCongratulatedToday(true);
                 currentUser.setTotalCongratsReceived(currentUser.getTotalCongratsReceived() + 1);
                 showSuccessMessage("Congratulations, you have completed the minimal number of tasks per day");
-                //increment the number of congrats received to show them in the user stats
-                currentUser.setTotalCongratsReceived(currentUser.getTotalCongratsReceived() + 1);
-                //Check if he was congratulated yesterday
-                //if yes  then increment the counter of the congrats in a row
-                //if he gets more than 5 in a row give him a badge
             }
             if (day.getNumberOfTasksCompletedOnThisDay() > currentUser.getMostTasksCompletedInADay()) {
                 showSuccessMessage("Congrats you just surpassed your best day!, you have completed " + day.getNumberOfTasksCompletedOnThisDay() + " tasks today, keep up the good work!");
@@ -142,6 +137,8 @@ public class SetTaskProgressController {
             showErrorMessage("No user is logged, the changes won't be saved");
         } catch (TaskDoesNotExistException e) {
             showErrorMessage("A problem has occurred, this task can't be found");
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
         //Go back to the calendar view
