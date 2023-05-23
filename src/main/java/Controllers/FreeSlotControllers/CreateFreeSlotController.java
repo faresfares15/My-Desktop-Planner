@@ -122,21 +122,19 @@ public class CreateFreeSlotController {
                         } else throw new RuntimeException("There is already a free slot in this time zone");
                     }
 
-                    //New logic
-//                    if (freeSlot.getStartTime().isBefore(startTime)) {
-//                        if (freeSlot.getEndTime().isAfter(endTime)) {
-//                            throw new RuntimeException("There is already a free slot in this time zone");
-//                        }
-//                    }
-
-
                 }
                 if (!freeSlotCreated) {
+                    Duration minimalDuration = HelloApplication.currentUserSettings.getMinimalDuration();
+                    if(Duration.between(startTime, endTime).compareTo(minimalDuration) < 0) endTime = startTime.plus(minimalDuration);
+
                     HelloApplication.freeSlotModel.create(date, startTime, endTime);
                     freeSlotCreated = true;
                 }
             } catch (DayDoesNotHaveFreeSlotsException e) {
                 //no free slots found to compare with so create it directly
+                Duration minimalDuration = HelloApplication.currentUserSettings.getMinimalDuration();
+                if(Duration.between(startTime, endTime).compareTo(minimalDuration) < 0) endTime = startTime.plus(minimalDuration);
+
                 HelloApplication.freeSlotModel.create(date, startTime, endTime);
                 freeSlotCreated = true;
 

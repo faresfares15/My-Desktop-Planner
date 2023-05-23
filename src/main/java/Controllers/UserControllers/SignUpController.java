@@ -24,6 +24,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.time.LocalDate;
 
 public class SignUpController {
     //assign models and views
@@ -86,6 +87,13 @@ public class SignUpController {
         finally {
 
             System.out.println("\nUsersDB content");
+
+
+            //create days from today to 30 days from now, and 10 days before
+            for (int i = -10; i < 40; i++) {
+                dayModel.create(LocalDate.now().plusDays(i));
+            }
+
             try {
                 System.out.println(userModel.find(username));
             } catch (UserDoesNotExistException e) {

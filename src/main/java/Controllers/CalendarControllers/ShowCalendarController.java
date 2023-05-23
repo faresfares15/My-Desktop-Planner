@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import static esi.tp_poo_final.HelloApplication.taskModel;
+
 public class ShowCalendarController{
     private static LocalDate currentWeekStartDate = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue() -1);
     private final int NUM_HOURS = 24;
@@ -194,7 +196,7 @@ public class ShowCalendarController{
                         if(blockId == 0.1){
                             //the task is a subtask ==> search in the subtasks list of all decomposable tasks
                             isSubtask = true;
-                            ArrayList<TaskSchema> decomposedTasks = HelloApplication.taskModel.findAll("DecomposableTaskSchema");
+                            ArrayList<TaskSchema> decomposedTasks = taskModel.findAll("DecomposableTaskSchema");
 
                             for(TaskSchema task: decomposedTasks){
                                 DecomposableTaskSchema decomposableTask = (DecomposableTaskSchema) task;
@@ -208,7 +210,7 @@ public class ShowCalendarController{
                             }
                         }else{
                             //else, search in the tasks list of all simple tasks
-                            clickedTask = HelloApplication.taskModel.find(currentWeekStartDate.plusDays(columnIndex -1), (int) blockId);
+                            clickedTask = taskModel.find(currentWeekStartDate.plusDays(columnIndex -1), (int) blockId);
                         }
 
                         //load the task info view
@@ -518,7 +520,7 @@ public class ShowCalendarController{
             //================ show the tasks of the current week ================================//
 
             //get tasks from the current week
-            TreeMap<LocalDate, ArrayList<TaskSchema>> weekTasks = HelloApplication.taskModel.findMany(currentWeekStartDate, currentWeekStartDate.plusDays(6));
+            TreeMap<LocalDate, ArrayList<TaskSchema>> weekTasks = taskModel.findMany(currentWeekStartDate, currentWeekStartDate.plusDays(6));
 
             //iterate over the days of the week
             for(LocalDate day: weekTasks.keySet()){
@@ -540,7 +542,7 @@ public class ShowCalendarController{
             }
 
             //================ search for decomposed tasks that have sub tasks in the current week ================================//
-            ArrayList<TaskSchema> decomposedTasks = HelloApplication.taskModel.findAll("DecomposableTaskSchema");
+            ArrayList<TaskSchema> decomposedTasks = taskModel.findAll("DecomposableTaskSchema");
 
             for(TaskSchema task: decomposedTasks){
                 DecomposableTaskSchema decomposableTask = (DecomposableTaskSchema) task;
@@ -565,11 +567,43 @@ public class ShowCalendarController{
         //get the day schema
         DaySchema day = HelloApplication.dayModel.find(date);
 
+        int numberOfTasksScheduledToday = 0;
+
+        //Evaluating the progress of the day
+        for (LocalDate dayInTheMap : taskModel.findAll().keySet()) {
+            for (TaskSchema taskInTheMap : taskModel.findAll().get(dayInTheMap)) {
+                //check if it's decomposable or not
+                if (taskInTheMap instanceof DecomposableTaskSchema) {
+                    //check if it's start time is before today
+                    if (!taskInTheMap.getDate().isAfter(date)) {
+                        //loop through all of it subtasks
+                        for (SimpleTaskSchema subtask : ((DecomposableTaskSchema) taskInTheMap).getSubTasks()) {
+                            //check if the subtask is scheduled today
+                            if (subtask.getDate().equals(date)) {
+                                numberOfTasksScheduledToday++;
+                            }
+                        }
+                    }
+                } else { //Then if it's a simpleTask so, just check if it has the same date as today
+                    if (taskInTheMap.getDate().equals(date)) {
+                        numberOfTasksScheduledToday++;
+                    }
+                }
+            }
+        }
+
+        double todaysPercentage = 0;
+        if(numberOfTasksScheduledToday != 0) {
+            todaysPercentage = (double) day.getNumberOfTasksCompletedOnThisDay() / numberOfTasksScheduledToday;
+        }
+
         //display the stats
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Day Stats");
         alert.setHeaderText("Day Stats");
-        alert.setContentText("Total tasks completed in this day: " + day.getNumberOfTasksCompletedOnThisDay());
+        alert.setContentText("\nTotal tasks scheduled in this day: " + numberOfTasksScheduledToday
+                + "\nTotal tasks completed in this day: " + day.getNumberOfTasksCompletedOnThisDay()
+                + "\nPercentage of tasks completed in this day: " + (todaysPercentage * 100) + "%");
         alert.showAndWait();
     }
     private static void setCurrentWeekStartDate(LocalDate currentWeekStartDate) {
@@ -591,9 +625,9 @@ public class ShowCalendarController{
         }
 
         StackPane taskBlock = createBlock(70, taskColor, task.getName(), task.getDate().getDayOfWeek(), task.getStartTime(), task.getDuration());
-        if(task.getProgress() == Progress.COMPLETED){
-            taskBlock = createBlock(70, taskColor, task.getName()+"\n(c)", task.getDate().getDayOfWeek(), task.getStartTime(), task.getDuration());
-        }
+//        if(task.getProgress() == Progress.COMPLETED){
+//            taskBlock = createBlock(70, taskColor, task.getName()+"\n(c)", task.getDate().getDayOfWeek(), task.getStartTime(), task.getDuration());
+//        }
 
         //if the task is a subtask, set the id of the task block to "subtask"
         if(isSubTask){

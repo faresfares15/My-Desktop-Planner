@@ -21,6 +21,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.time.LocalDate;
 
 public class LoginController {
     private final UserModel userModel = HelloApplication.userModel;
@@ -48,6 +49,12 @@ public class LoginController {
             //Load the DBs from the corresponding files
             HelloApplication.taskModel.load();
             HelloApplication.dayModel.load();
+
+//            //create days from today to 30 days from now, and 10 days before
+//            for (int i = -10; i < 40; i++) {
+//                HelloApplication.dayModel.create(LocalDate.now().plusDays(i));
+//            }
+
             HelloApplication.freeSlotModel.load();
             HelloApplication.projectsModel.load();
             HelloApplication.categoryModel.load();
