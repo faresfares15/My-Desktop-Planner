@@ -18,9 +18,9 @@ public class UserModel {
         }
     }
     public void load() throws IOException, ClassNotFoundException {
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File(HelloApplication.usersDbFileName)))) {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(HelloApplication.usersDbFileName))) {
 
-                userDataBase = (UserDataBase) objectInputStream.readObject();
+                userDataBase = (UserFileDataBase) objectInputStream.readObject();
                 System.out.println("loading the user model");
         }
     }

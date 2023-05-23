@@ -28,7 +28,7 @@ public class DayModel {
     public void load() throws IOException, ClassNotFoundException {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(HelloApplication.usersDirectoryName
                 + "/" + HelloApplication.currentUserName + "/" + HelloApplication.dayDbFileName))) {
-            dayDatabase = (DayDatabase) objectInputStream.readObject();
+            dayDatabase = (DayFileDataBase) objectInputStream.readObject();
         }
     }
     public DaySchema create(LocalDate date){

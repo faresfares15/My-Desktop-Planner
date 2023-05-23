@@ -2,9 +2,10 @@ package Models.Category;
 
 import javafx.scene.paint.Color;
 
+import java.io.Serializable;
 import java.time.Duration;
 
-public class CategorySchema implements Comparable<CategorySchema> {
+public class CategorySchema implements Comparable<CategorySchema>, Serializable {
     private String name;
     private String color;
     private int totalTasks = 0;

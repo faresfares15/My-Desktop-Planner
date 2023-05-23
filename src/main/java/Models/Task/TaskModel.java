@@ -28,7 +28,7 @@ public class TaskModel {
     public void load() throws IOException, ClassNotFoundException {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(HelloApplication.usersDirectoryName
                 + "/" + HelloApplication.currentUserName + "/" + HelloApplication.taskDbFileName))) {
-            taskDatabase = (TaskDatabase) objectInputStream.readObject();
+            taskDatabase = (TaskFileDatabase) objectInputStream.readObject();
         }
     }
 

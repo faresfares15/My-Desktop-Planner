@@ -153,7 +153,7 @@ public class HelloApplication extends Application {
 //        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("signup-view.fxml"));
 //        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("calendar-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 840, 500);
 //        primaryStage.setTitle("Plan Task");
 
@@ -179,8 +179,7 @@ public class HelloApplication extends Application {
     public void stop() throws Exception {
         //Save the files before the application closes (calling the stop method)
         if (HelloApplication.currentUserName != null){
-            //save the task model
-            taskModel.save();
+
 
             //save the free slot model
             freeSlotModel.save();
@@ -188,6 +187,8 @@ public class HelloApplication extends Application {
             //save the day model
             dayModel.save();
 
+            //save the task model
+            taskModel.save();
 
             //save the project model;
             projectsModel.save();
@@ -206,10 +207,12 @@ public class HelloApplication extends Application {
         try {
             File usersDBFile = new File(usersDbFileName);
             if (usersDBFile.exists()){
+                userModel.load();
             } else {
                 usersDBFile.createNewFile();
             }
-            userModel.load();
+
+
         } catch (Exception e){
             System.out.println(e.getMessage());
         }

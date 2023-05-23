@@ -91,6 +91,7 @@ public class SetTaskProgressController {
                 day.setWasCongratulatedToday(true);
                 currentUser.setTotalCongratsReceived(currentUser.getTotalCongratsReceived() + 1);
                 showSuccessMessage("Congratulations, you have completed the minimal number of tasks per day");
+
             }
             if (day.getNumberOfTasksCompletedOnThisDay() > currentUser.getMostTasksCompletedInADay()) {
                 showSuccessMessage("Congrats you just surpassed your best day!, you have completed " + day.getNumberOfTasksCompletedOnThisDay() + " tasks today, keep up the good work!");

@@ -1,9 +1,10 @@
 package Models.Calendar;
 
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.Duration;
 
-public class Settings {
+public class Settings implements Serializable {
     private int minimalNumberOfTasksPerDay;
     private Duration minimalDuration;
     private DayOfWeek startOfTheWeek;

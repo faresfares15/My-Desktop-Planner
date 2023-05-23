@@ -1,6 +1,8 @@
 package Models.Task;
 
-public enum Progress {
+import java.io.Serializable;
+
+public enum Progress implements Serializable {
     CANCELED (0),
     DELAYED(0),
     NOT_REALIZED(0),

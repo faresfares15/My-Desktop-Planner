@@ -1,5 +1,7 @@
 package Models.Task;
 
-public enum TaskStatus {
+import java.io.Serializable;
+
+public enum TaskStatus implements Serializable {
     UNSCHEDULED, SCHEDULED
 }

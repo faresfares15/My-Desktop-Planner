@@ -78,7 +78,7 @@ public class SignUpController {
                 throw new IOException("A problem occurred when creating the directory");
             }
 
-        } catch (UniqueUsernameViolationException | UserNameNotProvidedException | PasswordNotProvidedException e) {
+        } catch (UniqueUsernameViolationException | UserNameNotProvidedException | PasswordNotProvidedException | IOException e) {
             System.out.println(e.getMessage());
             showErrorMessage(e.getMessage());
         } finally {
@@ -87,7 +87,7 @@ public class SignUpController {
             try {
                 System.out.println(userModel.find(username));
             } catch (UserDoesNotExistException e) {
-                System.out.println("User does not exist");
+                showErrorMessage("User does not exist");
             }
         }
 

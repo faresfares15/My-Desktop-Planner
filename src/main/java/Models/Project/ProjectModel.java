@@ -26,7 +26,7 @@ public class ProjectModel {
     public void load() throws IOException, ClassNotFoundException {
         ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(HelloApplication.usersDirectoryName
                 + "/" + HelloApplication.currentUserName + "/" + HelloApplication.projectDbFileName));
-        projectDataBase = (ProjectDataBase) objectInputStream.readObject();
+        projectDataBase = (ProjectFileDataBase) objectInputStream.readObject();
     }
     // The CRUD operations
     public ProjectSchema create(ProjectSchema projectSchema){//Create directly
